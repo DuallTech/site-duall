@@ -45,7 +45,6 @@ import logoClientCury from './assets/images/clients/cury.png';
 import logoClientBild from './assets/images/clients/bild.svg';
 import logoClientRni from './assets/images/clients/rni.svg';
 import logoClientVitacon from './assets/images/clients/vitacon.svg';
-import logoClientIdeaZarvos from './assets/images/clients/ideazarvos.png';
 import logoClientWtorre from './assets/images/clients/wtorre.svg';
 import logoClientMpd from './assets/images/clients/mpd.png';
 
@@ -950,18 +949,18 @@ export default function App() {
             {/* CLIENT LOGO TICKER */}
             {(() => {
               const clients: { name: string; logo: string | null }[] = [
-                { name: 'Cyrela',     logo: logoClientCyrela },
-                { name: 'EzTec',     logo: logoClientEztec },
-                { name: 'Helbor',    logo: logoClientHelbor },
-                { name: 'Direcional',logo: logoClientDirecional },
-                { name: 'Cury',      logo: logoClientCury },
-                { name: 'BILD',      logo: logoClientBild },
-                { name: 'RNI',       logo: logoClientRni },
-                { name: 'Vitacon',   logo: logoClientVitacon },
-                { name: 'Idea!Zarvos', logo: logoClientIdeaZarvos },
-                { name: 'WTorre',    logo: logoClientWtorre },
-                { name: 'Tarraf',    logo: null },
-                { name: 'MPD',       logo: logoClientMpd },
+                { name: 'Cyrela',      logo: logoClientCyrela },
+                { name: 'EzTec',       logo: logoClientEztec },
+                { name: 'Helbor',      logo: logoClientHelbor },
+                { name: 'Direcional',  logo: logoClientDirecional },
+                { name: 'Cury',        logo: logoClientCury },
+                { name: 'BILD',        logo: logoClientBild },
+                { name: 'RNI',         logo: logoClientRni },
+                { name: 'Vitacon',     logo: logoClientVitacon },
+                { name: 'Idea Zarvos', logo: null },
+                { name: 'WTorre',      logo: logoClientWtorre },
+                { name: 'Tarraf',      logo: null },
+                { name: 'MPD',         logo: logoClientMpd },
               ];
               const doubled = [...clients, ...clients];
               return (
@@ -970,30 +969,34 @@ export default function App() {
                   whileInView="visible"
                   viewport={{ once: true, margin: "-80px" }}
                   variants={fadeInUpVariants}
-                  className="mt-20 pt-10 border-t border-slate-200"
+                  className="mt-24 pt-12 border-t border-slate-100"
                 >
-                  <p className="text-center text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-8">
-                    Construtoras &amp; Incorporadoras que Confiam na Duall
-                  </p>
+                  <div className="flex items-center gap-6 justify-center mb-10">
+                    <div className="h-px flex-1 max-w-20 bg-linear-to-r from-transparent to-slate-300" />
+                    <p className="text-[10px] font-mono font-bold uppercase tracking-[0.22em] text-slate-400 whitespace-nowrap">
+                      Construtoras &amp; Incorporadoras que Confiam na Duall
+                    </p>
+                    <div className="h-px flex-1 max-w-20 bg-linear-to-l from-transparent to-slate-300" />
+                  </div>
 
                   <div className="relative overflow-hidden">
-                    <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+                    <div className="absolute left-0 top-0 bottom-0 w-28 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-28 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
 
-                    <div className="flex gap-4 animate-ticker w-max">
+                    <div className="flex gap-4 animate-ticker w-max py-2">
                       {doubled.map((client, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-center px-8 py-4 bg-white border border-slate-200 rounded-2xl shadow-xs shrink-0 h-20 min-w-[160px] group hover:border-[#355979]/30 hover:shadow-md transition-all duration-200"
+                          className="flex items-center justify-center px-7 py-5 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md hover:border-duall-blue/20 transition-all duration-300 shrink-0 h-24 min-w-37.5 group cursor-default"
                         >
                           {client.logo ? (
                             <img
                               src={client.logo}
                               alt={client.name}
-                              className="max-h-10 max-w-30 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                              className="max-h-12 max-w-36 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-300"
                             />
                           ) : (
-                            <span className="font-display font-bold text-sm text-slate-500 group-hover:text-duall-blue transition-colors text-center">
+                            <span className="font-display font-semibold text-sm text-slate-400 group-hover:text-duall-blue transition-colors text-center leading-tight">
                               {client.name}
                             </span>
                           )}
