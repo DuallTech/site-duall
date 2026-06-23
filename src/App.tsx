@@ -36,6 +36,19 @@ import { SPECIALITIES, TESTIMONIALS, PORTFOLIO_PROJECTS } from './data';
 import duallLogoUrl from './assets/images/Logo Horizontal - WEB@4x.png';
 import duallLogoWhiteUrl from './assets/images/Logo Horizontal - branco@4x.png';
 
+// Client logos (hosted locally for reliability)
+import logoClientCyrela from './assets/images/clients/cyrela.svg';
+import logoClientEztec from './assets/images/clients/eztec.svg';
+import logoClientHelbor from './assets/images/clients/helbor.webp';
+import logoClientDirecional from './assets/images/clients/direcional.png';
+import logoClientCury from './assets/images/clients/cury.png';
+import logoClientBild from './assets/images/clients/bild.svg';
+import logoClientRni from './assets/images/clients/rni.svg';
+import logoClientVitacon from './assets/images/clients/vitacon.svg';
+import logoClientIdeaZarvos from './assets/images/clients/ideazarvos.png';
+import logoClientWtorre from './assets/images/clients/wtorre.svg';
+import logoClientMpd from './assets/images/clients/mpd.png';
+
 // Modular Components
 import AccessibilityPanel from './components/AccessibilityPanel';
 import ClashSimulator from './components/ClashSimulator';
@@ -936,19 +949,19 @@ export default function App() {
 
             {/* CLIENT LOGO TICKER */}
             {(() => {
-              const clients = [
-                { name: 'Cyrela', domain: 'cyrela.com.br' },
-                { name: 'EzTec', domain: 'eztec.com.br' },
-                { name: 'Helbor', domain: 'helbor.com' },
-                { name: 'Direcional', domain: 'direcional.com.br' },
-                { name: 'Cury', domain: 'cury.com.br' },
-                { name: 'BILD', domain: 'bildbrasil.com.br' },
-                { name: 'RNI', domain: 'rni.com.br' },
-                { name: 'Vitacon', domain: 'vitacon.com.br' },
-                { name: 'Idea Zarvos', domain: 'ideasampa.com.br' },
-                { name: 'WTorre', domain: 'wtorre.com.br' },
-                { name: 'Tarraf', domain: 'tarraf.com.br' },
-                { name: 'MPD', domain: 'mpd.com.br' },
+              const clients: { name: string; logo: string | null }[] = [
+                { name: 'Cyrela',     logo: logoClientCyrela },
+                { name: 'EzTec',     logo: logoClientEztec },
+                { name: 'Helbor',    logo: logoClientHelbor },
+                { name: 'Direcional',logo: logoClientDirecional },
+                { name: 'Cury',      logo: logoClientCury },
+                { name: 'BILD',      logo: logoClientBild },
+                { name: 'RNI',       logo: logoClientRni },
+                { name: 'Vitacon',   logo: logoClientVitacon },
+                { name: 'Idea!Zarvos', logo: logoClientIdeaZarvos },
+                { name: 'WTorre',    logo: logoClientWtorre },
+                { name: 'Tarraf',    logo: null },
+                { name: 'MPD',       logo: logoClientMpd },
               ];
               const doubled = [...clients, ...clients];
               return (
@@ -973,22 +986,17 @@ export default function App() {
                           key={i}
                           className="flex items-center justify-center px-8 py-4 bg-white border border-slate-200 rounded-2xl shadow-xs shrink-0 h-20 min-w-[160px] group hover:border-[#355979]/30 hover:shadow-md transition-all duration-200"
                         >
-                          <img
-                            src={`https://logo.clearbit.com/${client.domain}`}
-                            alt={client.name}
-                            className="max-h-10 max-w-[120px] w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
-                            onError={(e) => {
-                              const target = e.currentTarget;
-                              target.style.display = 'none';
-                              const fallback = target.nextElementSibling as HTMLElement;
-                              if (fallback) fallback.style.display = 'block';
-                            }}
-                          />
-                          <span
-                            className="hidden font-display font-bold text-sm text-slate-500 group-hover:text-[#355979] transition-colors text-center"
-                          >
-                            {client.name}
-                          </span>
+                          {client.logo ? (
+                            <img
+                              src={client.logo}
+                              alt={client.name}
+                              className="max-h-10 max-w-30 w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                            />
+                          ) : (
+                            <span className="font-display font-bold text-sm text-slate-500 group-hover:text-duall-blue transition-colors text-center">
+                              {client.name}
+                            </span>
+                          )}
                         </div>
                       ))}
                     </div>
