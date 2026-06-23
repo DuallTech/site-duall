@@ -33,6 +33,8 @@ import { motion, AnimatePresence, type Variants } from 'motion/react';
 
 // Static Data
 import { SPECIALITIES, TESTIMONIALS, PORTFOLIO_PROJECTS } from './data';
+import duallLogoUrl from './assets/images/Logo Horizontal - WEB@4x.png';
+import duallLogoWhiteUrl from './assets/images/Logo Horizontal - branco@4x.png';
 
 // Modular Components
 import AccessibilityPanel from './components/AccessibilityPanel';
@@ -187,34 +189,13 @@ export default function App() {
   // Pre-loaded image paths
   const heroImageUrl = "/src/assets/images/duall_hero_building_1782134245778.jpg";
 
-  // Dynamic SVG Brand Logo of Duall Engenharia (reproduced from Slide 7)
-  const DuallLogo = ({ isDark = false }: { isDark?: boolean }) => {
-    const brandColor = isDark ? "text-white" : "text-[#355979]";
-    const circleColor = isDark ? "fill-white" : "fill-[#355979]";
-    const triangleColor = isDark ? "fill-[#355979]" : "fill-white";
-    const innerBg = isDark ? "fill-white" : "fill-[#355979]";
-
-    return (
-      <div className="flex items-center gap-3">
-        <svg viewBox="0 0 100 100" className="h-9 w-9 shrink-0" role="img" aria-label="Logo Duall Engenharia">
-          <circle cx="50" cy="50" r="45" className={circleColor} />
-          {/* Modern stylized geometric capital A inside */}
-          <polygon points="50,22 80,74 20,74" className={triangleColor} />
-          <polygon points="50,44 65,70 35,70" className={innerBg} />
-          {/* Stylish slice cutout */}
-          <polygon points="41,55 59,55 50,41" className={triangleColor} />
-        </svg>
-        <div className="flex flex-col select-none">
-          <span className={`font-display font-extrabold tracking-wider text-xl leading-none ${brandColor}`}>
-            DUALL
-          </span>
-          <span className={`font-display font-semibold tracking-widest text-[8px] leading-none mt-1 ${isDark ? "text-slate-300" : "text-slate-500"}`}>
-            ENGENHARIA
-          </span>
-        </div>
-      </div>
-    );
-  };
+  const DuallLogo = ({ isDark = false }: { isDark?: boolean }) => (
+    <img
+      src={isDark ? duallLogoWhiteUrl : duallLogoUrl}
+      alt="Duall Engenharia"
+      className="h-14 w-auto select-none"
+    />
+  );
 
   // Helper mapping string icon name to Lucide components
   const getIconComponent = (iconName: string) => {
@@ -273,7 +254,7 @@ export default function App() {
               { label: 'Navegador IFC 3D', href: '#simulador' },
               { label: 'Diferenciais', href: '#diferenciais' },
               { label: 'História & Cases', href: '#portfolio' },
-              { label: 'Orçamento', href: '#proposal-calculator' }
+              { label: 'Orçamento', href: '#contato' }
             ].map((link) => (
               <a
                 key={link.label}
@@ -836,11 +817,11 @@ export default function App() {
                         : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-200/85 hover:border-slate-300 hover:text-slate-900 shadow-xs'
                     } font-sans uppercase tracking-wider text-[10px]`}
                   >
-                    {tab === 'all' && 'ðŸŒ Todos Locais'}
-                    {tab === 'eletrico' && 'âš¡ Projetos Elétricos'}
-                    {tab === 'hidraulico' && 'ðŸ’§ Projetos Hidráulicos'}
-                    {tab === 'incendio' && 'ðŸ”¥ Combate a Incêndio'}
-                    {tab === 'mecanico' && 'â„ï¸ Climatização VRF'}
+                    {tab === 'all' && 'Todos os Locais'}
+                    {tab === 'eletrico' && 'Projetos Elétricos'}
+                    {tab === 'hidraulico' && 'Projetos Hidráulicos'}
+                    {tab === 'incendio' && 'Combate a Incêndio'}
+                    {tab === 'mecanico' && 'Climatização VRF'}
                   </button>
                 );
               })}
@@ -953,6 +934,69 @@ export default function App() {
               </motion.div>
             </AnimatePresence>
 
+            {/* CLIENT LOGO TICKER */}
+            {(() => {
+              const clients = [
+                { name: 'Cyrela', domain: 'cyrela.com.br' },
+                { name: 'EzTec', domain: 'eztec.com.br' },
+                { name: 'Helbor', domain: 'helbor.com' },
+                { name: 'Direcional', domain: 'direcional.com.br' },
+                { name: 'Cury', domain: 'cury.com.br' },
+                { name: 'BILD', domain: 'bildbrasil.com.br' },
+                { name: 'RNI', domain: 'rni.com.br' },
+                { name: 'Vitacon', domain: 'vitacon.com.br' },
+                { name: 'Idea Zarvos', domain: 'ideasampa.com.br' },
+                { name: 'WTorre', domain: 'wtorre.com.br' },
+                { name: 'Tarraf', domain: 'tarraf.com.br' },
+                { name: 'MPD', domain: 'mpd.com.br' },
+              ];
+              const doubled = [...clients, ...clients];
+              return (
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-80px" }}
+                  variants={fadeInUpVariants}
+                  className="mt-20 pt-10 border-t border-slate-200"
+                >
+                  <p className="text-center text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-8">
+                    Construtoras &amp; Incorporadoras que Confiam na Duall
+                  </p>
+
+                  <div className="relative overflow-hidden">
+                    <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+
+                    <div className="flex gap-4 animate-ticker w-max">
+                      {doubled.map((client, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-center px-8 py-4 bg-white border border-slate-200 rounded-2xl shadow-xs shrink-0 h-20 min-w-[160px] group hover:border-[#355979]/30 hover:shadow-md transition-all duration-200"
+                        >
+                          <img
+                            src={`https://logo.clearbit.com/${client.domain}`}
+                            alt={client.name}
+                            className="max-h-10 max-w-[120px] w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              target.style.display = 'none';
+                              const fallback = target.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'block';
+                            }}
+                          />
+                          <span
+                            className="hidden font-display font-bold text-sm text-slate-500 group-hover:text-[#355979] transition-colors text-center"
+                          >
+                            {client.name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })()}
+
           </div>
         </section>
 
@@ -996,7 +1040,7 @@ export default function App() {
                   key={test.id}
                   className="bg-slate-50/60 p-6 md:p-8 rounded-2xl border border-slate-100/80 shadow-xs flex flex-col justify-between space-y-6 relative"
                 >
-                  <span className="text-5xl text-[#355979] font-serif absolute -top-1 -left-1 opacity-20 select-none">â€œ</span>
+                  <span className="text-5xl text-[#355979] font-serif absolute -top-1 -left-1 opacity-20 select-none">&ldquo;</span>
                   
                   <p className="text-slate-600 text-sm leading-relaxed relative z-10 font-normal">
                     {test.text}

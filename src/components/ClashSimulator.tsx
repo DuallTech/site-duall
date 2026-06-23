@@ -14,9 +14,8 @@ import {
 } from 'web-ifc';
 import fixedIfcUrl from '../assets/ifc/teste.ifc?url';
 import { 
-  Layers, 
-  RotateCw, 
-  Sliders, 
+  Layers,
+  RotateCw,
   Activity,
   FileCode,
   Grid,
@@ -65,7 +64,6 @@ interface IFCFileMetadata {
 type BIMSystem = BIMElementData['system'];
 
 const FIXED_IFC_FILE_NAME = 'teste.ifc';
-const MAX_EXPLODE_VALUE = 35;
 
 const disposeObject3D = (object: THREE.Object3D) => {
   object.traverse((child) => {
@@ -156,13 +154,11 @@ export default function ClashSimulator() {
   const [showAxes, setShowAxes] = useState<boolean>(true);
   const [showGrid, setShowGrid] = useState<boolean>(true);
   const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
-  const [clippingValue, setClippingValue] = useState<number>(0); // 0 (standard) to 100 (highly exploded discipline view)
   const [isXRayMode, setIsXRayMode] = useState<boolean>(false);
   const [isMeasuringMode, setIsMeasuringMode] = useState<boolean>(false);
   const [measurePoints, setMeasurePoints] = useState<THREE.Vector3[]>([]);
   const [measureDistance, setMeasureDistance] = useState<number | null>(null);
   const isAutoRotatingRef = useRef<boolean>(false);
-  const clippingValueRef = useRef<number>(0);
   
   // Discipline Show/Hide
   const [visibleSystems, setVisibleSystems] = useState({
@@ -481,7 +477,6 @@ export default function ClashSimulator() {
       setClashList([]);
       setActiveClashIndex(-1);
       setActiveTab('geral');
-      setClippingValue(0);
       fitCameraToLoadedModel();
       setParseProgress(100);
     } catch (err) {
@@ -523,13 +518,6 @@ export default function ClashSimulator() {
       controlsRef.current.autoRotateSpeed = 0.8;
     }
   }, [isAutoRotating]);
-
-  useEffect(() => {
-    clippingValueRef.current = Math.min(clippingValue, MAX_EXPLODE_VALUE);
-    if (clippingValue > MAX_EXPLODE_VALUE) {
-      setClippingValue(MAX_EXPLODE_VALUE);
-    }
-  }, [clippingValue]);
 
   // Setup Three JS scene context once on layout mount
   useEffect(() => {
@@ -691,28 +679,7 @@ export default function ClashSimulator() {
       }
       lastRenderTime = elapsed;
 
-      // Implement exploded dynamic clipping view offsets based on the slide percent
-      if (objectsGroup) {
-        objectsGroup.children.forEach(obj => {
-          if (obj.userData && obj.userData.system) {
-            const sys = obj.userData.system;
-            const expAmount = clippingValueRef.current / 100.0;
-            
-            // Re-apply coordinate offsets on vertical height dynamically
-            let baseOffset = 0;
-            if (sys === 'mecanico') baseOffset = 0.5 * expAmount;
-            else if (sys === 'eletrico') baseOffset = 1.0 * expAmount;
-            else if (sys === 'hidraulico') baseOffset = 1.4 * expAmount;
-            else if (sys === 'incendio') baseOffset = 1.9 * expAmount;
 
-            // Animate only visual positions
-            if (obj.userData.originalY === undefined) {
-              obj.userData.originalY = obj.position.y;
-            }
-            obj.position.y = obj.userData.originalY + baseOffset;
-          }
-        });
-      }
 
       // Auto rotation mapping
       if (controlsRef.current && isAutoRotatingRef.current) {
@@ -1229,21 +1196,6 @@ export default function ClashSimulator() {
                   </button>
                 );
               })}
-            </div>
-
-            {/* 2. Clipping & exploded height controller */}
-            <div className="flex items-center gap-3 w-full md:max-w-[240px] md:ml-auto">
-              <span className="text-[9px] text-slate-500 font-mono flex items-center gap-1 shrink-0">
-                <Sliders size={11} /> Explodir: {clippingValue}%
-              </span>
-              <input
-                type="range"
-                min="0"
-                max={MAX_EXPLODE_VALUE}
-                value={clippingValue}
-                onChange={(e) => setClippingValue(Number(e.target.value))}
-                className="flex-grow h-1 bg-slate-900 rounded-lg cursor-pointer accent-duall-gold"
-              />
             </div>
 
           </div>
