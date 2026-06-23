@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-duall-blue: #355979;
+  --color-duall-dark: #2d3748;
+  --color-duall-gold: #d9a006;
+  --color-duall-teal-start: #0082c8;
+  --color-duall-teal-end: #243c56;
+}
+
+/* Base style resets */
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  
+  /* Focus-visible ring for keyboard navigation WCAG compliance */
+  :focus-visible {
+    outline: 3px solid var(--color-duall-gold);
+    outline-offset: 3px;
+  }
+}
+
+/* Custom Scrollbar for premium feeling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-duall-blue);
+}
+
+/* Smooth motion accessibility setting */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Specific styling for the high contrast mode */
+.high-contrast {
+  filter: contrast(1.25);
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast input, 
+.high-contrast select, 
+.high-contrast textarea {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+}
+
+.high-contrast button {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  font-weight: 800 !important;
+}
+
+.high-contrast a {
+  text-decoration: underline !important;
+  color: #ffff00 !important;
+}
