@@ -207,10 +207,12 @@ export default function ClashSimulator() {
   const systemMaterialsRef = useRef<Partial<Record<BIMSystem, THREE.MeshLambertMaterial>>>({});
   // Mirror of visibleSystems as a ref so async callbacks can read the latest value
   const visibleSystemsRef  = useRef<typeof visibleSystems>(visibleSystems);
-  // Tracks which systems are currently fetching their IFC file
+  // Ref guard — prevents concurrent or duplicate loads of the same system
+  const loadingSetRef      = useRef<Set<BIMSystem>>(new Set());
+  // Tracks which systems are currently fetching their IFC file (for UI spinner)
   const [loadingSystems, setLoadingSystems] = useState<Set<BIMSystem>>(new Set());
 
-  // Keep visibleSystemsRef in sync with state
+  // Keep visibleSystemsRef in sync with state (runs before paint, always fresh)
   useEffect(() => {
     visibleSystemsRef.current = visibleSystems;
   });
@@ -228,20 +230,25 @@ export default function ClashSimulator() {
     });
   }, [visibleSystems]);
 
-  // Toggle a discipline on/off; lazy-loads its IFC file on first activation
+  // Simple toggle — only updates React state; loading is handled by the effect below
   const toggleSystem = (system: BIMSystem) => {
-    setVisibleSystems(prev => {
-      const nowVisible = !prev[system];
-
-      // Trigger lazy load on first activation (no Three.js side-effects here — useEffect handles visibility)
-      if (nowVisible && system !== 'estrutura' && !systemModelsRef.current[system]) {
-        const url = SYSTEM_IFC_URLS[system];
-        if (url) setTimeout(() => loadSystemModel(system, url), 0);
-      }
-
-      return { ...prev, [system]: nowVisible };
-    });
+    setVisibleSystems(prev => ({ ...prev, [system]: !prev[system] }));
   };
+
+  // Trigger lazy loading when a MEP system is first turned ON
+  useEffect(() => {
+    (Object.keys(visibleSystems) as BIMSystem[]).forEach(sys => {
+      if (sys === 'estrutura') return;
+      if (!visibleSystems[sys]) return;                      // system is off
+      if (systemModelsRef.current[sys]) return;              // already loaded
+      if (loadingSetRef.current.has(sys)) return;            // already in-flight
+      const url = SYSTEM_IFC_URLS[sys];
+      if (!url) return;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      loadSystemModel(sys, url);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleSystems]);
 
   const getIfcTextValue = (value: any, fallback = ''): string => {
     if (!value) return fallback;
@@ -417,10 +424,14 @@ export default function ClashSimulator() {
 
   // Lazy-load a dedicated IFC file for the given MEP discipline
   const loadSystemModel = async (system: BIMSystem, url: string) => {
+    // Guard: prevent duplicate concurrent loads
+    if (loadingSetRef.current.has(system) || systemModelsRef.current[system]) return;
+
     const loader = ifcLoaderRef.current;
     const group  = objectsGroupRef.current;
     if (!loader || !group) return;
 
+    loadingSetRef.current.add(system);
     setLoadingSystems(prev => new Set([...prev, system]));
     try {
       const response = await fetch(url);
@@ -440,11 +451,21 @@ export default function ClashSimulator() {
       model.name = `duall_system_${system}`;
       group.add(model);
       systemModelsRef.current[system] = model as unknown as THREE.Mesh;
-      // Sync visibility with whatever the user set while the file was loading
+      // Apply current visibility state (user may have toggled while loading)
       (model as THREE.Object3D).visible = visibleSystemsRef.current[system];
+
+      // Recompute scene bounds to include the new model, then refit camera
+      if (objectsGroupRef.current) {
+        const newBounds = getRobustObjectBounds(objectsGroupRef.current);
+        if (!newBounds.isEmpty()) {
+          modelBoundsRef.current = newBounds;
+          fitCameraToLoadedModel();
+        }
+      }
     } catch (err) {
       console.error(`[MEP] failed to load ${system}:`, err);
     } finally {
+      loadingSetRef.current.delete(system);
       setLoadingSystems(prev => { const s = new Set([...prev]); s.delete(system); return s; });
     }
   };
