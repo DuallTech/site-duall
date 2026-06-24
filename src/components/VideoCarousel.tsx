@@ -119,7 +119,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
           {/* Header Bar */}
           <div className="bg-[#101726]/90 px-4 py-3 flex items-center justify-between border-b border-slate-800 text-xs">
             <span className="font-display font-medium text-slate-300 flex items-center gap-1.5 uppercase tracking-wider text-[10px]">
-              <Video size={13} className="text-[#0082c8]" />
+              <Video size={13} className="text-[#1992BB]" />
               Duall Media Player v4.0
             </span>
             <span className="text-slate-400 font-mono">
@@ -147,9 +147,9 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
             {isPlaying && (
               <div className="absolute inset-0 bg-transparent flex flex-col items-center justify-center pointer-events-none p-4 text-center">
                 <div className="relative w-24 h-24 flex items-center justify-center">
-                  <div className="absolute inset-0 border-2 border-dashed border-duall-gold rounded-full animate-spin duration-10000 opacity-60" />
+                  <div className="absolute inset-0 border-2 border-dashed border-duall-blue rounded-full animate-spin duration-10000 opacity-60" />
                   <div className="absolute inset-2 border border-sky-500/30 rounded-full animate-ping duration-3000" />
-                  <div className="font-mono text-[10px] text-duall-gold opacity-90 relative mt-1 tracking-widest uppercase">
+                  <div className="font-mono text-[10px] text-duall-blue opacity-90 relative mt-1 tracking-widest uppercase">
                     BIM_LOD_400
                   </div>
                 </div>
@@ -178,7 +178,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
             {!isPlaying && (
               <button
                 onClick={() => setIsPlaying(true)}
-                className="relative z-10 w-16 h-16 rounded-full flex items-center justify-center bg-[#0082c8] text-white hover:bg-[#d9a006] hover:text-slate-900 shadow-2xl transition cursor-pointer transform hover:scale-110 active:scale-95"
+                className="relative z-10 w-16 h-16 rounded-full flex items-center justify-center bg-[#1992BB] text-white hover:bg-[#315676] shadow-2xl transition cursor-pointer transform hover:scale-110 active:scale-95"
                 aria-label="Reproduzir vídeo corporativo"
               >
                 <Play size={24} className="ml-1" />
@@ -204,7 +204,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
                 }}
               >
                 <div 
-                  className="h-full bg-[#0082c8] rounded-full relative transition-all duration-300"
+                  className="h-full bg-[#1992BB] rounded-full relative transition-all duration-300"
                   style={{ width: `${(playbackTime / totalSeconds) * 100}%` }}
                 >
                   <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white rounded-full border border-sky-500 shadow-sm" />
@@ -263,7 +263,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
           
           <div className="space-y-4">
             <div>
-              <span className="text-xs font-bold text-[#d9a006] uppercase tracking-wider">{currentVideo.category}</span>
+              <span className="text-xs font-bold text-[#1992BB] uppercase tracking-wider">{currentVideo.category}</span>
               <h3 className="text-xl font-display font-bold text-slate-900 mt-1">
                 {currentVideo.title}
               </h3>
@@ -284,7 +284,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
                       onClick={() => setPlaybackTime(parseDurationToSeconds(highlight.time))}
                       className={`p-3 rounded-lg border text-xs cursor-pointer transition-all flex items-start gap-2.5 ${
                         activeHighlight === index
-                          ? 'bg-sky-50 text-[#0f2d4a] border-[#0082c8]/30 font-medium font-semibold'
+                          ? 'bg-sky-50 text-[#0f2d4a] border-[#1992BB]/30 font-medium font-semibold'
                           : isPast
                           ? 'bg-slate-50/70 text-slate-500 border-slate-100'
                           : 'bg-white text-slate-700 border-slate-100 hover:bg-slate-50/50'
@@ -292,7 +292,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
                     >
                       <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
                         activeHighlight === index
-                          ? 'bg-[#0082c8] text-white'
+                          ? 'bg-[#1992BB] text-white'
                           : isPast
                           ? 'bg-slate-200 text-slate-600'
                           : 'bg-slate-100 text-slate-400'

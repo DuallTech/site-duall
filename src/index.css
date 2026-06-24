@@ -6,11 +6,11 @@
   --font-display: "Outfit", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
   
-  --color-duall-blue: #355979;
-  --color-duall-dark: #2d3748;
-  --color-duall-gold: #d9a006;
-  --color-duall-teal-start: #0082c8;
-  --color-duall-teal-end: #243c56;
+  --color-duall-blue: #315676;
+  --color-duall-dark: #2d3845;
+  --color-duall-gold: #1992bb;
+  --color-duall-teal-start: #1992bb;
+  --color-duall-teal-end: #2d3845;
 }
 
 /* Base style resets */
@@ -29,7 +29,7 @@
   
   /* Focus-visible ring for keyboard navigation WCAG compliance */
   :focus-visible {
-    outline: 3px solid var(--color-duall-gold);
+    outline: 3px solid var(--color-duall-teal-start);
     outline-offset: 3px;
   }
 }
@@ -105,5 +105,5 @@
 
 .high-contrast a {
   text-decoration: underline !important;
-  color: #ffff00 !important;
+  color: #7dd3fc !important;
 }
