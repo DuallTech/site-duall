@@ -44,11 +44,11 @@ export default function ContactForm({ isHighContrast }: ContactFormProps) {
       : 'bg-slate-900/60 backdrop-blur-md border border-slate-800 text-white',
     input: isHighContrast 
       ? 'bg-black border border-white text-white focus:outline-none focus:border-yellow-405 placeholder-slate-400' 
-      : 'bg-slate-950/65 border border-slate-800 text-white focus:outline-none focus:border-[#1992BB] focus:ring-1 focus:ring-[#1992BB]/35 placeholder-slate-500',
+      : 'bg-slate-950/65 border border-slate-800 text-white focus:outline-none focus:border-[#315676] focus:ring-1 focus:ring-[#315676]/35 placeholder-slate-500',
     label: 'block text-xs font-bold uppercase tracking-wider font-mono text-slate-300 mb-1.5',
     button: isHighContrast 
       ? 'bg-white text-black hover:bg-slate-200' 
-      : 'bg-[#1992BB] text-white hover:bg-[#157a9d] shadow-lg shadow-sky-500/10'
+      : 'bg-[#315676] text-white hover:bg-[#254261] shadow-lg shadow-blue-950/10'
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -95,7 +95,7 @@ export default function ContactForm({ isHighContrast }: ContactFormProps) {
             className="space-y-4"
           >
             <div>
-              <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-[#1992BB] font-mono mb-1">
+              <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-[#315676] font-mono mb-1">
                 <Sparkles size={11} /> Atendimento Premium
               </span>
               <h3 className="text-lg font-display font-extrabold tracking-tight">Fale com Nossos Especialistas</h3>
