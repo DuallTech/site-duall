@@ -76,7 +76,7 @@ export default function AccessibilityPanel({
       {/* Skip to Main Content Link for WCAG Keyboard navigation */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-duall-gold focus:text-duall-dark focus:px-4 focus:py-2 focus:rounded-md focus:font-bold focus:shadow-lg focus:outline-none focus:ring-4 focus:ring-amber-400"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-duall-blue focus:text-white focus:px-4 focus:py-2 focus:rounded-md focus:font-bold focus:shadow-lg focus:outline-none focus:ring-4 focus:ring-sky-400"
       >
         Pular para o conteúdo principal
       </a>
@@ -145,7 +145,7 @@ export default function AccessibilityPanel({
                         textSize === size
                           ? isHighContrast
                             ? 'bg-white text-black border-white'
-                            : 'bg-duall-gold text-duall-dark border-duall-gold'
+                            : 'bg-duall-blue text-white border-duall-blue'
                           : isHighContrast
                           ? 'bg-black text-white border-slate-500 hover:border-white'
                           : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'

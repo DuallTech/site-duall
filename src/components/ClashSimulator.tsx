@@ -10,7 +10,6 @@ import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-
 import { IFCLoader } from 'web-ifc-three/IFCLoader';
 import { IFCSPACE, IFCOPENINGELEMENT } from 'web-ifc';
 import fixedIfcUrl  from '../assets/ifc/teste.ifc?url';
-import fixedIfcAUrl from '../assets/ifc/testeA.ifc?url';
 import { 
   Layers,
   RotateCw,
@@ -71,13 +70,13 @@ const SYSTEM_COLORS: Record<BIMSystem, { color: number; opacity: number; transpa
 };
 
 // IFC file URL for each discipline that has a dedicated file
-// testeA.ifc = Arquitetura/Estrutura; testeH.ifc = Hidráulica
+// Atualmente usamos o mesmo arquivo base disponível em assets/ifc/teste.ifc.
 const SYSTEM_IFC_URLS: Partial<Record<BIMSystem, string>> = {
-  estrutura:  fixedIfcAUrl,
+  estrutura:  fixedIfcUrl,
   hidraulico: fixedIfcUrl,
 };
 
-const FIXED_IFC_FILE_NAME = 'testeA.ifc';
+const FIXED_IFC_FILE_NAME = 'teste.ifc';
 
 const disposeObject3D = (object: THREE.Object3D) => {
   object.traverse((child) => {
@@ -255,7 +254,7 @@ export default function ClashSimulator() {
   const selectIfcIntersection = async (intersection: THREE.Intersection) => {
     const loader = ifcLoaderRef.current;
     const model = activeIfcModelRef.current;
-    if (!loader || !model || intersection.faceIndex === undefined || !objectsGroupRef.current) return;
+    if (!loader || !model || intersection.faceIndex == null || !objectsGroupRef.current) return;
 
     const mesh = intersection.object as any;
     const modelID = typeof mesh.modelID === 'number' ? mesh.modelID : (model as any).modelID;
@@ -265,7 +264,7 @@ export default function ClashSimulator() {
     if (expressID === undefined || expressID === null) return;
 
     const material = selectionMaterialRef.current ?? new THREE.MeshLambertMaterial({
-      color: 0xd9a006,
+      color: 0x1992bb,
       transparent: true,
       opacity: 0.85,
       depthTest: false,
@@ -303,7 +302,7 @@ export default function ClashSimulator() {
       dimensions: `Express ID ${expressID}`,
       lod: 'Propriedade IFC real',
       status: 'Selecionado',
-      colorHex: 0xd9a006
+      colorHex: 0x1992bb
     };
 
     selectedIfcRef.current = { modelID, expressID };
@@ -481,7 +480,7 @@ export default function ClashSimulator() {
         ifcLoaderRef.current = loader;
       }
 
-      loader.ifcManager.setOnProgress((event: ProgressEvent) => {
+      loader.ifcManager.setOnProgress((event) => {
         const total = Math.max(event.total || arrayBuffer.byteLength, 1);
         const progress = Math.min(90, Math.max(10, Math.round((event.loaded / total) * 90)));
         setParseProgress(progress);
@@ -579,7 +578,7 @@ export default function ClashSimulator() {
   };
 
   const loadFixedIFCFile = async () => {
-    const response = await fetch(fixedIfcAUrl);
+    const response = await fetch(fixedIfcUrl);
     if (!response.ok) {
       throw new Error(`Não foi possível carregar o IFC fixo: ${response.status}`);
     }
@@ -655,7 +654,7 @@ export default function ClashSimulator() {
     dirLight.position.set(7, 13, 8);
     scene.add(dirLight);
 
-    const pointLight = new THREE.PointLight(0xd9a006, 0.5, 12);
+    const pointLight = new THREE.PointLight(0x1992bb, 0.5, 12);
     pointLight.position.set(0, 3, 0);
     scene.add(pointLight);
 
@@ -722,7 +721,7 @@ export default function ClashSimulator() {
       if (intersects.length > 0) {
         const loader = ifcLoaderRef.current;
         const faceIndex = intersects[0].faceIndex;
-        if (loader && faceIndex !== undefined) {
+        if (loader && faceIndex != null) {
           const object = intersects[0].object as any;
           const expressID = loader.ifcManager.getExpressId(object.geometry, faceIndex);
           if (expressID !== undefined && expressID !== null) {
@@ -736,7 +735,7 @@ export default function ClashSimulator() {
               dimensions: `Express ID ${expressID}`,
               lod: 'IFCLoader',
               status: 'Hover',
-              colorHex: 0xd9a006
+              colorHex: 0x1992bb
             });
             return;
           }
@@ -973,7 +972,7 @@ export default function ClashSimulator() {
       <div className="p-6 border-b border-slate-900 bg-slate-950/40 backdrop-blur-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-[10px] uppercase tracking-widest font-mono font-bold text-duall-gold">
+            <span className="px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-[10px] uppercase tracking-widest font-mono font-bold text-duall-blue">
               Visualizador BIM .IFC Real
             </span>
             <span className="flex h-2 w-2 relative">
@@ -1024,7 +1023,7 @@ export default function ClashSimulator() {
             {!activeMetadata && !isParsing && (
               <div className="absolute inset-x-4 inset-y-4 bg-[#060b18]/95 z-20 flex flex-col items-center justify-center p-6 text-center select-none border-2 border-dashed border-duall-blue/30 rounded-2xl backdrop-blur-sm">
                 <div className="p-4 bg-duall-blue/10 rounded-full border border-duall-blue/20 mb-3 animate-pulse">
-                  <FileCode size={32} className="text-duall-gold" />
+                  <FileCode size={32} className="text-duall-blue" />
                 </div>
                 <h4 className="text-base font-display font-extrabold text-white tracking-wide">
                   Carregando arquivo IFC de exemplo
@@ -1035,7 +1034,7 @@ export default function ClashSimulator() {
                 
                 <div className="flex flex-col sm:flex-row items-center gap-3 mt-5">
                   <div className="px-5 py-2.5 bg-slate-900 text-slate-300 rounded-xl text-xs font-sans font-semibold shadow-lg inline-flex items-center gap-2 border border-slate-800">
-                    <FolderOpen size={14} className="text-duall-gold" />
+                    <FolderOpen size={14} className="text-duall-blue" />
                     <span>assets/ifc/teste.ifc</span>
                   </div>
                 </div>
@@ -1049,8 +1048,8 @@ export default function ClashSimulator() {
             {/* Parsing Overlay */}
             {isParsing && (
               <div className="absolute inset-0 bg-slate-950/95 z-25 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
-                <div className="p-4 bg-amber-500/10 rounded-full border border-amber-500/20 mb-4">
-                  <RefreshCw size={28} className="text-duall-gold animate-spin" />
+                <div className="p-4 bg-sky-500/10 rounded-full border border-sky-500/20 mb-4">
+                  <RefreshCw size={28} className="text-duall-blue animate-spin" />
                 </div>
                 <h4 className="text-base font-display font-extrabold text-white tracking-wide">
                   Analisando Linhas do Arquivo IFC
@@ -1062,11 +1061,11 @@ export default function ClashSimulator() {
                 {/* Visual Custom Progress Bar */}
                 <div className="w-56 h-1.5 bg-slate-900 rounded-full overflow-hidden mt-5 border border-white/5">
                   <div 
-                    className="h-full bg-linear-to-r from-amber-500 to-duall-gold transition-all duration-300"
+                    className="h-full bg-linear-to-r from-[#315676] to-duall-blue transition-all duration-300"
                     style={{ width: `${parseProgress}%` }}
                   />
                 </div>
-                <span className="text-[10px] font-mono font-bold text-amber-500 mt-2 tracking-widest">
+                <span className="text-[10px] font-mono font-bold text-sky-500 mt-2 tracking-widest">
                   {parseProgress}% PROCESSADO
                 </span>
               </div>
@@ -1092,7 +1091,7 @@ export default function ClashSimulator() {
                   onClick={() => setShowAxes(!showAxes)}
                   className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition duration-200 cursor-pointer ${
                     showAxes 
-                      ? 'bg-amber-500/15 text-duall-gold border border-amber-500/20' 
+                      ? 'bg-sky-500/15 text-duall-blue border border-sky-500/20' 
                       : 'text-slate-400 hover:text-white hover:bg-white/5'
                   }`}
                   title="Exibir Linhas de Coordenadas Globais XYZ"
@@ -1136,7 +1135,7 @@ export default function ClashSimulator() {
                   }}
                   className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition duration-200 cursor-pointer ${
                     isMeasuringMode 
-                      ? 'bg-duall-gold text-slate-950 font-bold' 
+                      ? 'bg-[#315676] text-white font-bold' 
                       : 'text-slate-300 hover:text-white hover:bg-white/5'
                   }`}
                   title="Ferramenta de medição 3D"
@@ -1171,8 +1170,8 @@ export default function ClashSimulator() {
 
             {/* Measuring Tool UI overlay */}
             {isMeasuringMode && (
-              <div className="absolute top-16 right-4 z-10 p-3 bg-slate-950/95 border border-amber-500/25 backdrop-blur-md rounded-xl shadow-xl flex flex-col gap-1.5 max-w-[190px] text-xs font-sans text-slate-300 text-left">
-                <div className="flex items-center gap-1.5 text-duall-gold font-extrabold">
+              <div className="absolute top-16 right-4 z-10 p-3 bg-slate-950/95 border border-sky-500/25 backdrop-blur-md rounded-xl shadow-xl flex flex-col gap-1.5 max-w-[190px] text-xs font-sans text-slate-300 text-left">
+                <div className="flex items-center gap-1.5 text-duall-blue font-extrabold">
                   <Ruler size={13} className="animate-pulse" />
                   <span>Régua Ativa (BIM)</span>
                 </div>
@@ -1180,7 +1179,7 @@ export default function ClashSimulator() {
                   <p className="text-[10px] text-slate-400 leading-relaxed">Clique em dois elementos no modelo 3D para medir a distância real.</p>
                 )}
                 {measurePoints.length === 1 && (
-                  <p className="text-[10px] text-amber-500 leading-relaxed font-semibold">Ponto 1 definido. Clique em outro ponto para calcular.</p>
+                  <p className="text-[10px] text-sky-400 leading-relaxed font-semibold">Ponto 1 definido. Clique em outro ponto para calcular.</p>
                 )}
                 {measurePoints.length === 2 && measureDistance !== null && (
                   <div className="space-y-1 mt-1 border-t border-slate-900 pt-1">
@@ -1200,7 +1199,7 @@ export default function ClashSimulator() {
             {/* Hover element name pill overlay */}
             {hoveredElement && (
               <div className="absolute bottom-4 left-4 z-10 px-3 py-1.5 bg-slate-950/85 backdrop-blur-md rounded-lg border border-white/10 text-[10px] font-mono font-bold text-slate-200 pointer-events-none shadow-lg">
-                <span className="text-amber-500 ">{hoveredElement.stepId}</span> {hoveredElement.name}
+                <span className="text-sky-400 ">{hoveredElement.stepId}</span> {hoveredElement.name}
               </div>
             )}
 
@@ -1208,7 +1207,7 @@ export default function ClashSimulator() {
             <div className="absolute inset-x-4 bottom-4 z-10 flex justify-center pointer-events-none">
               <div className="bg-slate-950/95 px-4 py-3 rounded-2xl border border-slate-800/80 backdrop-blur-lg flex items-center justify-between shadow-2xl pointer-events-auto max-w-lg w-full select-none">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="p-2 bg-amber-500/10 rounded-xl text-amber-500 border border-amber-500/20 flex-shrink-0 animate-pulse">
+                  <div className="p-2 bg-sky-500/10 rounded-xl text-sky-500 border border-sky-500/20 flex-shrink-0 animate-pulse">
                     <Activity size={15} />
                   </div>
                   <div className="text-left min-w-0">
