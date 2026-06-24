@@ -23,6 +23,7 @@ import {
   ChevronDown,
   ChevronUp,
   Cpu,
+  FileText,
   Sparkles,
   Layers,
   Clock,
@@ -838,198 +839,112 @@ export default function App() {
           </div>
         </section>
 
-        {/* PORTFOLIO GRID & HISTORICAL SAVINGS (Locations São Paulo, Americana, Santos) */}
+        {/* PORTFOLIO EDITORIAL GRID */}
         <section
           id="portfolio"
           aria-labelledby="portfolio-heading"
-          className="py-24 bg-slate-50 border-t border-slate-100"
+          className="py-24 bg-white border-t border-slate-200/80"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            {/* Split layout: Intro on left, Quick statistics card on right */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16">
-              <motion.div 
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-14">
+              <motion.div
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={fadeInUpVariants}
-                className="lg:col-span-7 space-y-4 text-left"
+                className="max-w-3xl text-left"
               >
-                <span className="text-[#1992BB] text-xs font-bold uppercase tracking-wider font-mono">Nosso Histórico</span>
-                <h2 id="portfolio-heading" className="text-3xl md:text-4xl font-display font-extrabold text-[#1c2e3f] tracking-tight">
-                  Projetos de Empreendimentos de Alto Impacto
+                <div className="flex items-center gap-3 text-[11px] font-mono font-bold uppercase tracking-[0.28em] text-[#315676]">
+                  <span className="h-px w-5 bg-[#315676]" />
+                  <span>Portfólio de Obras</span>
+                </div>
+                <h2 id="portfolio-heading" className="mt-5 text-3xl md:text-4xl lg:text-[3.35rem] font-display font-extrabold text-[#2D3845] tracking-tight leading-[1]">
+                  Veja nossas obras de destaque.
                 </h2>
-                <div className="h-1.5 w-24 bg-[#355979] rounded-full" />
-                <p className="text-slate-600 text-base leading-relaxed">
-                  Lideramos o desenvolvimento de instalações com aprovação ágil junto ao Corpo de Bombeiros e concessionárias em São Paulo, Americana e Santos.
+                <p className="mt-4 text-base text-[#5E6B7A] leading-relaxed max-w-2xl">
+                  Projetos de instalações prediais de alta complexidade desenvolvidos integralmente em tecnologia BIM (LOD 400), garantindo precisão executiva e zero interferências.
                 </p>
               </motion.div>
 
-              {/* Statistics Grid */}
-              <motion.div 
+              <motion.a
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={fadeInUpVariants}
-                className="lg:col-span-5 bg-[#1c2e3f] text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between border border-slate-700/60"
+                href={getWhatsAppGlobalUrl('Olá Duall Engenharia! Gostaria de receber o portfólio completo de obras e conhecer mais casos de destaque.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 inline-flex items-center justify-center gap-2.5 bg-[#1992BB] text-white px-5 py-3.5 rounded-md text-[11px] font-bold tracking-[0.12em] uppercase transition-all duration-200 hover:bg-[#157a9d] hover:-translate-y-px shadow-[0_4px_16px_rgba(25,146,187,0.18)]"
               >
-                <div className="text-xs space-y-1">
-                  <span className="text-[10px] text-sky-400 font-mono font-bold tracking-wider uppercase">Indicadores Consolidados de Sucesso</span>
-                  <p className="text-slate-300">Unindo a tecnologia BIM ao rigor fiscal da obra</p>
-                </div>
-                <div className="grid grid-cols-3 gap-4 mt-6">
-                  <div className="text-center border-r border-slate-700">
-                    <span className="text-2xl font-bold font-display text-white">+18</span>
-                    <span className="text-[10px] block text-slate-300 mt-1 uppercase font-mono tracking-wider">Anos Ativa</span>
-                  </div>
-                  <div className="text-center border-r border-slate-700">
-                    <span className="text-2xl font-bold font-display text-white">420k²</span>
-                    <span className="text-[10px] block text-slate-300 mt-1 uppercase font-mono tracking-wider">M² Projetados</span>
-                  </div>
-                  <div className="text-center">
-                    <span className="text-2xl font-bold font-display text-[#1992BB]">95%+</span>
-                    <span className="text-[10px] block text-slate-300 mt-1 uppercase font-mono tracking-wider">Economia de Custos</span>
-                  </div>
-                </div>
-              </motion.div>
+                <FileText size={16} />
+                <span>Abrir Portfólio Completo</span>
+              </motion.a>
             </div>
 
-            {/* Custom Interactive Portfolio Tab Filter */}
-            <motion.div 
+            <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInUpVariants}
-              className="flex gap-2.5 justify-center mb-12 flex-wrap"
+              variants={staggerContainerVariants}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5"
             >
-              {(['all', 'eletrico', 'hidraulico', 'incendio', 'mecanico'] as const).map((tab) => {
-                const isActive = activeTab === tab;
-                return (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-350 cursor-pointer border ${
-                      isActive 
-                        ? 'bg-[#355979] text-white border-[#355979] shadow-lg shadow-blue-950/25 scale-[1.02]' 
-                        : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-200/85 hover:border-slate-300 hover:text-slate-900 shadow-xs'
-                    } font-sans uppercase tracking-wider text-[10px]`}
-                  >
-                    {tab === 'all' && 'Todos os Locais'}
-                    {tab === 'eletrico' && 'Projetos Elétricos'}
-                    {tab === 'hidraulico' && 'Projetos Hidráulicos'}
-                    {tab === 'incendio' && 'Combate a Incêndio'}
-                    {tab === 'mecanico' && 'Climatização VRF'}
-                  </button>
-                );
-              })}
-            </motion.div>
+              {PORTFOLIO_PROJECTS.slice(0, 5).map((project, index) => {
+                const isFeatured = index === 0;
+                const isSideFeature = index === 1;
+                const wrapperClass = isFeatured
+                  ? 'lg:col-span-7'
+                  : isSideFeature
+                    ? 'lg:col-span-5'
+                    : 'lg:col-span-4';
+                const imageHeight = isFeatured ? 'h-[280px] md:h-[320px] lg:h-[340px]' : isSideFeature ? 'h-[280px] md:h-[320px] lg:h-[340px]' : 'h-[210px] md:h-[225px]';
+                const categoryLabel =
+                  index === 0 ? 'Residencial Alto Padrão' :
+                  index === 1 ? 'Corporativo Premium' :
+                  index === 2 ? 'Residencial de Luxo' :
+                  index === 3 ? 'Comercial / Mixed-Use' :
+                  'Complexo de Saúde';
 
-            {/* Portfolio Grid Cards */}
-            <AnimatePresence mode="popLayout">
-              <motion.div 
-                layout
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={staggerContainerVariants}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-              >
-                {PORTFOLIO_PROJECTS.filter(project => {
-                  if (activeTab === 'all') return true;
-                  const specNameMapped = activeTab === 'eletrico' ? 'Elétrico' : activeTab === 'hidraulico' ? 'Hidráulico' : activeTab === 'incendio' ? 'Incêndio' : 'Climatização';
-                  return project.specialities.includes(specNameMapped);
-                }).map((project) => (
-                  <motion.div
-                    layout
-                    variants={staggerItemVariants}
-                    whileHover={{ y: -6 }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                return (
+                  <motion.article
                     key={project.id}
-                    className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:border-slate-200/60 transition-all duration-300 flex flex-col justify-between group"
+                    variants={staggerItemVariants}
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.28, ease: 'easeOut' }}
+                    className={`${wrapperClass} overflow-hidden rounded-2xl bg-white border border-slate-200/70 shadow-[0_6px_22px_rgba(15,23,42,0.07)] group h-full`}
                   >
-                    {/* Card head layout */}
-                    <div className="relative h-56 overflow-hidden bg-slate-900">
+                    <div className={`relative overflow-hidden ${imageHeight}`}>
                       <img
                         src={project.imageUrl}
                         alt={`Empreendimento ${project.title}`}
-                        className="w-full h-full object-cover filter brightness-95 group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent pointer-events-none" />
-                      
-                      {/* Property Type Pill */}
-                      <div className="absolute top-4 left-4 py-1.5 px-3 bg-slate-950/80 backdrop-blur-md text-white text-[9px] uppercase tracking-wider font-extrabold font-mono rounded-lg border border-white/10">
-                        {project.type}
-                      </div>
-
-                      {/* Spark dynamic tag */}
-                      <div className="absolute bottom-4 right-4 py-1 px-2.5 bg-[#1992BB] text-white text-[9px] uppercase font-mono font-black rounded-md tracking-wider flex items-center gap-1 shadow-md">
-                        <Sparkles size={10} className="fill-slate-950" />
-                        <span>BIM Coord.</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute left-4 top-4 rounded-full bg-[#1992BB] px-3.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md">
+                        {categoryLabel}
                       </div>
                     </div>
 
-                    {/* Card body layout */}
-                    <div className="p-6 flex-grow flex flex-col justify-between space-y-5">
-                      <div className="space-y-2.5">
-                        <div className="flex items-center gap-1.5 text-slate-400 font-mono text-[9px] uppercase tracking-wider select-none">
-                          <MapPin size={11} className="text-[#1992BB]" />
-                          <span>{project.location}</span>
-                        </div>
-                        <h3 className="font-display font-extrabold text-lg text-slate-800 leading-snug group-hover:text-[#355979] transition duration-150">
-                          {project.title}
-                        </h3>
-                        <p className="text-slate-500 font-sans font-light text-xs leading-relaxed line-clamp-3">
-                          {project.description}
-                        </p>
-                      </div>
-
-                      <div className="space-y-4 pt-1">
-                        {/* Custom visual specialty badges */}
-                        <div className="flex flex-wrap gap-1.5">
-                          {project.specialities.map((spec, i) => {
-                            let badgeColor = 'bg-slate-50 text-slate-600 border-slate-200/50';
-                            if (spec === 'Elétrico') badgeColor = 'bg-sky-500/10 text-sky-800 border-sky-500/20';
-                            else if (spec === 'Hidráulico') badgeColor = 'bg-sky-500/10 text-sky-800 border-sky-500/20';
-                            else if (spec === 'Incêndio') badgeColor = 'bg-rose-500/10 text-rose-800 border-rose-500/20';
-                            else if (spec === 'Climatização') badgeColor = 'bg-emerald-500/10 text-emerald-800 border-emerald-500/20';
-                            
-                            return (
-                              <span
-                                key={i}
-                                className={`px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wide uppercase border ${badgeColor}`}
-                              >
-                                {spec}
-                              </span>
-                            );
-                          })}
-                        </div>
-
-                        {/* Card bottom area with area scale indication & dynamic link to CTA */}
-                        <div className="border-t border-slate-100 pt-4 flex justify-between items-center bg-slate-50/70 -mx-6 -mb-6 p-6">
-                          <div>
-                            <span className="text-[9px] text-slate-400 font-mono tracking-wider uppercase block select-none">Área Coberta</span>
-                            <span className="font-mono text-xs font-black text-[#355979] tracking-tight">{project.area}</span>
-                          </div>
-                          
-                          <a
-                            href={getWhatsAppGlobalUrl(`Olá Duall Engenharia! Vi o portfólio oficial de vocês e gostei bastante do empreendimento "${project.title}" (${project.location}). Gostaria de entender mais sobre o escopo de engenharia e modelagem BIM para esse tipo de obra.`)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#355979]/5 hover:bg-[#355979] hover:text-white text-[#355979] text-[11px] font-extrabold font-sans rounded-xl transition-all duration-300"
-                            id={`btn-${project.id}`}
-                          >
-                            <span>Caso de Estudo</span>
-                            <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-                          </a>
-                        </div>
-                      </div>
-
+                    <div className="bg-white px-5 py-4 md:px-5 md:py-5">
+                      <h3 className={`font-display font-extrabold tracking-tight text-[#2D3845] leading-tight ${
+                        isFeatured
+                          ? 'text-[2rem] md:text-[2.25rem]'
+                          : isSideFeature
+                            ? 'text-[1.45rem] md:text-[1.7rem]'
+                            : 'text-[1.28rem] md:text-[1.45rem]'
+                      }`}>
+                        {project.title}
+                      </h3>
+                      <p className={`mt-2 text-[#5E6B7A] ${
+                        isFeatured || isSideFeature ? 'text-[14px] leading-7' : 'text-[13px] leading-6'
+                      }`}>
+                        {project.area} · BIM 2024 · {project.specialities.join(', ')}
+                      </p>
                     </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
+                  </motion.article>
+                );
+              })}
+            </motion.div>
 
             {/* CLIENT LOGO TICKER */}
             {(() => {

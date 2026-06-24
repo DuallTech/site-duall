@@ -66,6 +66,17 @@ export const SPECIALITIES: ProjectSpeciality[] = [
     ],
     bannerUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80'
   }
+,
+  {
+    id: 'port_5',
+    title: 'Complexo Hospitalar Sancta',
+    location: 'Moema, São Paulo - SP',
+    type: 'Complexo de Saúde',
+    area: '16.400 m²',
+    description: 'Projeto integrado com climatização crítica, hidráulica hospitalar, combate a incêndio e infraestrutura elétrica para operação de alta confiabilidade.',
+    imageUrl: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=800&h=600&q=80',
+    specialities: ['Climatização', 'Hidráulico', 'Incêndio', 'Elétrico']
+  }
 ];
 
 export const TESTIMONIALS: Testimony[] = [
