@@ -9,7 +9,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
 import { IFCLoader } from 'web-ifc-three/IFCLoader';
 import { IFCSPACE, IFCOPENINGELEMENT } from 'web-ifc';
-import fixedIfcHUrl from '../assets/ifc/testeH.ifc?url';
+import fixedIfcUrl  from '../assets/ifc/teste.ifc?url';
 import fixedIfcAUrl from '../assets/ifc/testeA.ifc?url';
 import { 
   Layers,
@@ -74,7 +74,7 @@ const SYSTEM_COLORS: Record<BIMSystem, { color: number; opacity: number; transpa
 // testeA.ifc = Arquitetura/Estrutura; testeH.ifc = Hidráulica
 const SYSTEM_IFC_URLS: Partial<Record<BIMSystem, string>> = {
   estrutura:  fixedIfcAUrl,
-  hidraulico: fixedIfcHUrl,
+  hidraulico: fixedIfcUrl,
 };
 
 const FIXED_IFC_FILE_NAME = 'testeA.ifc';
