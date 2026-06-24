@@ -1,0 +1,16 @@
+import duallLogoUrl from '../assets/images/Logo Horizontal - WEB@4x.png';
+import duallLogoWhiteUrl from '../assets/images/Logo Horizontal - branco@4x.png';
+
+interface DuallLogoProps {
+  isDark?: boolean;
+}
+
+export default function DuallLogo({ isDark = false }: DuallLogoProps) {
+  return (
+    <img
+      src={isDark ? duallLogoWhiteUrl : duallLogoUrl}
+      alt="Duall Engenharia"
+      className="h-14 w-auto select-none"
+    />
+  );
+}
