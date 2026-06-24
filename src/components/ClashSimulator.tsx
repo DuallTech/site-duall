@@ -1097,7 +1097,7 @@ export default function ClashSimulator() {
                 {/* Visual Custom Progress Bar */}
                 <div className="w-56 h-1.5 bg-slate-900 rounded-full overflow-hidden mt-5 border border-white/5">
                   <div 
-                    className="h-full bg-linear-to-r from-[#1992BB] to-duall-blue transition-all duration-300"
+                    className="h-full bg-linear-to-r from-[#315676] to-duall-blue transition-all duration-300"
                     style={{ width: `${parseProgress}%` }}
                   />
                 </div>
@@ -1171,7 +1171,7 @@ export default function ClashSimulator() {
                   }}
                   className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition duration-200 cursor-pointer ${
                     isMeasuringMode 
-                      ? 'bg-[#1992BB] text-white font-bold' 
+                      ? 'bg-[#315676] text-white font-bold' 
                       : 'text-slate-300 hover:text-white hover:bg-white/5'
                   }`}
                   title="Ferramenta de medição 3D"
