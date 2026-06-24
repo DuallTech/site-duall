@@ -10,7 +10,30 @@ import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-
 import { IFCLoader } from 'web-ifc-three/IFCLoader';
 import {
   IFCSPACE,
-  IFCOPENINGELEMENT
+  IFCOPENINGELEMENT,
+  IFCWALL,
+  IFCWALLSTANDARDCASE,
+  IFCCOLUMN,
+  IFCBEAM,
+  IFCSLAB,
+  IFCMEMBER,
+  IFCPIPESEGMENT,
+  IFCPIPEFITTING,
+  IFCVALVE,
+  IFCPUMP,
+  IFCDUCTSEGMENT,
+  IFCDUCTFITTING,
+  IFCAIRTERMINAL,
+  IFCFAN,
+  IFCFLOWTERMINAL,
+  IFCFLOWSEGMENT,
+  IFCCABLECARRIERSEGMENT,
+  IFCCABLESEGMENT,
+  IFCLIGHTFIXTURE,
+  IFCOUTLET,
+  IFCSWITCHINGDEVICE,
+  IFCJUNCTIONBOX,
+  IFCFIRESUPPRESSIONTERMINAL,
 } from 'web-ifc';
 import fixedIfcUrl from '../assets/ifc/teste.ifc?url';
 import { 
@@ -62,6 +85,24 @@ interface IFCFileMetadata {
 }
 
 type BIMSystem = BIMElementData['system'];
+
+// Colors, opacity and render settings for each MEP discipline subset
+const SYSTEM_COLORS: Record<BIMSystem, { color: number; opacity: number; transparent: boolean; depthWrite: boolean }> = {
+  estrutura: { color: 0x94a3b8, opacity: 0.38, transparent: true,  depthWrite: false },
+  eletrico:  { color: 0xfbbf24, opacity: 1.0,  transparent: false, depthWrite: true  },
+  hidraulico:{ color: 0x60a5fa, opacity: 1.0,  transparent: false, depthWrite: true  },
+  mecanico:  { color: 0x22d3ee, opacity: 1.0,  transparent: false, depthWrite: true  },
+  incendio:  { color: 0xf87171, opacity: 1.0,  transparent: false, depthWrite: true  },
+};
+
+// IFC types that belong to each discipline (specific → generic fallback last)
+const SYSTEM_IFC_TYPES: [BIMSystem, number[]][] = [
+  ['estrutura', [IFCWALL, IFCWALLSTANDARDCASE, IFCCOLUMN, IFCBEAM, IFCSLAB, IFCMEMBER]],
+  ['mecanico',  [IFCDUCTSEGMENT, IFCDUCTFITTING, IFCAIRTERMINAL, IFCFAN, IFCFLOWTERMINAL]],
+  ['hidraulico',[IFCPIPESEGMENT, IFCPIPEFITTING, IFCVALVE, IFCPUMP, IFCFLOWSEGMENT]],
+  ['eletrico',  [IFCCABLECARRIERSEGMENT, IFCCABLESEGMENT, IFCLIGHTFIXTURE, IFCOUTLET, IFCSWITCHINGDEVICE, IFCJUNCTIONBOX]],
+  ['incendio',  [IFCFIRESUPPRESSIONTERMINAL]],
+];
 
 const FIXED_IFC_FILE_NAME = 'teste.ifc';
 
@@ -189,12 +230,20 @@ export default function ClashSimulator() {
   const modelBoundsRef = useRef<THREE.Box3 | null>(null);
   const modelFrameRef = useRef<THREE.Box3Helper | null>(null);
   const fixedIFCLoadedRef = useRef<boolean>(false);
+  const systemSubsetsRef = useRef<Partial<Record<BIMSystem, THREE.Mesh>>>({});
+  const systemMaterialsRef = useRef<Partial<Record<BIMSystem, THREE.MeshLambertMaterial>>>({});
 
-  // Toggle Visibility Helper
+  // Toggle per-discipline subset visibility
   const toggleSystem = (system: keyof typeof visibleSystems) => {
     setVisibleSystems(prev => {
       const next = { ...prev, [system]: !prev[system] };
-      if (activeIfcModelRef.current) activeIfcModelRef.current.visible = Object.values(next).some(Boolean);
+      const subset = systemSubsetsRef.current[system];
+      if (subset) {
+        subset.visible = !prev[system];
+      } else if (activeIfcModelRef.current) {
+        // fallback before subsets are ready
+        activeIfcModelRef.current.visible = Object.values(next).some(Boolean);
+      }
       return next;
     });
   };
@@ -310,6 +359,11 @@ export default function ClashSimulator() {
       modelFrameRef.current = null;
     }
 
+    // Dispose per-discipline subset materials (geometry is cleared by the loop below)
+    Object.values(systemMaterialsRef.current).forEach(mat => mat?.dispose());
+    systemSubsetsRef.current = {};
+    systemMaterialsRef.current = {};
+
     while (objectsGroupRef.current.children.length > 0) {
       const obj = objectsGroupRef.current.children[0];
       disposeObject3D(obj);
@@ -355,6 +409,52 @@ export default function ClashSimulator() {
     controls.minDistance = Math.max(maxSize * 0.02, 0.5);
     controls.maxDistance = Math.max(maxSize * 8, 25);
     controls.update();
+  };
+
+  // Build per-discipline colored IFC subsets after the model is loaded
+  const buildSystemSubsets = async (modelID: number) => {
+    const loader = ifcLoaderRef.current;
+    const group = objectsGroupRef.current;
+    if (!loader || !group) return;
+
+    // Hide the merged model so only the colored subsets are visible
+    if (activeIfcModelRef.current) activeIfcModelRef.current.visible = false;
+
+    const classified = new Set<number>();
+
+    for (const [system, types] of SYSTEM_IFC_TYPES) {
+      const ids: number[] = [];
+      for (const ifcType of types) {
+        try {
+          const found: number[] = await loader.ifcManager.getAllItemsOfType(modelID, ifcType, false);
+          found.forEach(id => { if (!classified.has(id)) { ids.push(id); classified.add(id); } });
+        } catch (_) { /* type not in model */ }
+      }
+      if (ids.length === 0) continue;
+
+      const { color, opacity, transparent, depthWrite } = SYSTEM_COLORS[system];
+      const mat = new THREE.MeshLambertMaterial({ color, transparent, opacity, depthWrite, side: THREE.DoubleSide });
+      systemMaterialsRef.current[system] = mat;
+
+      try {
+        const subset = loader.ifcManager.createSubset({
+          modelID,
+          ids,
+          material: mat,
+          scene: group as unknown as THREE.Scene,
+          removePrevious: true,
+          customID: `duall_sys_${system}`,
+        }) as THREE.Mesh;
+
+        if (subset) {
+          subset.name = `duall_sys_${system}`;
+          subset.visible = true;
+          systemSubsetsRef.current[system] = subset;
+        }
+      } catch (err) {
+        console.warn(`[MEP] subset creation failed for ${system}:`, err);
+      }
+    }
   };
 
   const loadFixedIFCBuffer = async (arrayBuffer: ArrayBuffer, fileName: string) => {
@@ -478,6 +578,8 @@ export default function ClashSimulator() {
       setActiveClashIndex(-1);
       setActiveTab('geral');
       fitCameraToLoadedModel();
+      // Build per-discipline colored subsets asynchronously after camera is set
+      buildSystemSubsets(modelID).catch(e => console.warn('[MEP] buildSystemSubsets:', e));
       setParseProgress(100);
     } catch (err) {
       console.error(err);
@@ -770,40 +872,34 @@ export default function ClashSimulator() {
     });
   }, [showGrid, showAxes]);
 
-  // Trigger X-Ray / Ghost Mode updating transparency on structure elements
+  // Trigger X-Ray / Ghost Mode — make structure subset nearly transparent so MEP pipes are visible
   useEffect(() => {
+    const structureSubset = systemSubsetsRef.current['estrutura'];
+    if (structureSubset) {
+      const mat = systemMaterialsRef.current['estrutura'];
+      if (mat) {
+        mat.transparent = true;
+        mat.opacity = isXRayMode ? 0.04 : SYSTEM_COLORS['estrutura'].opacity;
+        mat.depthWrite = !isXRayMode;
+        mat.needsUpdate = true;
+      }
+      return;
+    }
+    // Fallback: subsets not yet built — operate on the merged model children
     if (!objectsGroupRef.current) return;
     objectsGroupRef.current.children.forEach(obj => {
       const sys = obj.userData.system as BIMSystem | undefined;
-      const className = obj.userData.className as string | undefined;
       if (!sys) return;
-
       obj.traverse(child => {
         if (!(child instanceof THREE.Mesh)) return;
         const mat = child.material as THREE.MeshStandardMaterial;
         if (!mat) return;
-
         if (isXRayMode) {
-          // In X-Ray mode, make structural items (concrete, walls, doors, windows, etc.) extremely ghosted
-          if (sys === 'estrutura') {
-            mat.transparent = true;
-            mat.opacity = 0.05; // Faint glass look
-          } else {
-            mat.transparent = false;
-            mat.opacity = 1.0; // Keep MEP colored systems 100% solid
-          }
+          mat.transparent = true;
+          mat.opacity = sys === 'estrutura' ? 0.05 : 1.0;
         } else {
-          // Restore normal materials
-          if (sys === 'estrutura') {
-            mat.transparent = true;
-            mat.opacity = 0.62; // Default IFC structural transparency
-          } else if (className === 'IFCWALLSTANDARDCASE') {
-            mat.transparent = true;
-            mat.opacity = 0.45; // Default wall transparency
-          } else {
-            mat.transparent = false;
-            mat.opacity = 1.0;
-          }
+          mat.transparent = sys === 'estrutura';
+          mat.opacity = sys === 'estrutura' ? 0.62 : 1.0;
         }
         mat.needsUpdate = true;
       });
