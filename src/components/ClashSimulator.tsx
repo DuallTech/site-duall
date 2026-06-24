@@ -8,34 +8,10 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
 import { IFCLoader } from 'web-ifc-three/IFCLoader';
-import {
-  IFCSPACE,
-  IFCOPENINGELEMENT,
-  IFCWALL,
-  IFCWALLSTANDARDCASE,
-  IFCCOLUMN,
-  IFCBEAM,
-  IFCSLAB,
-  IFCMEMBER,
-  IFCPIPESEGMENT,
-  IFCPIPEFITTING,
-  IFCVALVE,
-  IFCPUMP,
-  IFCDUCTSEGMENT,
-  IFCDUCTFITTING,
-  IFCAIRTERMINAL,
-  IFCFAN,
-  IFCFLOWTERMINAL,
-  IFCFLOWSEGMENT,
-  IFCCABLECARRIERSEGMENT,
-  IFCCABLESEGMENT,
-  IFCLIGHTFIXTURE,
-  IFCOUTLET,
-  IFCSWITCHINGDEVICE,
-  IFCJUNCTIONBOX,
-  IFCFIRESUPPRESSIONTERMINAL,
-} from 'web-ifc';
-import fixedIfcUrl from '../assets/ifc/teste.ifc?url';
+import { IFCSPACE, IFCOPENINGELEMENT } from 'web-ifc';
+import fixedIfcUrl  from '../assets/ifc/teste.ifc?url';
+import fixedIfcHUrl from '../assets/ifc/testeH.ifc?url';
+import fixedIfcAUrl from '../assets/ifc/testeA.ifc?url';
 import { 
   Layers,
   RotateCw,
@@ -95,14 +71,12 @@ const SYSTEM_COLORS: Record<BIMSystem, { color: number; opacity: number; transpa
   incendio:  { color: 0xf87171, opacity: 1.0,  transparent: false, depthWrite: true  },
 };
 
-// IFC types that belong to each discipline (specific → generic fallback last)
-const SYSTEM_IFC_TYPES: [BIMSystem, number[]][] = [
-  ['estrutura', [IFCWALL, IFCWALLSTANDARDCASE, IFCCOLUMN, IFCBEAM, IFCSLAB, IFCMEMBER]],
-  ['mecanico',  [IFCDUCTSEGMENT, IFCDUCTFITTING, IFCAIRTERMINAL, IFCFAN, IFCFLOWTERMINAL]],
-  ['hidraulico',[IFCPIPESEGMENT, IFCPIPEFITTING, IFCVALVE, IFCPUMP, IFCFLOWSEGMENT]],
-  ['eletrico',  [IFCCABLECARRIERSEGMENT, IFCCABLESEGMENT, IFCLIGHTFIXTURE, IFCOUTLET, IFCSWITCHINGDEVICE, IFCJUNCTIONBOX]],
-  ['incendio',  [IFCFIRESUPPRESSIONTERMINAL]],
-];
+// IFC file URL for each discipline that has a dedicated file
+const SYSTEM_IFC_URLS: Partial<Record<BIMSystem, string>> = {
+  estrutura: fixedIfcUrl,
+  hidraulico: fixedIfcHUrl,
+  mecanico:   fixedIfcAUrl,
+};
 
 const FIXED_IFC_FILE_NAME = 'teste.ifc';
 
@@ -230,19 +204,30 @@ export default function ClashSimulator() {
   const modelBoundsRef = useRef<THREE.Box3 | null>(null);
   const modelFrameRef = useRef<THREE.Box3Helper | null>(null);
   const fixedIFCLoadedRef = useRef<boolean>(false);
-  const systemSubsetsRef = useRef<Partial<Record<BIMSystem, THREE.Mesh>>>({});
+  // Stores the additional IFC models loaded per MEP discipline (not the base structure model)
+  const systemModelsRef   = useRef<Partial<Record<BIMSystem, THREE.Mesh>>>({});
   const systemMaterialsRef = useRef<Partial<Record<BIMSystem, THREE.MeshLambertMaterial>>>({});
+  // Tracks which systems are currently fetching their IFC file
+  const [loadingSystems, setLoadingSystems] = useState<Set<BIMSystem>>(new Set());
 
-  // Toggle per-discipline subset visibility
-  const toggleSystem = (system: keyof typeof visibleSystems) => {
+  // Toggle a discipline on/off; lazy-loads its IFC file on first activation
+  const toggleSystem = (system: BIMSystem) => {
     setVisibleSystems(prev => {
-      const next = { ...prev, [system]: !prev[system] };
-      const subset = systemSubsetsRef.current[system];
-      if (subset) {
-        subset.visible = !prev[system];
-      } else if (activeIfcModelRef.current) {
-        // fallback before subsets are ready
-        activeIfcModelRef.current.visible = Object.values(next).some(Boolean);
+      const nowVisible = !prev[system];
+      const next = { ...prev, [system]: nowVisible };
+
+      if (system === 'estrutura') {
+        // The structure is the base model loaded at startup
+        if (activeIfcModelRef.current) activeIfcModelRef.current.visible = nowVisible;
+      } else {
+        const model = systemModelsRef.current[system];
+        const url   = SYSTEM_IFC_URLS[system];
+        if (model) {
+          model.visible = nowVisible;
+        } else if (nowVisible && url) {
+          // First activation: lazy-load the IFC file for this discipline
+          setTimeout(() => loadSystemModel(system, url), 0);
+        }
       }
       return next;
     });
@@ -359,9 +344,9 @@ export default function ClashSimulator() {
       modelFrameRef.current = null;
     }
 
-    // Dispose per-discipline subset materials (geometry is cleared by the loop below)
+    // Dispose per-discipline MEP model materials
     Object.values(systemMaterialsRef.current).forEach(mat => mat?.dispose());
-    systemSubsetsRef.current = {};
+    systemModelsRef.current = {};
     systemMaterialsRef.current = {};
 
     while (objectsGroupRef.current.children.length > 0) {
@@ -376,6 +361,15 @@ export default function ClashSimulator() {
         ifcLoaderRef.current.ifcManager.close(modelID, sceneRef.current);
       }
     }
+
+    // Close additional MEP models
+    Object.entries(systemModelsRef.current).forEach(([, mepModel]) => {
+      if (!mepModel || !ifcLoaderRef.current || !sceneRef.current) return;
+      const mepID = (mepModel as any).modelID;
+      if (typeof mepID === 'number') {
+        ifcLoaderRef.current.ifcManager.close(mepID, sceneRef.current);
+      }
+    });
 
     activeIfcModelRef.current = null;
     objectsMapRef.current = {};
@@ -411,49 +405,35 @@ export default function ClashSimulator() {
     controls.update();
   };
 
-  // Build per-discipline colored IFC subsets after the model is loaded
-  const buildSystemSubsets = async (modelID: number) => {
+  // Lazy-load a dedicated IFC file for the given MEP discipline
+  const loadSystemModel = async (system: BIMSystem, url: string) => {
     const loader = ifcLoaderRef.current;
-    const group = objectsGroupRef.current;
+    const group  = objectsGroupRef.current;
     if (!loader || !group) return;
 
-    // Hide the merged model so only the colored subsets are visible
-    if (activeIfcModelRef.current) activeIfcModelRef.current.visible = false;
+    setLoadingSystems(prev => new Set([...prev, system]));
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const buffer = await response.arrayBuffer();
 
-    const classified = new Set<number>();
+      const model = await loader.parse(buffer);
 
-    for (const [system, types] of SYSTEM_IFC_TYPES) {
-      const ids: number[] = [];
-      for (const ifcType of types) {
-        try {
-          const found: number[] = await loader.ifcManager.getAllItemsOfType(modelID, ifcType, false);
-          found.forEach(id => { if (!classified.has(id)) { ids.push(id); classified.add(id); } });
-        } catch (_) { /* type not in model */ }
-      }
-      if (ids.length === 0) continue;
-
+      // Override all materials with this system's colour
       const { color, opacity, transparent, depthWrite } = SYSTEM_COLORS[system];
       const mat = new THREE.MeshLambertMaterial({ color, transparent, opacity, depthWrite, side: THREE.DoubleSide });
       systemMaterialsRef.current[system] = mat;
+      model.traverse((child: THREE.Object3D) => {
+        if (child instanceof THREE.Mesh) child.material = mat;
+      });
 
-      try {
-        const subset = loader.ifcManager.createSubset({
-          modelID,
-          ids,
-          material: mat,
-          scene: group as unknown as THREE.Scene,
-          removePrevious: true,
-          customID: `duall_sys_${system}`,
-        }) as THREE.Mesh;
-
-        if (subset) {
-          subset.name = `duall_sys_${system}`;
-          subset.visible = true;
-          systemSubsetsRef.current[system] = subset;
-        }
-      } catch (err) {
-        console.warn(`[MEP] subset creation failed for ${system}:`, err);
-      }
+      model.name = `duall_system_${system}`;
+      group.add(model);
+      systemModelsRef.current[system] = model as unknown as THREE.Mesh;
+    } catch (err) {
+      console.error(`[MEP] failed to load ${system}:`, err);
+    } finally {
+      setLoadingSystems(prev => { const s = new Set([...prev]); s.delete(system); return s; });
     }
   };
 
@@ -500,16 +480,13 @@ export default function ClashSimulator() {
 
       activeIfcModelRef.current = model as unknown as THREE.Mesh;
       model.name = 'duall_ifc_model';
+
+      // Apply structure colour (grey semitransparent) to the base model
+      const { color: sCol, opacity: sOp, transparent: sTrans, depthWrite: sDW } = SYSTEM_COLORS['estrutura'];
+      const structureMat = new THREE.MeshLambertMaterial({ color: sCol, transparent: sTrans, opacity: sOp, depthWrite: sDW, side: THREE.DoubleSide });
+      systemMaterialsRef.current['estrutura'] = structureMat;
       model.traverse((child) => {
-        if (!(child instanceof THREE.Mesh)) return;
-        const materials = Array.isArray(child.material) ? child.material : [child.material];
-        materials.forEach((material) => {
-          if (!material) return;
-          material.side = THREE.DoubleSide;
-          material.transparent = false;
-          material.opacity = 1;
-          material.needsUpdate = true;
-        });
+        if (child instanceof THREE.Mesh) child.material = structureMat;
       });
 
       objectsGroupRef.current.add(model);
@@ -578,8 +555,6 @@ export default function ClashSimulator() {
       setActiveClashIndex(-1);
       setActiveTab('geral');
       fitCameraToLoadedModel();
-      // Build per-discipline colored subsets asynchronously after camera is set
-      buildSystemSubsets(modelID).catch(e => console.warn('[MEP] buildSystemSubsets:', e));
       setParseProgress(100);
     } catch (err) {
       console.error(err);
@@ -872,38 +847,15 @@ export default function ClashSimulator() {
     });
   }, [showGrid, showAxes]);
 
-  // Trigger X-Ray / Ghost Mode — make structure subset nearly transparent so MEP pipes are visible
+  // Trigger X-Ray / Ghost Mode — ghost the structure so MEP pipes are visible through it
   useEffect(() => {
-    const structureSubset = systemSubsetsRef.current['estrutura'];
-    if (structureSubset) {
-      const mat = systemMaterialsRef.current['estrutura'];
-      if (mat) {
-        mat.transparent = true;
-        mat.opacity = isXRayMode ? 0.04 : SYSTEM_COLORS['estrutura'].opacity;
-        mat.depthWrite = !isXRayMode;
-        mat.needsUpdate = true;
-      }
-      return;
+    const mat = systemMaterialsRef.current['estrutura'];
+    if (mat) {
+      mat.transparent = true;
+      mat.opacity   = isXRayMode ? 0.04 : SYSTEM_COLORS['estrutura'].opacity;
+      mat.depthWrite = !isXRayMode;
+      mat.needsUpdate = true;
     }
-    // Fallback: subsets not yet built — operate on the merged model children
-    if (!objectsGroupRef.current) return;
-    objectsGroupRef.current.children.forEach(obj => {
-      const sys = obj.userData.system as BIMSystem | undefined;
-      if (!sys) return;
-      obj.traverse(child => {
-        if (!(child instanceof THREE.Mesh)) return;
-        const mat = child.material as THREE.MeshStandardMaterial;
-        if (!mat) return;
-        if (isXRayMode) {
-          mat.transparent = true;
-          mat.opacity = sys === 'estrutura' ? 0.05 : 1.0;
-        } else {
-          mat.transparent = sys === 'estrutura';
-          mat.opacity = sys === 'estrutura' ? 0.62 : 1.0;
-        }
-        mat.needsUpdate = true;
-      });
-    });
   }, [isXRayMode]);
 
   // Handle interactive measuring ruler coordinates and 3D wire draw indicators
@@ -1269,25 +1221,39 @@ export default function ClashSimulator() {
                 <Filter size={11} /> Sistemas MEP:
               </span>
               {[
-                { id: 'estrutura', label: 'Estrutura', dotColor: 'bg-zinc-500' },
-                { id: 'mecanico', label: 'Climatização', dotColor: 'bg-cyan-500' },
-                { id: 'eletrico', label: 'Elétrica', dotColor: 'bg-amber-500' },
-                { id: 'hidraulico', label: 'Hidráulica', dotColor: 'bg-blue-500' },
-                { id: 'incendio', label: 'Incêndio', dotColor: 'bg-rose-500' },
+                { id: 'estrutura', label: 'Estrutura',   dotColor: 'bg-zinc-400',  hasFile: true  },
+                { id: 'mecanico',  label: 'Climatização',dotColor: 'bg-cyan-400',  hasFile: true  },
+                { id: 'eletrico',  label: 'Elétrica',    dotColor: 'bg-amber-400', hasFile: false },
+                { id: 'hidraulico',label: 'Hidráulica',  dotColor: 'bg-blue-400',  hasFile: true  },
+                { id: 'incendio',  label: 'Incêndio',    dotColor: 'bg-rose-400',  hasFile: false },
               ].map((item) => {
-                const key = item.id as keyof typeof visibleSystems;
+                const key      = item.id as BIMSystem;
                 const isVisible = visibleSystems[key];
+                const isLoading = loadingSystems.has(key);
                 return (
                   <button
                     key={item.id}
                     onClick={() => toggleSystem(key)}
-                    className={`px-3 py-1 rounded-full border text-[11px] font-sans flex items-center gap-2 transition duration-150 cursor-pointer ${
-                      isVisible
-                        ? 'bg-slate-900 text-slate-200 border-slate-800'
-                        : 'bg-slate-950/20 text-slate-600 border-slate-950/50 line-through'
+                    disabled={isLoading || !item.hasFile}
+                    title={!item.hasFile ? 'Arquivo IFC não disponível' : undefined}
+                    className={`px-3 py-1 rounded-full border text-[11px] font-sans flex items-center gap-1.5 transition duration-150 ${
+                      !item.hasFile
+                        ? 'opacity-35 cursor-not-allowed bg-slate-950/10 text-slate-600 border-slate-950/30'
+                        : isLoading
+                          ? 'cursor-wait bg-slate-800 text-slate-400 border-slate-700'
+                          : isVisible
+                            ? 'cursor-pointer bg-slate-900 text-slate-200 border-slate-700'
+                            : 'cursor-pointer bg-slate-950/20 text-slate-500 border-slate-950/50 line-through'
                     }`}
                   >
-                    <span className={`h-1.5 w-1.5 rounded-full ${isVisible ? item.dotColor : 'bg-slate-750'}`} />
+                    {isLoading ? (
+                      <svg className="animate-spin h-2.5 w-2.5 text-slate-400" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                      </svg>
+                    ) : (
+                      <span className={`h-1.5 w-1.5 rounded-full ${isVisible && item.hasFile ? item.dotColor : 'bg-slate-600'}`} />
+                    )}
                     <span className="font-medium">{item.label}</span>
                   </button>
                 );
