@@ -205,31 +205,43 @@ export default function ClashSimulator() {
   const modelFrameRef = useRef<THREE.Box3Helper | null>(null);
   const fixedIFCLoadedRef = useRef<boolean>(false);
   // Stores the additional IFC models loaded per MEP discipline (not the base structure model)
-  const systemModelsRef   = useRef<Partial<Record<BIMSystem, THREE.Mesh>>>({});
+  const systemModelsRef    = useRef<Partial<Record<BIMSystem, THREE.Mesh>>>({});
   const systemMaterialsRef = useRef<Partial<Record<BIMSystem, THREE.MeshLambertMaterial>>>({});
+  // Mirror of visibleSystems as a ref so async callbacks can read the latest value
+  const visibleSystemsRef  = useRef<typeof visibleSystems>(visibleSystems);
   // Tracks which systems are currently fetching their IFC file
   const [loadingSystems, setLoadingSystems] = useState<Set<BIMSystem>>(new Set());
+
+  // Keep visibleSystemsRef in sync with state
+  useEffect(() => {
+    visibleSystemsRef.current = visibleSystems;
+  });
+
+  // Sync Three.js model visibility whenever visibleSystems state changes
+  useEffect(() => {
+    // Structure model (base IFC loaded at startup)
+    if (activeIfcModelRef.current) {
+      activeIfcModelRef.current.visible = visibleSystems.estrutura;
+    }
+    // Additional MEP models
+    (Object.keys(visibleSystems) as BIMSystem[]).forEach(sys => {
+      const model = systemModelsRef.current[sys];
+      if (model) model.visible = visibleSystems[sys];
+    });
+  }, [visibleSystems]);
 
   // Toggle a discipline on/off; lazy-loads its IFC file on first activation
   const toggleSystem = (system: BIMSystem) => {
     setVisibleSystems(prev => {
       const nowVisible = !prev[system];
-      const next = { ...prev, [system]: nowVisible };
 
-      if (system === 'estrutura') {
-        // The structure is the base model loaded at startup
-        if (activeIfcModelRef.current) activeIfcModelRef.current.visible = nowVisible;
-      } else {
-        const model = systemModelsRef.current[system];
-        const url   = SYSTEM_IFC_URLS[system];
-        if (model) {
-          model.visible = nowVisible;
-        } else if (nowVisible && url) {
-          // First activation: lazy-load the IFC file for this discipline
-          setTimeout(() => loadSystemModel(system, url), 0);
-        }
+      // Trigger lazy load on first activation (no Three.js side-effects here — useEffect handles visibility)
+      if (nowVisible && system !== 'estrutura' && !systemModelsRef.current[system]) {
+        const url = SYSTEM_IFC_URLS[system];
+        if (url) setTimeout(() => loadSystemModel(system, url), 0);
       }
-      return next;
+
+      return { ...prev, [system]: nowVisible };
     });
   };
 
@@ -430,6 +442,8 @@ export default function ClashSimulator() {
       model.name = `duall_system_${system}`;
       group.add(model);
       systemModelsRef.current[system] = model as unknown as THREE.Mesh;
+      // Sync visibility with whatever the user set while the file was loading
+      (model as THREE.Object3D).visible = visibleSystemsRef.current[system];
     } catch (err) {
       console.error(`[MEP] failed to load ${system}:`, err);
     } finally {
