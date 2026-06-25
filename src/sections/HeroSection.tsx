@@ -73,22 +73,22 @@ export default function HeroSection() {
             variants={staggerContainerVariants}
             className="space-y-6 flex flex-col items-center"
           >
-            <motion.span variants={staggerItemVariants} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#1992BB]/15 text-[#9ddcf2] border border-[#1992BB]/25">
+            <motion.span variants={staggerItemVariants} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EDA700]/15 text-[#EDA700] border border-[#EDA700]/30">
               <Compass size={13} /> Know-how certificado líder em BIM
             </motion.span>
 
             <motion.h1 variants={staggerItemVariants} className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-tight leading-tight">
-              Know-how em projetos de <span className="text-[#1992BB]">INSTALAÇÕES</span>
+              Know-how em projetos de <span className="text-[#EDA700]">INSTALAÇÕES</span>
             </motion.h1>
 
             <motion.p variants={staggerItemVariants} className="text-slate-200 text-lg sm:text-xl font-light font-sans leading-relaxed max-w-2xl mx-auto">
-              Um time de engenheiros incansáveis em busca da <strong className="text-[#7dd3fc] font-semibold">melhor solução tecnológica</strong> para garantir segurança física e economia inteligente no seu empreendimento!
+              Um time de engenheiros incansáveis em busca da <strong className="text-[#EDA700] font-semibold">melhor solução tecnológica</strong> para garantir segurança física e economia inteligente no seu empreendimento!
             </motion.p>
 
             <motion.div variants={staggerItemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-left max-w-3xl w-full">
               {heroFeatures.map((feat) => (
                 <div key={feat.title} className="flex gap-3 bg-slate-950/40 backdrop-blur-xs p-4 rounded-xl border border-white/5">
-                  <div className="w-6 h-6 rounded-full bg-[#1992BB]/10 border border-[#1992BB]/25 text-[#1992BB] flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-6 h-6 rounded-full bg-[#EDA700]/15 border border-[#EDA700]/40 text-[#EDA700] flex items-center justify-center shrink-0 mt-0.5">
                     <CheckCircle2 size={13} />
                   </div>
                   <div>
@@ -102,7 +102,7 @@ export default function HeroSection() {
             <motion.div variants={staggerItemVariants} className="pt-6 flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto">
               <a
                 href="#contato"
-                className="py-4 px-8 rounded-xl font-bold bg-[#1992BB] hover:bg-[#157a9d] text-white transition flex items-center justify-center gap-2 transform active:scale-95 shadow-xl hover:shadow-sky-500/20 text-sm cursor-pointer"
+                className="py-4 px-8 rounded-xl font-bold bg-[#EDA700] hover:bg-[#d49500] text-slate-900 transition flex items-center justify-center gap-2 transform active:scale-95 shadow-xl hover:shadow-amber-500/30 text-sm cursor-pointer"
               >
                 Solicitar Proposta Comercial <ArrowRight size={16} />
               </a>
@@ -157,7 +157,7 @@ export default function HeroSection() {
             </motion.div>
 
             <motion.div variants={staggerItemVariants} className="text-center group hover:opacity-100 transition duration-150 col-span-2 md:col-span-1">
-              <div className="text-[#1992BB] font-display font-extrabold text-sm tracking-wider bg-[#1992BB]/10 border border-[#1992BB]/20 px-4 py-1.5 rounded-lg flex items-center justify-center text-center">
+              <div className="text-[#EDA700] font-display font-extrabold text-sm tracking-wider bg-[#1992BB]/10 border border-[#1992BB]/20 px-4 py-1.5 rounded-lg flex items-center justify-center text-center">
                 Edge
               </div>
               <span className="text-[10px] text-slate-500 font-mono mt-1 block font-semibold">Eficiência Energética</span>

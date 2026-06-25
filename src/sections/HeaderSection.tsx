@@ -70,20 +70,6 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href={getWhatsAppGlobalUrl('Olá Duall Engenharia! Estava navegando no site de vocês e gostaria de falar com um coordenador de engenharia sobre nossos projetos corporativos.')}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`hidden sm:flex items-center gap-2 py-2 px-4 rounded-xl font-bold text-xs transition duration-150 transform active:scale-95 cursor-pointer ${
-              isScrolled
-                ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                : 'bg-[#1992BB] text-white hover:bg-[#157a9d]'
-            }`}
-            aria-label="Falar conosco no WhatsApp corporativo +55 11 94540.6289"
-          >
-            <Phone size={14} />
-            <span className="font-mono">+55 11 94540.6289</span>
-          </a>
         </div>
       </div>
     </header>
