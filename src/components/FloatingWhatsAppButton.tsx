@@ -5,7 +5,7 @@ import { getWhatsAppGlobalUrl } from '../utils/whatsapp';
 export default function FloatingWhatsAppButton() {
   return (
     <a
-      href={getWhatsAppGlobalUrl('Olá Duall Engenharia! Vi a landing page e gostaria de conversar com um coordenador sobre nosso orçamento de projetos.')}
+      href={getWhatsAppGlobalUrl('Olá Duall Engenharia! Gostaria de conversar com um coordenador sobre nosso orçamento de projetos.')}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-40 bg-emerald-600 hover:bg-emerald-500 text-white p-3.5 rounded-full shadow-2xl flex items-center gap-2 font-bold text-sm transform hover:scale-105 transition duration-150 group active:scale-95 cursor-pointer max-w-fit"
