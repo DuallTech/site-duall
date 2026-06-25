@@ -152,7 +152,7 @@ export default function TestimonialsSection() {
                 style={{ flexBasis: `${100 / cardsPerView}%` }}
               >
                 <blockquote className="h-full min-h-66.25 rounded-lg border border-[#D6DEE8] bg-white px-7 py-10 shadow-[0_14px_30px_rgba(29,53,87,0.06)]">
-                  <div className="flex text-[#1992BB] text-sm tracking-[0.2em]">
+                  <div className="flex text-[#EDA700] text-sm tracking-[0.2em]">
                     {Array.from({ length: testimonial.rating }).map((_, starIndex) => (
                       <span key={starIndex}>★</span>
                     ))}
@@ -190,7 +190,7 @@ export default function TestimonialsSection() {
               type="button"
               onClick={() => setPage(idx)}
               className={`h-2.5 rounded-full transition-all ${
-                idx === page ? 'w-8 bg-duall-blue' : 'w-2.5 bg-[#C7D3E0] hover:bg-[#8EA8C3]'
+                idx === page ? 'w-8 bg-[#EDA700]' : 'w-2.5 bg-[#C7D3E0] hover:bg-[#8EA8C3]'
               }`}
               aria-label={`Ir para o grupo de depoimentos ${idx + 1}`}
             />

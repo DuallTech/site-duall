@@ -42,11 +42,11 @@ export default function PartnershipsSection() {
       <div className="mx-auto max-w-[1680px] px-3 sm:px-4 lg:px-6">
         <div className="mb-12 text-center max-w-4xl mx-auto">
           <div className="flex items-center justify-center gap-4 mb-5">
-            <div className="h-px w-10 bg-[#1992BB]/55" />
-            <p className="text-[11px] font-mono font-bold uppercase tracking-[0.3em] text-[#5db9df] whitespace-nowrap">
+            <div className="h-px w-10 bg-[#EDA700]/55" />
+            <p className="text-[11px] font-mono font-bold uppercase tracking-[0.3em] text-[#EDA700] whitespace-nowrap">
               Parcerias e Credibilidade
             </p>
-            <div className="h-px w-10 bg-[#1992BB]/55" />
+            <div className="h-px w-10 bg-[#EDA700]/55" />
           </div>
           <h3 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.05] text-white">
             Grandes marcas que

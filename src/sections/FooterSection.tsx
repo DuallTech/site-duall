@@ -33,7 +33,7 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
               href="https://www.instagram.com/duallengenharia"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-[#1992BB] hover:border-[#1992BB] flex items-center justify-center transition"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-[#EDA700] hover:border-[#1992BB] flex items-center justify-center transition"
               aria-label="Visitar perfil do Duall Engenharia no Instagram"
             >
               <Instagram size={18} />
@@ -42,7 +42,7 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
               href={getWhatsAppGlobalUrl('Olá Duall, vim do site oficial e gostaria de agendar uma reunião comercial de projetos.')}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-[#1992BB] hover:border-[#1992BB] flex items-center justify-center transition"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-[#EDA700] hover:border-[#1992BB] flex items-center justify-center transition"
               aria-label="Falar conosco via canal direto no WhatsApp"
             >
               <Phone size={18} />
@@ -59,7 +59,7 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
           </div>
 
           <div className="text-center md:text-right text-[10px] text-slate-400 space-y-1">
-            <p className="font-semibold text-[#1992BB]">Duall Projetos e Instalações Prediais BIM LOD 400</p>
+            <p className="font-semibold text-[#EDA700]">Duall Projetos e Instalações Prediais BIM LOD 400</p>
             <p className="text-slate-500">Desenvolvido em total conformidade WCAG 2.1 AA | Teclado & Leitores de Tela</p>
           </div>
         </div>

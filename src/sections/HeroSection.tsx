@@ -174,7 +174,7 @@ export default function HeroSection() {
               key={idx}
               onClick={() => setCurrentImageIndex(idx)}
               className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
-                isSelected ? 'w-7 bg-[#1992BB]' : 'w-2 bg-slate-400 hover:bg-white'
+                isSelected ? 'w-7 bg-[#EDA700]' : 'w-2 bg-slate-400 hover:bg-white'
               }`}
               aria-label={`Visualizar slide de fundo ${idx + 1}`}
               title={`Slide de fundo ${idx + 1}`}

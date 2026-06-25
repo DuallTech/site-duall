@@ -26,7 +26,7 @@ export default function ContactSection({ isHighContrast }: ContactSectionProps) 
             variants={staggerContainerVariants}
             className="lg:col-span-6 space-y-6 text-left"
           >
-            <motion.span variants={staggerItemVariants} className="inline-flex px-3 py-1 bg-[#1992BB]/15 text-[#9ddcf2] rounded-full text-xs font-semibold uppercase tracking-wider font-mono">
+            <motion.span variants={staggerItemVariants} className="inline-flex px-3 py-1 bg-[#EDA700]/15 text-[#EDA700] rounded-full text-xs font-semibold uppercase tracking-wider font-mono">
               Contato & Licenciamento de Projetos
             </motion.span>
 
@@ -41,7 +41,7 @@ export default function ContactSection({ isHighContrast }: ContactSectionProps) 
             <motion.div variants={staggerItemVariants} className="space-y-4 pt-4 border-t border-slate-800">
               <div className="flex gap-3.5 items-start">
                 <div className="w-9 h-9 rounded-lg bg-sky-505/10 bg-slate-800 text-sky-450 border border-slate-700 flex items-center justify-center shrink-0">
-                  <MapPin size={17} className="text-[#1992BB]" />
+                  <MapPin size={17} className="text-[#EDA700]" />
                 </div>
                 <div className="text-xs">
                   <h4 className="font-bold text-white uppercase tracking-wider">Cidades Atendidas Fisicamente:</h4>
@@ -51,7 +51,7 @@ export default function ContactSection({ isHighContrast }: ContactSectionProps) 
 
               <div className="flex gap-3.5 items-start">
                 <div className="w-9 h-9 rounded-lg bg-[#355979]/30 text-white border border-[#355979]/40 flex items-center justify-center shrink-0">
-                  <Zap size={17} strokeWidth={2.5} className="text-[#1992BB]" />
+                  <Zap size={17} strokeWidth={2.5} className="text-[#EDA700]" />
                 </div>
                 <div className="text-xs">
                   <h4 className="font-bold text-white uppercase tracking-wider">Plantão Técnico Urgente:</h4>
@@ -75,7 +75,7 @@ export default function ContactSection({ isHighContrast }: ContactSectionProps) 
             </motion.div>
 
             <motion.div variants={staggerItemVariants} className="bg-slate-950/50 p-4 rounded-xl border border-slate-800/80 flex items-start gap-2.5 max-w-md">
-              <ShieldCheck size={16} className="text-[#1992BB] shrink-0 mt-0.5" />
+              <ShieldCheck size={16} className="text-[#EDA700] shrink-0 mt-0.5" />
               <p className="text-[10px] text-slate-400 leading-normal">
                 Seus dados corporativos estão salvos sob as diretrizes de criptografia AES-256 e LGPD de Prospecção Comercial. Nenhum dado de empreendimento é compartilhado com terceiros.
               </p>

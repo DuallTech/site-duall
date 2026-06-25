@@ -177,7 +177,7 @@ export default function SpecialitiesSection() {
                       className="absolute inset-y-0 z-20 w-0.5 bg-white/90 shadow-lg pointer-events-none"
                       style={{ left: `${getCardSliderPercent(spec.id)}%`, transform: 'translateX(-50%)' }}
                     >
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#1992BB] shadow-xl flex items-center justify-center">
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#EDA700] shadow-xl flex items-center justify-center">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M9 18 3 12 9 6" />
                           <path d="M15 6 21 12 15 18" />
@@ -186,7 +186,7 @@ export default function SpecialitiesSection() {
                     </div>
 
                     <div className="absolute top-3 left-3 z-20 bg-[#1c2e3f]/75 text-white text-[9px] font-bold px-2.5 py-1 rounded-full tracking-widest uppercase backdrop-blur-sm flex items-center gap-1.5 pointer-events-none">
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1992BB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#EDA700" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M9 18 3 12 9 6" />
                         <path d="M15 6 21 12 15 18" />
                       </svg>
