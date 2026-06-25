@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Phone } from 'lucide-react';
 
 import DuallLogo from '../components/DuallLogo';
-import { getWhatsAppGlobalUrl } from '../utils/whatsapp';
 
 const NAV_LINKS = [
   { label: 'Início', href: '#' },
+  { label: 'A Duall', href: '#a-duall' },
   { label: 'Especialidades', href: '#especialidades' },
   { label: 'Simulador', href: '#navegador-ifc' },
-  { label: 'A Duall', href: '#diferenciais' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'Parcerias', href: '#parcerias' },
   { label: 'Depoimentos', href: '#depoimentos' },
@@ -69,8 +67,7 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-        </div>
+        <div className="flex items-center gap-3" />
       </div>
     </header>
   );
