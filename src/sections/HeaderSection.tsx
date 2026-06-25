@@ -5,9 +5,9 @@ import DuallLogo from '../components/DuallLogo';
 
 const NAV_LINKS = [
   { label: 'Início', href: '#' },
+  { label: 'A Duall', href: '#a-duall' },
   { label: 'Especialidades', href: '#especialidades' },
   { label: 'Simulador', href: '#navegador-ifc' },
-  { label: 'A Duall', href: '#diferenciais' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'Parcerias', href: '#parcerias' },
   { label: 'Depoimentos', href: '#depoimentos' },

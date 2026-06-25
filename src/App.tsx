@@ -60,9 +60,9 @@ export default function App() {
 
       <main id="main-content" role="main">
         <HeroSection />
+        <DifferentialsSection isHighContrast={isHighContrast} />
         <SpecialitiesSection />
         <SimulatorSection />
-        <DifferentialsSection isHighContrast={isHighContrast} />
         <PortfolioSection />
         <PartnershipsSection />
         <TestimonialsSection />
