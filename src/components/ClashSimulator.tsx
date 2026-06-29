@@ -122,7 +122,7 @@ const getRobustObjectBounds = (object: THREE.Object3D) => {
       point.fromBufferAttribute(position, i).applyMatrix4(child.matrixWorld);
       xs.push(point.x);
       ys.push(point.y);
-      zs.push(point.z);
+      zs.push(point.z);  
     }
   });
 
