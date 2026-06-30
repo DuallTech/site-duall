@@ -1,27 +1,69 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { CheckCircle2, Cpu, Droplet, Shield, Wrench, Zap } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, ChevronRight, Cpu, Droplet, Shield, Wrench, Zap } from 'lucide-react';
 
 import { SPECIALITIES } from '../data';
 import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from './animations';
 
-const specialitiesImages: Record<string, { bim: string; real: string }> = {
-  eletrico: {
-    bim: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
-    real: 'https://images.unsplash.com/photo-1621905252507-b354bc25edac?auto=format&fit=crop&w=1200&q=80',
-  },
-  hidraulico: {
-    bim: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&w=1200&q=80',
-    real: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80',
-  },
-  incendio: {
-    bim: 'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=1200&q=80',
-    real: 'https://images.unsplash.com/photo-1516216621174-bfa2196cfcf0?auto=format&fit=crop&w=1200&q=80',
-  },
-  mecanico: {
-    bim: 'https://images.unsplash.com/photo-1581094751180-2292a8cf2723?auto=format&fit=crop&w=1200&q=80',
-    real: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80',
-  },
+type ImagePair = { bim: string; real: string };
+
+const specialitiesImages: Record<string, ImagePair[]> = {
+  eletrico: [
+    {
+      bim: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1621905252507-b354bc25edac?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1544724480-1a6c4dfdcf27?auto=format&fit=crop&w=1200&q=80',
+    },
+  ],
+  hidraulico: [
+    {
+      bim: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1581094751180-2292a8cf2723?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
+    },
+  ],
+  incendio: [
+    {
+      bim: 'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1516216621174-bfa2196cfcf0?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1200&q=80',
+    },
+  ],
+  mecanico: [
+    {
+      bim: 'https://images.unsplash.com/photo-1581094751180-2292a8cf2723?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      bim: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80',
+    },
+  ],
 };
 
 function getIconComponent(iconName: string) {
@@ -44,10 +86,31 @@ function getIconComponent(iconName: string) {
 export default function SpecialitiesSection() {
   const [expandedSpec, setExpandedSpec] = useState<string | null>('eletrico');
   const [cardSliderPercents, setCardSliderPercents] = useState<Record<string, number>>({});
+  const [cardImageIndexes, setCardImageIndexes] = useState<Record<string, number>>({});
+  const [isImageHovered, setIsImageHovered] = useState(false);
   const cardSliderRefs = useRef<Record<string, HTMLDivElement>>({});
+  const isDraggingRef = useRef(false);
+
+  // Auto-advance carousel — pauses when user hovers the image area
+  useEffect(() => {
+    if (!expandedSpec || isImageHovered) return;
+    const pairs = specialitiesImages[expandedSpec] ?? [];
+    if (pairs.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCardImageIndexes((prev) => {
+        const current = prev[expandedSpec] ?? 0;
+        return { ...prev, [expandedSpec]: (current + 1) % pairs.length };
+      });
+      setCardSliderPercents((prev) => ({ ...prev, [expandedSpec]: 50 }));
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [expandedSpec, isImageHovered]);
 
   const handleCardSliderPointerDown = (specId: string, e: React.PointerEvent<HTMLDivElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId);
+    isDraggingRef.current = true;
     const rect = cardSliderRefs.current[specId]?.getBoundingClientRect();
     if (!rect) return;
     const x = e.clientX - rect.left;
@@ -56,7 +119,7 @@ export default function SpecialitiesSection() {
   };
 
   const handleCardSliderPointerMove = (specId: string, e: React.PointerEvent<HTMLDivElement>) => {
-    if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
+    if (!isDraggingRef.current) return;
     const rect = cardSliderRefs.current[specId]?.getBoundingClientRect();
     if (!rect) return;
     const x = e.clientX - rect.left;
@@ -64,7 +127,27 @@ export default function SpecialitiesSection() {
     setCardSliderPercents((prev) => ({ ...prev, [specId]: percent }));
   };
 
+  const handleCardSliderPointerUp = () => {
+    isDraggingRef.current = false;
+  };
+
   const getCardSliderPercent = (specId: string) => cardSliderPercents[specId] ?? 50;
+  const getCardImageIndex = (specId: string) => cardImageIndexes[specId] ?? 0;
+
+  const navigateImage = (specId: string, direction: 1 | -1, e: React.PointerEvent) => {
+    e.stopPropagation();
+    const pairs = specialitiesImages[specId] ?? [];
+    const current = getCardImageIndex(specId);
+    const next = (current + direction + pairs.length) % pairs.length;
+    setCardImageIndexes((prev) => ({ ...prev, [specId]: next }));
+    setCardSliderPercents((prev) => ({ ...prev, [specId]: 50 }));
+  };
+
+  const goToImage = (specId: string, index: number, e: React.PointerEvent) => {
+    e.stopPropagation();
+    setCardImageIndexes((prev) => ({ ...prev, [specId]: index }));
+    setCardSliderPercents((prev) => ({ ...prev, [specId]: 50 }));
+  };
 
   return (
     <section
@@ -104,7 +187,7 @@ export default function SpecialitiesSection() {
                 <motion.button
                   key={spec.id}
                   variants={staggerItemVariants}
-                  onClick={() => setExpandedSpec(isActive ? null : spec.id)}
+                  onClick={() => { setExpandedSpec(isActive ? null : spec.id); setIsImageHovered(false); }}
                   className={`w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200 border ${
                     isActive
                       ? 'bg-white border-[#355979] shadow-lg ring-2 ring-[#355979]/10'
@@ -145,36 +228,48 @@ export default function SpecialitiesSection() {
                 );
               }
 
+              const pairs = specialitiesImages[spec.id] ?? [];
+              const imgIndex = getCardImageIndex(spec.id);
+              const currentPair = pairs[imgIndex] ?? { bim: spec.bannerUrl, real: spec.bannerUrl };
+              const total = pairs.length;
+
               return (
                 <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
                   <div
-                    ref={(el) => {
-                      if (el) cardSliderRefs.current[spec.id] = el;
-                    }}
+                    ref={(el) => { if (el) cardSliderRefs.current[spec.id] = el; }}
                     className="aspect-video overflow-hidden bg-slate-100 relative select-none cursor-ew-resize"
                     onPointerDown={(e) => handleCardSliderPointerDown(spec.id, e)}
                     onPointerMove={(e) => handleCardSliderPointerMove(spec.id, e)}
+                    onPointerUp={handleCardSliderPointerUp}
+                    onPointerCancel={handleCardSliderPointerUp}
+                    onMouseEnter={() => setIsImageHovered(true)}
+                    onMouseLeave={() => { setIsImageHovered(false); isDraggingRef.current = false; }}
                   >
+                    {/* Real image (background) */}
                     <img
-                      src={specialitiesImages[spec.id]?.real || spec.bannerUrl}
+                      src={currentPair.real}
                       alt={spec.name}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                      draggable="false"
                       loading="lazy"
                     />
 
+                    {/* BIM image (clipped foreground) */}
                     <div
-                      className="absolute inset-0 overflow-hidden z-10"
+                      className="absolute inset-0 overflow-hidden z-10 pointer-events-none"
                       style={{ width: `${getCardSliderPercent(spec.id)}%` }}
                     >
                       <img
-                        src={specialitiesImages[spec.id]?.bim || spec.bannerUrl}
+                        src={currentPair.bim}
                         alt={`${spec.name} - BIM`}
-                        className="absolute top-0 left-0 w-full h-full object-cover"
+                        className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none"
+                        draggable="false"
                         style={{ width: `${10000 / Math.max(getCardSliderPercent(spec.id), 1)}%`, maxWidth: 'none' }}
                         loading="lazy"
                       />
                     </div>
 
+                    {/* Divider line + handle */}
                     <div
                       className="absolute inset-y-0 z-20 w-0.5 bg-white/90 shadow-lg pointer-events-none"
                       style={{ left: `${getCardSliderPercent(spec.id)}%`, transform: 'translateX(-50%)' }}
@@ -187,6 +282,7 @@ export default function SpecialitiesSection() {
                       </div>
                     </div>
 
+                    {/* Top-left label */}
                     <div className="absolute top-3 left-3 z-20 bg-[#1c2e3f]/75 text-white text-[9px] font-bold px-2.5 py-1 rounded-full tracking-widest uppercase backdrop-blur-sm flex items-center gap-1.5 pointer-events-none">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#EDA700" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M9 18 3 12 9 6" />
@@ -195,34 +291,66 @@ export default function SpecialitiesSection() {
                       ARRASTE PARA COMPARAR BIM VS REALIDADE
                     </div>
 
+                    {/* Top-right BIM/Obra buttons */}
                     <div className="absolute top-3 right-3 z-20 flex bg-[#1c2e3f]/80 backdrop-blur-sm rounded-lg border border-white/10 overflow-hidden text-[9px] font-bold">
                       <button
                         className="px-3 py-1.5 text-white hover:bg-white/15 transition cursor-pointer"
-                        onPointerDown={(e) => {
-                          e.stopPropagation();
-                          setCardSliderPercents((prev) => ({ ...prev, [spec.id]: 100 }));
-                        }}
+                        onPointerDown={(e) => { e.stopPropagation(); setCardSliderPercents((prev) => ({ ...prev, [spec.id]: 100 })); }}
                       >
                         Ver BIM
                       </button>
                       <div className="w-px bg-white/20" />
                       <button
                         className="px-3 py-1.5 text-white hover:bg-white/15 transition cursor-pointer"
-                        onPointerDown={(e) => {
-                          e.stopPropagation();
-                          setCardSliderPercents((prev) => ({ ...prev, [spec.id]: 0 }));
-                        }}
+                        onPointerDown={(e) => { e.stopPropagation(); setCardSliderPercents((prev) => ({ ...prev, [spec.id]: 0 })); }}
                       >
                         Ver Obra
                       </button>
                     </div>
 
+                    {/* Bottom labels */}
                     <div className="absolute bottom-3 left-3 z-10 bg-[#1c2e3f]/75 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider backdrop-blur-sm pointer-events-none">
                       MODELO BIM (3D REVIT)
                     </div>
                     <div className="absolute bottom-3 right-3 z-10 bg-[#1c2e3f]/75 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider backdrop-blur-sm pointer-events-none">
                       OBRA REAL (INSTALADO)
                     </div>
+
+                    {/* Carousel nav arrows */}
+                    {total > 1 && (
+                      <>
+                        <button
+                          className="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-black/60 transition"
+                          onPointerDown={(e) => navigateImage(spec.id, -1, e)}
+                          aria-label="Imagem anterior"
+                        >
+                          <ChevronLeft size={16} />
+                        </button>
+                        <button
+                          className="absolute right-3 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-black/60 transition"
+                          onPointerDown={(e) => navigateImage(spec.id, 1, e)}
+                          aria-label="Próxima imagem"
+                        >
+                          <ChevronRight size={16} />
+                        </button>
+
+                        {/* Dot indicators */}
+                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
+                          {pairs.map((_, idx) => (
+                            <button
+                              key={idx}
+                              className={`rounded-full transition-all ${
+                                idx === imgIndex
+                                  ? 'w-5 h-2 bg-[#EDA700]'
+                                  : 'w-2 h-2 bg-white/50 hover:bg-white/80'
+                              }`}
+                              onPointerDown={(e) => goToImage(spec.id, idx, e)}
+                              aria-label={`Ir para imagem ${idx + 1}`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="p-6 space-y-4">
