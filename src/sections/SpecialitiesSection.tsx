@@ -34,6 +34,8 @@ function getIconComponent(iconName: string) {
       return <Shield className="text-rose-500 shrink-0" size={24} />;
     case 'Wrench':
       return <Wrench className="text-teal-500 shrink-0" size={24} />;
+    case 'Cpu':
+      return <Cpu className="text-[#EDA700] shrink-0" size={24} />;
     default:
       return <Cpu className="text-slate-500 shrink-0" size={24} />;
   }

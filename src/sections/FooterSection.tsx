@@ -24,7 +24,7 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
               href="https://www.linkedin.com/company/duall-engenharia/posts/?feedView=all"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-duall-blue hover:border-duall-blue flex items-center justify-center transition"
+              className="w-10 h-10 rounded-full bg-[#0077B5]/10 border border-[#0077B5]/30 text-[#0077B5] hover:bg-[#0077B5]/20 hover:border-[#0077B5] flex items-center justify-center transition"
               aria-label="Visitar perfil da Duall Engenharia no LinkedIn"
             >
               <Linkedin size={18} />
@@ -33,7 +33,7 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
               href="https://www.instagram.com/duallengenharia"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-[#EDA700] hover:border-[#1992BB] flex items-center justify-center transition"
+              className="w-10 h-10 rounded-full bg-[#E1306C]/10 border border-[#E1306C]/30 text-[#E1306C] hover:bg-[#E1306C]/20 hover:border-[#E1306C] flex items-center justify-center transition"
               aria-label="Visitar perfil do Duall Engenharia no Instagram"
             >
               <Instagram size={18} />
@@ -42,7 +42,7 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
               href={getWhatsAppGlobalUrl('Olá Duall, vim do site oficial e gostaria de agendar uma reunião comercial de projetos.')}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-[#EDA700] hover:border-[#1992BB] flex items-center justify-center transition"
+              className="w-10 h-10 rounded-full bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366]/20 hover:border-[#25D366] flex items-center justify-center transition"
               aria-label="Falar conosco via canal direto no WhatsApp"
             >
               <Phone size={18} />
@@ -56,6 +56,14 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
             <p className="text-[10px] text-slate-500 font-mono">
               CNPJ sob regulação comercial de Engenharia de Construção Civil brasileira.
             </p>
+            <a
+              href="https://talentos.duallengenharia.com.br/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] text-slate-400 hover:text-[#EDA700] transition font-medium"
+            >
+              Trabalhe Conosco →
+            </a>
           </div>
 
           <div className="text-center md:text-right text-[10px] text-slate-400 space-y-1">

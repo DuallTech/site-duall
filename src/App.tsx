@@ -16,6 +16,7 @@ import PartnershipsSection from './sections/PartnershipsSection';
 import PortfolioSection from './sections/PortfolioSection';
 import SimulatorSection from './sections/SimulatorSection';
 import SpecialitiesSection from './sections/SpecialitiesSection';
+import StatsSection from './sections/StatsSection';
 import TestimonialsSection from './sections/TestimonialsSection';
 
 export default function App() {
@@ -60,6 +61,7 @@ export default function App() {
 
       <main id="main-content" role="main">
         <HeroSection />
+        <StatsSection />
         <DifferentialsSection isHighContrast={isHighContrast} />
         <SpecialitiesSection />
         <SimulatorSection />

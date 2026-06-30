@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Instagram, MapPin, ShieldCheck, Zap } from 'lucide-react';
+import { Briefcase, Instagram, MapPin, ShieldCheck, Zap } from 'lucide-react';
 
 import ContactForm from '../components/ContactForm';
 import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from './animations';
@@ -70,6 +70,23 @@ export default function ContactSection({ isHighContrast }: ContactSectionProps) 
                   <p className="text-slate-400 mt-0.5 flex items-center gap-1 font-mono">
                     Instagram: @duallengenharia
                   </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3.5 items-start">
+                <div className="w-9 h-9 rounded-lg bg-[#EDA700]/10 border border-[#EDA700]/20 flex items-center justify-center shrink-0">
+                  <Briefcase size={17} className="text-[#EDA700]" />
+                </div>
+                <div className="text-xs">
+                  <h4 className="font-bold text-white uppercase tracking-wider">Faça Parte da Nossa Equipe:</h4>
+                  <a
+                    href="https://talentos.duallengenharia.com.br/login"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#EDA700] mt-0.5 inline-flex items-center gap-1 font-mono hover:underline"
+                  >
+                    Trabalhe Conosco →
+                  </a>
                 </div>
               </div>
             </motion.div>
