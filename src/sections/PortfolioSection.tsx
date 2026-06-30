@@ -1,86 +1,66 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { FileText, MapPin, X } from 'lucide-react';
+import { Building2, FileText, X } from 'lucide-react';
 
-import { PORTFOLIO_PROJECTS } from '../data';
 import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from './animations';
 
-const portfolioFilters = [
-  { id: 'all', label: 'Todos os Projetos' },
-  { id: 'eletrico', label: 'Projeto Elétrico' },
-  { id: 'hidraulico', label: 'Projeto Hidráulico' },
-  { id: 'incendio', label: 'Combate a Incêndio' },
-  { id: 'climatizacao', label: 'Climatização' },
-] as const;
+type PortfolioEntry = {
+  id: string;
+  title: string;
+  client: string;
+  category: string;
+  imageFileName: string;
+};
 
-const portfolioGalleryImages = [
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80',
+const portfolioEntries: PortfolioEntry[] = [
+  { id: 'port_1', title: 'Eden West', client: 'Cyrela', category: 'Residencial', imageFileName: 'Eden-West.jpg' },
+  { id: 'port_2', title: 'Gran Alphaville', client: 'P4 Engenharia / RSF', category: 'Residencial', imageFileName: 'Gran-Alphaville.jpg' },
+  { id: 'port_3', title: 'Res. Ventis', client: 'Urben', category: 'Residencial', imageFileName: 'Ventis.jpg' },
+  { id: 'port_4', title: 'Res. Marques de Olinda', client: 'Fratta', category: 'Residencial', imageFileName: 'Res.-Marques-de-Olinda.jpg' },
+  { id: 'port_5', title: 'Res. Borghese Boulevard 2', client: 'Tarraf', category: 'Residencial', imageFileName: 'Res.-Borghese-Boulevard-2.jpg' },
+  { id: 'port_6', title: 'Res. Hildebrando 131', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Hidelbrando-131.jpg' },
+  { id: 'port_7', title: 'Res. My Way Guanabara', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'My-Way-Guanabara.jpg' },
+  { id: 'port_8', title: 'Res. Apogeo', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Apogeo.jpg' },
+  { id: 'port_9', title: 'Res. Reserva Urano', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'RP25-Urano.jpg' },
+  { id: 'port_10', title: 'Misto Alameda Franca', client: 'Idea Zarvos', category: 'Misto', imageFileName: 'Alameda-Franca.jpg' },
+  { id: 'port_11', title: 'Misto Jazz Moema Chanes', client: 'Gerporj-I / Rev3', category: 'Misto', imageFileName: 'MISTO-JAZZ-MOEMA-CHANES.jpg' },
+  { id: 'port_12', title: 'Misto Botani', client: 'Gamaro', category: 'Misto', imageFileName: 'Misto-Botani.jpg' },
+  { id: 'port_13', title: 'Res. Terrae', client: 'Gamaro', category: 'Residencial', imageFileName: 'Terrae.jpg' },
+  { id: 'port_14', title: 'Res. Torres de Ozanam', client: 'Santa Angela', category: 'Residencial', imageFileName: 'RES.TORRES-OZANAM.jpg' },
+  { id: 'port_15', title: 'Res. Soma', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Soma,jpg.webp' },
+  { id: 'port_16', title: 'Res. Viva Jaguaribe', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Viva-Jaguaribe.jpg' },
+  { id: 'port_17', title: 'Res. Mirai Guarapiranga', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Guarapiranga.webp' },
+  { id: 'port_18', title: 'Res. Mirai Cidade Lider', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Cidade-Lider.webp' },
+  { id: 'port_19', title: 'Res. Mirai Campinas Jardim do Lago', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Campinas-Jardim-do-Lago.webp' },
+  { id: 'port_20', title: 'Res. Monreal', client: 'Tarraf', category: 'Residencial', imageFileName: 'Monreal.webp' },
+  { id: 'port_21', title: 'Res. Pereque Acu', client: 'Stylos', category: 'Residencial', imageFileName: 'Pereque-Açu.webp' },
+  { id: 'port_22', title: 'Res. Vale Verde', client: 'Planeta', category: 'Residencial', imageFileName: 'Vale-Verde.webp' },
+  { id: 'port_23', title: 'Res. Bonnard 307', client: 'CNA Spitaletti', category: 'Residencial', imageFileName: 'Bonnard-307.webp' },
+  { id: 'port_24', title: 'Res. Bless Jardim Esperanca', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Bless-Jardim-Esperança.webp' },
+  { id: 'port_25', title: 'Res. HM59 Osasco', client: 'HM', category: 'Residencial', imageFileName: 'Res-HM59-Osasco.webp' },
+  { id: 'port_26', title: 'Res. Vivendas de Limeira HM54', client: 'HM', category: 'Residencial', imageFileName: 'Res.-Vivendas-de-Limeira.webp' },
+  { id: 'port_27', title: 'Res. Villa Parka Osasco', client: 'Emccamp', category: 'Residencial', imageFileName: 'Villa-Park-Osasco.webp' },
+  { id: 'port_28', title: 'Res. Terras Altas', client: 'Embraplan', category: 'Residencial', imageFileName: 'Terras-Altas.webp' },
+  { id: 'port_29', title: 'Res. Ozz Quitauna', client: 'Econ', category: 'Residencial', imageFileName: 'Ozz-Quituana.webp' },
+  { id: 'port_30', title: 'Res. Moove', client: 'Bild', category: 'Residencial', imageFileName: 'Moove.webp' },
+  { id: 'port_31', title: 'Res. Tomas Alves', client: 'Canopus', category: 'Residencial', imageFileName: 'Tomas-Alves.webp' },
+  { id: 'port_32', title: 'E/ Life Mandaqui', client: 'Econ', category: 'Residencial', imageFileName: 'Life Mandaqui.webp' },
+  { id: 'port_33', title: 'The Place', client: 'Fratta', category: 'Residencial', imageFileName: 'The Place.webp' },
+  { id: 'port_34', title: 'The Gardens', client: 'Embraplan', category: 'Residencial', imageFileName: 'The Gardens.webp' },
+  { id: 'port_35', title: 'Res. Kairos', client: 'Bild', category: 'Residencial', imageFileName: 'res-kairos.webp' },
 ];
 
-const portfolioMockProjects = Array.from({ length: 30 }, (_, index) => {
-  const templates = [
-    {
-      titleBase: 'Residencial Panorama',
-      type: 'Residencial Vertical',
-      specialties: ['Elétrico', 'Hidráulico', 'Incêndio'],
-      city: 'São Paulo - SP',
-    },
-    {
-      titleBase: 'Corporate Nexus',
-      type: 'Corporativo Premium',
-      specialties: ['Elétrico', 'Climatização'],
-      city: 'Campinas - SP',
-    },
-    {
-      titleBase: 'Living Coast',
-      type: 'Residencial Multifamiliar',
-      specialties: ['Hidráulico', 'Incêndio', 'Climatização'],
-      city: 'Santos - SP',
-    },
-    {
-      titleBase: 'Medical Tower',
-      type: 'Complexo de Saúde',
-      specialties: ['Climatização', 'Elétrico', 'Incêndio'],
-      city: 'São Paulo - SP',
-    },
-    {
-      titleBase: 'Business Park',
-      type: 'Mixed-Use Comercial',
-      specialties: ['Elétrico', 'Hidráulico'],
-      city: 'Americana - SP',
-    },
-  ];
+const portfolioImageModules = import.meta.glob('../assets/images/projetos/*.{png,jpg,jpeg,webp}', {
+  eager: true,
+  import: 'default',
+}) as Record<string, string>;
 
-  const template = templates[index % templates.length];
-  const number = index + 1;
-  const area = 8500 + index * 1350;
-
-  return {
-    id: `mock_portfolio_${number}`,
-    title: `${template.titleBase} ${number}`,
-    type: template.type,
-    location: template.city,
-    area: `${area.toLocaleString('pt-BR')} m²`,
-    year: 2021 + (index % 5),
-    specialties: template.specialties,
-    imageUrl: portfolioGalleryImages[index % portfolioGalleryImages.length],
-  };
-});
-
-function getPortfolioCategoryLabel(index: number) {
-  if (index === 0) return 'Residencial Alto Padrão';
-  if (index === 1) return 'Corporativo Premium';
-  if (index === 2) return 'Residencial de Luxo';
-  if (index === 3) return 'Comercial / Mixed-Use';
-  return 'Complexo de Saúde';
-}
+const portfolioImageByFileName = Object.fromEntries(
+  Object.entries(portfolioImageModules).map(([path, imageUrl]) => [
+    path.split('/').pop() ?? path.split('\\').pop() ?? path,
+    imageUrl,
+  ]),
+);
 
 function getPortfolioWrapperClass(index: number) {
   if (index === 0) return 'lg:col-span-7';
@@ -95,33 +75,22 @@ function getPortfolioImageHeight(index: number) {
 
 export default function PortfolioSection() {
   const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
-  const [portfolioFilter, setPortfolioFilter] = useState<'all' | 'eletrico' | 'hidraulico' | 'incendio' | 'climatizacao'>('all');
 
-  const filteredPortfolioProjects = useMemo(() => {
-    return portfolioMockProjects.filter((project) => {
-      if (portfolioFilter === 'all') return true;
-
-      const mappedSpec =
-        portfolioFilter === 'eletrico'
-          ? 'Elétrico'
-          : portfolioFilter === 'hidraulico'
-            ? 'Hidráulico'
-            : portfolioFilter === 'incendio'
-              ? 'Incêndio'
-              : 'Climatização';
-
-      return project.specialties.includes(mappedSpec);
-    });
-  }, [portfolioFilter]);
+  const portfolioProjects = useMemo(
+    () =>
+      portfolioEntries
+        .map((project) => ({
+          ...project,
+          imageUrl: portfolioImageByFileName[project.imageFileName],
+        }))
+        .filter((project) => Boolean(project.imageUrl)),
+    [],
+  );
 
   return (
-    <section
-      id="portfolio"
-      aria-labelledby="portfolio-heading"
-      className="py-24 bg-white border-t border-slate-200/80"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-14">
+    <section id="portfolio" aria-labelledby="portfolio-heading" className="border-t border-slate-200/80 bg-white py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-14 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -131,17 +100,15 @@ export default function PortfolioSection() {
           >
             <div className="flex items-center gap-3 text-[11px] font-mono font-bold uppercase tracking-[0.28em] text-[#315676]">
               <span className="h-px w-5 bg-[#315676]" />
-              <span>Portfólio de Obras</span>
+              <span>Portfolio de Obras</span>
             </div>
             <h2
               id="portfolio-heading"
-              className="mt-5 text-3xl md:text-4xl lg:text-[3.35rem] font-display font-extrabold text-[#2D3845] tracking-tight leading-[1]"
+              className="mt-5 font-display text-3xl font-extrabold leading-[1] tracking-tight text-[#2D3845] md:text-4xl lg:text-[3.35rem]"
             >
-              Veja nossas obras de destaque.
+              Projetos ja desenvolvidos pela Duall.
             </h2>
-            <p className="mt-4 text-base text-[#5E6B7A] leading-relaxed max-w-2xl">
-              Projetos de instalações prediais de alta complexidade desenvolvidos integralmente em tecnologia BIM (LOD 400), garantindo precisão executiva e zero interferências.
-            </p>
+            
           </motion.div>
 
           <motion.button
@@ -151,10 +118,10 @@ export default function PortfolioSection() {
             variants={fadeInUpVariants}
             type="button"
             onClick={() => setIsPortfolioModalOpen(true)}
-            className="shrink-0 inline-flex items-center justify-center gap-2.5 bg-[#315676] text-white px-5 py-3.5 rounded-md text-[11px] font-bold tracking-[0.12em] uppercase transition-all duration-200 hover:bg-[#254261] hover:-translate-y-px shadow-[0_4px_16px_rgba(49,86,118,0.18)]"
+            className="inline-flex shrink-0 items-center justify-center gap-2.5 rounded-md bg-[#315676] px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_4px_16px_rgba(49,86,118,0.18)] transition-all duration-200 hover:-translate-y-px hover:bg-[#254261]"
           >
             <FileText size={16} />
-            <span>Abrir Portfólio Completo</span>
+            <span>Ver Portfolio Completo</span>
           </motion.button>
         </div>
 
@@ -163,9 +130,9 @@ export default function PortfolioSection() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
           variants={staggerContainerVariants}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5"
+          className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5"
         >
-          {PORTFOLIO_PROJECTS.slice(0, 5).map((project, index) => {
+          {portfolioProjects.slice(0, 5).map((project, index) => {
             const isFeatured = index === 0;
             const isSideFeature = index === 1;
 
@@ -175,24 +142,23 @@ export default function PortfolioSection() {
                 variants={staggerItemVariants}
                 whileHover={{ y: -5 }}
                 transition={{ duration: 0.28, ease: 'easeOut' }}
-                className={`${getPortfolioWrapperClass(index)} overflow-hidden rounded-2xl bg-white border border-slate-200/70 shadow-[0_6px_22px_rgba(15,23,42,0.07)] group h-full`}
+                className={`${getPortfolioWrapperClass(index)} group h-full overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-[0_6px_22px_rgba(15,23,42,0.07)]`}
               >
                 <div className={`relative overflow-hidden ${getPortfolioImageHeight(index)}`}>
                   <img
                     src={project.imageUrl}
-                    alt={`Empreendimento ${project.title}`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    referrerPolicy="no-referrer"
+                    alt={`Projeto ${project.title}`}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
                   <div className="absolute left-4 top-4 rounded-full bg-[#315676] px-3.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md">
-                    {getPortfolioCategoryLabel(index)}
+                    {project.category}
                   </div>
                 </div>
 
                 <div className="bg-white px-5 py-4 md:px-5 md:py-5">
                   <h3
-                    className={`font-display font-extrabold tracking-tight text-[#2D3845] leading-tight ${
+                    className={`font-display font-extrabold leading-tight tracking-tight text-[#2D3845] ${
                       isFeatured
                         ? 'text-[2rem] md:text-[2.25rem]'
                         : isSideFeature
@@ -202,13 +168,15 @@ export default function PortfolioSection() {
                   >
                     {project.title}
                   </h3>
-                  <p
-                    className={`mt-2 text-[#5E6B7A] ${
-                      isFeatured || isSideFeature ? 'text-[14px] leading-7' : 'text-[13px] leading-6'
-                    }`}
-                  >
-                    {project.area} · BIM 2024 · {project.specialities.join(', ')}
-                  </p>
+
+                  <div className="mt-3 flex items-center gap-2 text-[#5E6B7A]">
+                    <Building2 size={16} className="shrink-0 text-[#315676]" />
+                    <p className={`${isFeatured || isSideFeature ? 'text-[15px] leading-7' : 'text-[14px] leading-6'}`}>
+                      Cliente:
+                      {' '}
+                      <span className="font-semibold text-[#315676]">{project.client}</span>
+                    </p>
+                  </div>
                 </div>
               </motion.article>
             );
@@ -231,99 +199,55 @@ export default function PortfolioSection() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97, y: 12 }}
                 transition={{ duration: 0.28, ease: 'easeOut' }}
-                className="relative z-10 w-full max-w-[1580px] h-[92vh] rounded-[28px] overflow-hidden bg-white shadow-[0_30px_100px_rgba(6,17,31,0.32)] border border-slate-200 flex flex-col"
+                className="relative z-10 flex h-[92vh] w-full max-w-[1580px] flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_30px_100px_rgba(6,17,31,0.32)]"
               >
-                <div className="flex items-start justify-between gap-6 px-6 py-5 md:px-8 border-b border-slate-200 bg-white">
+                <div className="flex items-start justify-between gap-6 border-b border-slate-200 bg-white px-6 py-5 md:px-8">
                   <div className="max-w-4xl">
                     <span className="text-[11px] font-mono font-bold uppercase tracking-[0.28em] text-[#315676]">
-                      Portfólio Completo
+                      Portfolio Completo
                     </span>
-                    <h3 className="mt-3 text-2xl md:text-4xl font-display font-extrabold text-[#2D3845] tracking-tight leading-tight">
-                      Projetos já desenvolvidos pela Duall Engenharia.
+                    <h3 className="mt-3 font-display text-2xl font-extrabold leading-tight tracking-tight text-[#2D3845] md:text-4xl">
+                      Empreendimentos da Duall Engenharia
                     </h3>
-                    <p className="mt-3 text-sm md:text-base text-[#5E6B7A] leading-relaxed">
-                      Explore uma base mock com dezenas de empreendimentos organizados por disciplina. Cada projeto traz tipologia, localização, área e imagem de referência.
-                    </p>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => setIsPortfolioModalOpen(false)}
-                    className="shrink-0 w-11 h-11 rounded-full border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-[#315676] transition flex items-center justify-center"
-                    aria-label="Fechar portfólio"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-[#315676]"
+                    aria-label="Fechar portfolio"
                   >
                     <X size={20} />
                   </button>
                 </div>
 
-                <div className="px-6 pt-5 pb-4 md:px-8 border-b border-slate-200 bg-slate-50/70">
-                  <div className="flex gap-2.5 flex-wrap">
-                    {portfolioFilters.map((filter) => {
-                      const isActive = portfolioFilter === filter.id;
-
-                      return (
-                        <button
-                          key={filter.id}
-                          type="button"
-                          onClick={() => setPortfolioFilter(filter.id)}
-                          className={`px-4 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-[0.14em] border transition ${
-                            isActive
-                              ? 'bg-[#315676] text-white border-[#315676] shadow-md'
-                              : 'bg-white text-[#315676] border-slate-200 hover:border-[#315676]/35 hover:bg-slate-50'
-                          }`}
-                        >
-                          {filter.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="flex-1 overflow-y-auto px-6 py-6 md:px-8 md:py-7 bg-white">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-                    {filteredPortfolioProjects.map((project) => (
+                <div className="flex-1 overflow-y-auto bg-white px-6 py-6 md:px-8 md:py-7">
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                    {portfolioProjects.map((project) => (
                       <article
                         key={project.id}
                         className="overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
                       >
-                        <div className="relative h-48 overflow-hidden bg-slate-100">
-                          <img
-                            src={project.imageUrl}
-                            alt={`Projeto ${project.title}`}
-                            className="h-full w-full object-cover"
-                            referrerPolicy="no-referrer"
-                          />
-                          <div className="absolute top-3 left-3 rounded-full bg-[#315676] px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] text-white">
-                            {project.type}
+                        <div className="relative h-56 overflow-hidden bg-slate-100">
+                          <img src={project.imageUrl} alt={`Projeto ${project.title}`} className="h-full w-full object-cover" />
+                          <div className="absolute left-3 top-3 rounded-full bg-[#315676] px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] text-white">
+                            {project.category}
                           </div>
                         </div>
 
-                        <div className="p-5 space-y-3">
-                          <h4 className="font-display text-[1.35rem] font-extrabold text-[#2D3845] leading-tight">
+                        <div className="space-y-3 p-5">
+                          <h4 className="font-display text-[1.35rem] font-extrabold leading-tight text-[#2D3845]">
                             {project.title}
                           </h4>
 
-                          <div className="space-y-1.5 text-[13px] text-[#5E6B7A]">
-                            <p className="flex items-center gap-2">
-                              <MapPin size={14} className="text-[#315676] shrink-0" />
-                              <span>{project.location}</span>
-                            </p>
-                            <p className="font-semibold text-[#315676]">
-                              Área: {project.area}
-                            </p>
-                            <p>Ano de referência: BIM {project.year}</p>
-                          </div>
-
-                          <div className="flex flex-wrap gap-2 pt-1">
-                            {project.specialties.map((specialty) => (
-                              <span
-                                key={`${project.id}-${specialty}`}
-                                className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#315676] border border-slate-200"
-                              >
-                                {specialty}
-                              </span>
-                            ))}
-                          </div>
+                          <p className="flex items-center gap-2 text-[14px] leading-6 text-[#5E6B7A]">
+                            <Building2 size={15} className="shrink-0 text-[#315676]" />
+                            <span>
+                              Cliente:
+                              {' '}
+                              <span className="font-semibold text-[#315676]">{project.client}</span>
+                            </span>
+                          </p>
                         </div>
                       </article>
                     ))}
