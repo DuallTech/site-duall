@@ -1190,7 +1190,7 @@ export default function ClashSimulator() {
 
             {/* Measuring Tool UI overlay */}
             {isMeasuringMode && (
-              <div className="absolute top-16 right-4 z-10 p-3 bg-slate-950/95 border border-sky-500/25 backdrop-blur-md rounded-xl shadow-xl flex flex-col gap-1.5 max-w-[190px] text-xs font-sans text-slate-300 text-left">
+              <div className="absolute top-16 right-4 z-10 flex max-w-47.5 flex-col gap-1.5 rounded-xl border border-sky-500/25 bg-slate-950/95 p-3 text-left text-xs font-sans text-slate-300 shadow-xl backdrop-blur-md">
                 <div className="flex items-center gap-1.5 text-duall-blue font-extrabold">
                   <Ruler size={13} className="animate-pulse" />
                   <span>Régua Ativa (BIM)</span>
@@ -1204,7 +1204,7 @@ export default function ClashSimulator() {
                 {measurePoints.length === 2 && measureDistance !== null && (
                   <div className="space-y-1 mt-1 border-t border-slate-900 pt-1">
                     <span className="text-[8px] text-slate-500 uppercase font-mono block">Distância:</span>
-                    <span className="text-sm font-mono font-bold text-emerald-400 block break-words bg-emerald-950/10 p-1.5 rounded">{measureDistance.toFixed(3)} m (metros)</span>
+                    <span className="block rounded bg-emerald-950/10 p-1.5 text-sm font-mono font-bold text-emerald-400 wrap-break-word">{measureDistance.toFixed(3)} m (metros)</span>
                   </div>
                 )}
                 <button
@@ -1227,7 +1227,7 @@ export default function ClashSimulator() {
             <div className="absolute inset-x-4 bottom-4 z-10 flex justify-center pointer-events-none">
               <div className="bg-slate-950/95 px-4 py-3 rounded-2xl border border-slate-800/80 backdrop-blur-lg flex items-center justify-between shadow-2xl pointer-events-auto max-w-lg w-full select-none">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="p-2 bg-sky-500/10 rounded-xl text-sky-500 border border-sky-500/20 flex-shrink-0 animate-pulse">
+                  <div className="animate-pulse shrink-0 rounded-xl border border-sky-500/20 bg-sky-500/10 p-2 text-sky-500">
                     <Activity size={15} />
                   </div>
                   <div className="text-left min-w-0">

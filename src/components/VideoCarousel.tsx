@@ -171,11 +171,11 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
                 </p>
               </div>
 
-              <div className="relative min-h-[280px] overflow-hidden bg-slate-200 lg:min-h-full">
+              <div className="relative min-h-70 overflow-hidden bg-slate-200 lg:min-h-full">
                 <img
                   src={duallTeamImage}
                   alt="Equipe da Duall Engenharia"
-                  className="absolute inset-0 h-full w-full object-cover object-[50%_68%]"
+                  className="absolute inset-0 h-full w-full object-[50%_68%] object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-slate-950/55 via-slate-950/12 to-transparent" />
 
