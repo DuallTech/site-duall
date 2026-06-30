@@ -56,31 +56,19 @@ export const SPECIALITIES: ProjectSpeciality[] = [
   },
   {
     id: 'mecanico',
-    name: 'Climatização (HVAC) & Ventilação',
-    icon: 'Wrench',
-    description:
-      'Conforto térmico, controle microbiológico e taxas ideais de renovação de ar baseados em conceitos inovadores e de baixo custo operacional.',
+    name: 'Compatibilização BIM',
+    icon: 'Cpu',
+    description: 'Detecção e resolução de interferências geométricas entre disciplinas antes do canteiro, garantindo obra limpa, sem improvisos e com rastreabilidade total.',
     details: [
-      'Sistemas VRF (Variable Refrigerant Flow)',
-      'Sistemas Recomendados de Chiller e Fan-coils',
-      'Renovação de Ar e Filtragem segundo a Portaria 3523 (PMOC)',
-      'Grelhas de Exaustão de Cozinhas e Exaustão Mecânica de Banheiros',
-      'Pressurização de Escadas de Emergência contra Fumaça',
-      'Sistemas de Climatização para Salas Limpas e CPDs',
+      'Clash Detection automatizado entre estrutura e instalações',
+      'Coordenação Multidisciplinar em ambiente BIM unificado',
+      'Relatórios de interferências com rastreabilidade por revisão',
+      'Integração arquitetura, estrutura e MEP em modelo único',
+      'Exportação IFC/NWD para revisão colaborativa em nuvem',
+      'LOD 400 — precisão executiva sem improvisos no canteiro'
     ],
-    bannerUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'port_5',
-    title: 'Complexo Hospitalar Sancta',
-    location: 'Moema, São Paulo - SP',
-    type: 'Complexo de Saúde',
-    area: '16.400 m²',
-    description:
-      'Projeto integrado com climatização crítica, hidráulica hospitalar, combate a incêndio e infraestrutura elétrica para operação de alta confiabilidade.',
-    imageUrl: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=800&h=600&q=80',
-    specialities: ['Climatização', 'Hidráulico', 'Incêndio', 'Elétrico'],
-  },
+    bannerUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80'
+  }
 ];
 
 export const TESTIMONIALS: Testimony[] = [

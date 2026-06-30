@@ -69,48 +69,21 @@ const serviceAreas = [
   },
 ] as const;
 
-function AreaCard({
-  eyebrow,
-  title,
-  description,
-  icon: Icon,
-  span,
-}: (typeof serviceAreas)[number]) {
-  return (
-    <motion.article
-      variants={staggerItemVariants}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
-      className={`${span} group flex h-full flex-col justify-between border border-slate-200/90 bg-white p-7 shadow-[0_12px_40px_rgba(15,23,42,0.05)] transition-shadow duration-200 hover:shadow-[0_18px_48px_rgba(15,23,42,0.08)]`}
-    >
-      <div className="space-y-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            {eyebrow ? (
-              <p className="text-[0.9rem] uppercase tracking-[0.02em] text-[#0f4d79]">{eyebrow}</p>
-            ) : null}
-            <h3 className="mt-2 max-w-[13ch] text-[2rem] font-extrabold uppercase leading-[1.05] tracking-[-0.03em] text-[#EDA700]">
-              {title}
-            </h3>
-          </div>
-
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#EDA700]/25 bg-[#EDA700]/10 text-[#EDA700]">
-            <Icon size={22} strokeWidth={2.2} />
-          </div>
-        </div>
-
-        <p className="max-w-[28rem] text-[1.05rem] leading-8 text-[#103b5b]">{description}</p>
-      </div>
-
-      <a
-        href="#contato"
-        className="mt-8 inline-flex items-center gap-2 text-[1.05rem] font-medium text-[#0f4d79] transition group-hover:text-[#09314d]"
-      >
-        <span>Mais detalhes</span>
-        <ArrowRight size={18} className="transition-transform duration-200 group-hover:translate-x-1" />
-      </a>
-    </motion.article>
-  );
+function getIconComponent(iconName: string) {
+  switch (iconName) {
+    case 'Zap':
+      return <Zap className="text-sky-500 shrink-0" size={24} />;
+    case 'Droplet':
+      return <Droplet className="text-sky-500 shrink-0" size={24} />;
+    case 'ShieldAlert':
+      return <Shield className="text-rose-500 shrink-0" size={24} />;
+    case 'Wrench':
+      return <Wrench className="text-teal-500 shrink-0" size={24} />;
+    case 'Cpu':
+      return <Cpu className="text-[#EDA700] shrink-0" size={24} />;
+    default:
+      return <Cpu className="text-slate-500 shrink-0" size={24} />;
+  }
 }
 
 export default function SpecialitiesSection() {

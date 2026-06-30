@@ -75,6 +75,14 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
                 {link.label}
               </a>
             ))}
+            <a
+              href="https://talentos.duallengenharia.com.br/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-1 px-4 py-1.5 rounded-full border border-[#EDA700] text-[#EDA700] text-sm font-semibold hover:bg-[#EDA700] hover:text-slate-900 transition whitespace-nowrap"
+            >
+              Trabalhe Conosco
+            </a>
           </nav>
 
           {/* Mobile hamburger button */}
@@ -91,6 +99,7 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
           </button>
         </div>
       </header>
+
 
       {/* Mobile drawer overlay */}
       {mobileOpen && (
@@ -137,13 +146,22 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
         </nav>
 
         {/* Drawer footer CTA */}
-        <div className="px-4 pb-8 pt-4 border-t border-white/10">
+        <div className="px-4 pb-8 pt-4 border-t border-white/10 space-y-3">
           <a
             href="#contato"
             onClick={closeMenu}
             className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#EDA700] text-slate-900 font-bold text-sm hover:bg-[#d49500] transition active:scale-95"
           >
             Solicitar Proposta
+          </a>
+          <a
+            href="https://talentos.duallengenharia.com.br/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={closeMenu}
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[#EDA700] text-[#EDA700] font-semibold text-sm hover:bg-[#EDA700]/10 transition active:scale-95"
+          >
+            Trabalhe Conosco
           </a>
         </div>
       </div>
