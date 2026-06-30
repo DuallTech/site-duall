@@ -2,58 +2,19 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+import { TESTIMONIALS } from '../data';
 import { fadeInUpVariants } from './animations';
 
-const testimonials = [
-  {
-    initials: 'MR',
-    name: 'Marcos Ribeiro',
-    role: 'Diretor de Obras',
-    company: 'Construtora Alfa',
-    text: 'A Duall é uma excelente parceira. Segue à risca o cronograma e sempre traz soluções inteligentes de modelagem e compatibilização 3D, poupando retrabalho no canteiro.',
-    rating: 5,
-  },
-  {
-    initials: 'CP',
-    name: 'Carla Pinheiro',
-    role: 'Gerente de Projetos',
-    company: 'C2J Incorporadora',
-    text: 'Fomos surpreendidos positivamente desde o início. O atendimento é muito próximo, e a equipe entrega segurança técnica em SPDA, elétrica e solar fotovoltaico.',
-    rating: 5,
-  },
-  {
-    initials: 'TS',
-    name: 'Thiago Souza',
-    role: 'Engenheiro Coordenador',
-    company: 'RM Mais',
-    text: 'Encontramos na Duall um parceiro sólido para instalações elétricas e redes de incêndio de alta complexidade. Suporte nota dez e cumprimento impecável de prazos.',
-    rating: 5,
-  },
-  {
-    initials: 'LF',
-    name: 'Larissa Ferreira',
-    role: 'Arquiteta Coordenadora',
-    company: 'Núcleo Urbano',
-    text: 'A compatibilização BIM evitou conflitos importantes entre estrutura e instalações. O processo ficou mais claro para toda a equipe e a obra ganhou previsibilidade.',
-    rating: 5,
-  },
-  {
-    initials: 'RG',
-    name: 'Rafael Gomes',
-    role: 'Sócio Diretor',
-    company: 'Horizonte Engenharia',
-    text: 'O diferencial da Duall está na agilidade com profundidade técnica. Eles entendem o projeto, propõem soluções e ajudam a destravar decisões com rapidez.',
-    rating: 5,
-  },
-  {
-    initials: 'AM',
-    name: 'Amanda Moura',
-    role: 'Coordenadora de Implantação',
-    company: 'Vértice Construtora',
-    text: 'Recebemos documentação organizada, comunicação objetiva e um acompanhamento muito próximo nas etapas críticas. Foi uma parceria que trouxe tranquilidade.',
-    rating: 5,
-  },
-];
+const getInitials = (name: string) =>
+  name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('');
+
+const getTestimonialMeta = (role: string, company: string) =>
+  [role, company].filter(Boolean).join(' · ');
 
 export default function TestimonialsSection() {
   const [cardsPerView, setCardsPerView] = useState(3);
@@ -79,7 +40,7 @@ export default function TestimonialsSection() {
     return () => window.removeEventListener('resize', updateCardsPerView);
   }, []);
 
-  const totalPages = Math.max(1, Math.ceil(testimonials.length / cardsPerView));
+  const totalPages = Math.max(1, Math.ceil(TESTIMONIALS.length / cardsPerView));
   const translate = `${page * (100 / cardsPerView)}%`;
 
   useEffect(() => {
@@ -113,24 +74,6 @@ export default function TestimonialsSection() {
             <div className="text-[11px] font-bold uppercase tracking-[1.4px] text-[#5E6B7A]">
               {String(page + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
             </div>
-            <button
-              type="button"
-              onClick={() => setPage((current) => Math.max(0, current - 1))}
-              disabled={page === 0}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D6DEE8] bg-white text-duall-blue transition hover:border-duall-blue hover:bg-duall-blue hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
-              aria-label="Ver depoimentos anteriores"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}
-              disabled={page === totalPages - 1}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D6DEE8] bg-white text-duall-blue transition hover:border-duall-blue hover:bg-duall-blue hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
-              aria-label="Ver mais depoimentos"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
           </div>
         </div>
 
@@ -139,15 +82,36 @@ export default function TestimonialsSection() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
           variants={fadeInUpVariants}
-          className="mt-12 overflow-hidden"
+          className="relative mt-12"
         >
+          <button
+            type="button"
+            onClick={() => setPage((current) => Math.max(0, current - 1))}
+            disabled={page === 0}
+            className="absolute left-0 top-1/2 z-10 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#D6DEE8] bg-white text-duall-blue shadow-sm transition hover:border-duall-blue hover:bg-duall-blue hover:text-white disabled:cursor-not-allowed disabled:opacity-40 xl:flex"
+            aria-label="Ver depoimentos anteriores"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}
+            disabled={page === totalPages - 1}
+            className="absolute right-0 top-1/2 z-10 hidden h-12 w-12 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#D6DEE8] bg-white text-duall-blue shadow-sm transition hover:border-duall-blue hover:bg-duall-blue hover:text-white disabled:cursor-not-allowed disabled:opacity-40 xl:flex"
+            aria-label="Ver mais depoimentos"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
+          <div className="overflow-hidden">
           <div
             className="flex transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${translate})` }}
           >
-            {testimonials.map((testimonial, idx) => (
+            {TESTIMONIALS.map((testimonial, idx) => (
               <div
-                key={`${testimonial.initials}-${idx}`}
+                key={`${testimonial.id}-${idx}`}
                 className="w-full shrink-0 px-2.5"
                 style={{ flexBasis: `${100 / cardsPerView}%` }}
               >
@@ -166,14 +130,14 @@ export default function TestimonialsSection() {
 
                   <div className="mt-6 flex items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-duall-blue text-base font-extrabold text-white">
-                      {testimonial.initials}
+                      {getInitials(testimonial.name)}
                     </div>
                     <div>
                       <div className="text-[1.02rem] font-display font-bold text-slate-900">
                         {testimonial.name}
                       </div>
                       <div className="text-[13px] leading-relaxed text-[#5E6B7A]">
-                        {testimonial.role} · {testimonial.company}
+                        {getTestimonialMeta(testimonial.role, testimonial.company)}
                       </div>
                     </div>
                   </div>
@@ -181,9 +145,20 @@ export default function TestimonialsSection() {
               </div>
             ))}
           </div>
+          </div>
         </motion.div>
 
-        <div className="mt-8 flex justify-center gap-2">
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => setPage((current) => Math.max(0, current - 1))}
+            disabled={page === 0}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D6DEE8] bg-white text-duall-blue transition hover:border-duall-blue hover:bg-duall-blue hover:text-white disabled:cursor-not-allowed disabled:opacity-40 xl:hidden"
+            aria-label="Ver depoimentos anteriores"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
           {Array.from({ length: totalPages }).map((_, idx) => (
             <button
               key={idx}
@@ -195,6 +170,16 @@ export default function TestimonialsSection() {
               aria-label={`Ir para o grupo de depoimentos ${idx + 1}`}
             />
           ))}
+
+          <button
+            type="button"
+            onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}
+            disabled={page === totalPages - 1}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D6DEE8] bg-white text-duall-blue transition hover:border-duall-blue hover:bg-duall-blue hover:text-white disabled:cursor-not-allowed disabled:opacity-40 xl:hidden"
+            aria-label="Ver mais depoimentos"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </section>

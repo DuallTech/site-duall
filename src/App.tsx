@@ -63,7 +63,6 @@ export default function App() {
         <HeroSection />
         <StatsSection />
         <DifferentialsSection isHighContrast={isHighContrast} />
-        <SpecialitiesSection />
         <SimulatorSection />
         <PortfolioSection />
         <PartnershipsSection />

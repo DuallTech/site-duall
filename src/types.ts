@@ -36,12 +36,15 @@ export interface VideoDifferential {
 export interface PortfolioProject {
   id: string;
   title: string;
-  location: string;
-  type: string;
-  area: string;
-  description: string;
-  imageUrl: string;
-  specialities: string[];
+  client?: string;
+  category?: string;
+  imageFileName?: string;
+  location?: string;
+  type?: string;
+  area?: string;
+  description?: string;
+  imageUrl?: string;
+  specialities?: string[];
 }
 
 export interface LeadSubmission {
