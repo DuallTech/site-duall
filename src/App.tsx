@@ -7,7 +7,9 @@ import { useEffect, useState } from 'react';
 
 import AccessibilityPanel from './components/AccessibilityPanel';
 import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
+import AreasAtuacaoSection from './sections/AreasAtuacaoSection';
 import ContactSection from './sections/ContactSection';
+import SpecialitiesSection from './sections/SpecialitiesSection';
 import DifferentialsSection from './sections/DifferentialsSection';
 import FooterSection from './sections/FooterSection';
 import HeaderSection from './sections/HeaderSection';
@@ -62,6 +64,8 @@ export default function App() {
         <HeroSection />
         <StatsSection />
         <DifferentialsSection isHighContrast={isHighContrast} />
+        <AreasAtuacaoSection />
+        <SpecialitiesSection />
         <SimulatorSection />
         <PortfolioSection />
         <PartnershipsSection />

@@ -25,7 +25,7 @@ const specialitiesImages: Record<string, ImagePair[]> = {
   hidraulico: [
     {
       bim: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&w=1200&q=80',
-      real: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80',
+      real: 'https://space-duall.sfo3.cdn.digitaloceanspaces.com/galeria/0c58241e-a88b-420c-bbfa-ae92066d38e3.jpg',
     },
     {
       bim: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
@@ -151,7 +151,7 @@ export default function SpecialitiesSection() {
 
   return (
     <section
-      id="especialidades"
+      id="comparador-bim"
       aria-labelledby="spec-heading"
       className="py-24 bg-white"
     >

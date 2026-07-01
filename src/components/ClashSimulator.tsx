@@ -166,12 +166,12 @@ export default function ClashSimulator() {
   const [hoveredElement, setHoveredElement] = useState<BIMElementData | null>(null);
   const [showAxes, setShowAxes] = useState<boolean>(true);
   const [showGrid, setShowGrid] = useState<boolean>(true);
-  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
+  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(true);
   const [isXRayMode, setIsXRayMode] = useState<boolean>(false);
   const [isMeasuringMode, setIsMeasuringMode] = useState<boolean>(false);
   const [measurePoints, setMeasurePoints] = useState<THREE.Vector3[]>([]);
   const [measureDistance, setMeasureDistance] = useState<number | null>(null);
-  const isAutoRotatingRef = useRef<boolean>(false);
+  const isAutoRotatingRef = useRef<boolean>(true);
   
   // Discipline Show/Hide
   const [visibleSystems, setVisibleSystems] = useState({
@@ -1009,22 +1009,7 @@ export default function ClashSimulator() {
           </p>
         </div>
 
-        {/* Demo switcher presets info */}
-        <div className="flex flex-wrap items-center gap-1.55">
-          {uploadedModel && (
-            <button
-              onClick={fitCameraToLoadedModel}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-sans font-semibold transition duration-150 cursor-pointer ${
-                activeModelKey === 'uploaded'
-                  ? 'bg-emerald-600 text-white border border-emerald-500 shadow-sm font-bold animate-pulse'
-                  : 'bg-slate-900/40 hover:bg-slate-900 text-emerald-400 hover:text-emerald-300 border border-emerald-950'
-              }`}
-            >
-              <span>{uploadedModel.icon}</span>
-              <span>{uploadedModel.name}</span>
-            </button>
-          )}
-        </div>
+        <div />
       </div>
 
       {/* Main Grid Content Area */}
