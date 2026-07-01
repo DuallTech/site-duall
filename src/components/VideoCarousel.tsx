@@ -24,8 +24,8 @@ const ABOUT_VIDEO_URL =
 
 const TABS = [
   { id: 'descricao', label: 'A Duall', icon: FileText },
-  { id: 'video', label: 'Vídeo Institucional', icon: PlayCircle },
   { id: 'atuacao', label: 'Áreas de Atuação', icon: Blocks },
+  { id: 'video', label: 'Vídeo Institucional', icon: PlayCircle },
 ] as const;
 
 const VIDEO_LEAD_TEXT =
