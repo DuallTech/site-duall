@@ -15,7 +15,6 @@ import HeroSection from './sections/HeroSection';
 import PartnershipsSection from './sections/PartnershipsSection';
 import PortfolioSection from './sections/PortfolioSection';
 import SimulatorSection from './sections/SimulatorSection';
-import SpecialitiesSection from './sections/SpecialitiesSection';
 import StatsSection from './sections/StatsSection';
 import TestimonialsSection from './sections/TestimonialsSection';
 
