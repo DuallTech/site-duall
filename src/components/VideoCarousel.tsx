@@ -16,7 +16,7 @@ import {
   SunMedium,
   Zap,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 
 import duallTeamImage from '../assets/images/diretores_duall.jpeg';
 
@@ -29,17 +29,17 @@ const ABOUT_VIDEO_URL =
 
 const TABS = [
   { id: 'descricao', label: 'A Duall', icon: FileText },
-  { id: 'video', label: 'Video Institucional', icon: PlayCircle },
-  { id: 'atuacao', label: 'Areas de Atuacao', icon: Blocks },
+  { id: 'atuacao', label: 'Áreas de Atuação', icon: Blocks },
+  { id: 'video', label: 'Vídeo Institucional', icon: PlayCircle },
 ] as const;
 
 const VIDEO_LEAD_TEXT =
-  'Comprometimento significa obrigacao, dever. Envolve a responsabilidade de cumprir com o planejado, de realizar um acordo. Por isso, comprometimento e a palavra que rege o nosso trabalho.';
+  'Comprometimento significa obrigação, dever. Envolve a responsabilidade de cumprir com o planejado, de realizar um acordo. Por isso, comprometimento é a palavra que rege o nosso trabalho.';
 
 const VIDEO_TEXT_PARAGRAPHS = [
-  'Nos somos um time de engenheiros incansaveis em buscar a melhor solucao para sua necessidade. Vamos conquistar a sua confianca de que pontualidade, qualidade, precisao e bom atendimento podem andar juntos.',
-  'Somos uma equipe que segue normas, respeita padroes e se motiva pelo sucesso dos nossos clientes. Oferecemos solucoes, mas tambem opcoes de escolha, garantindo agilidade e prontidao em qualquer etapa do processo.',
-  'Entendemos que, quando um projeto nasce, expectativas sao criadas. E e por isso que entregar no prazo estabelecido e a nossa missao, com etica, responsabilidade e conhecimento tecnico de ponta.',
+  'Nós somos um time de engenheiros incansáveis em buscar a melhor solução para sua necessidade. Vamos conquistar a sua confiança de que pontualidade, qualidade, precisão e bom atendimento podem andar juntos.',
+  'Somos uma equipe que segue normas, respeita padrões e se motiva pelo sucesso dos nossos clientes. Oferecemos soluções, mas também opções de escolha, garantindo agilidade e prontidão em qualquer etapa do processo.',
+  'Entendemos que, quando um projeto nasce, expectativas são criadas. E é por isso que entregar no prazo estabelecido é a nossa missão, com ética, responsabilidade e conhecimento técnico de ponta.',
 ] as const;
 
 const SERVICE_AREAS = [
@@ -206,6 +206,30 @@ const SERVICE_AREAS = [
 
 type TabId = (typeof TABS)[number]['id'];
 
+function getTooltipHeightClasses(itemsCount: number, isWideCard: boolean) {
+  if (itemsCount <= 5) {
+    return isWideCard
+      ? 'hover:min-h-[250px] focus:min-h-[250px] md:hover:min-h-[270px] md:focus:min-h-[270px]'
+      : 'hover:min-h-[240px] focus:min-h-[240px] md:hover:min-h-[255px] md:focus:min-h-[255px]';
+  }
+
+  if (itemsCount <= 8) {
+    return isWideCard
+      ? 'hover:min-h-[310px] focus:min-h-[310px] md:hover:min-h-[330px] md:focus:min-h-[330px]'
+      : 'hover:min-h-[300px] focus:min-h-[300px] md:hover:min-h-[320px] md:focus:min-h-[320px]';
+  }
+
+  if (itemsCount <= 10) {
+    return isWideCard
+      ? 'hover:min-h-[360px] focus:min-h-[360px] md:hover:min-h-[390px] md:focus:min-h-[390px]'
+      : 'hover:min-h-[350px] focus:min-h-[350px] md:hover:min-h-[380px] md:focus:min-h-[380px]';
+  }
+
+  return isWideCard
+    ? 'hover:min-h-[420px] focus:min-h-[420px] md:hover:min-h-[450px] md:focus:min-h-[450px]'
+    : 'hover:min-h-[430px] focus:min-h-[430px] md:hover:min-h-[470px] md:focus:min-h-[470px]';
+}
+
 export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
   const [activeTab, setActiveTab] = useState<TabId>('descricao');
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -272,21 +296,21 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
                 </span>
 
                 <h3 className="mt-6 font-display text-2xl font-extrabold tracking-tight md:text-3xl">
-                  Referencia em projetos de instalacoes e gestao de engenharia
+                  Referência em projetos de instalações e gestão de engenharia
                 </h3>
 
                 <p className="mt-5 text-base leading-relaxed text-slate-600">
-                  A Duall Engenharia, empresa especializada em Projetos de Instalacoes, e referencia de qualidade no
-                  desenvolvimento e gestao de projetos de engenharia no pais e conta com profissionais altamente
-                  qualificados e motivados para garantir a excelencia na entrega dos projetos de engenharia,
-                  maximizando valor aos nossos clientes, respeitando as normas que regulamentam o exercicio da
-                  profissao e atuando com etica, responsabilidade e conhecimento tecnico de ponta.
+                  A Duall Engenharia, empresa especializada em Projetos de Instalações, é referência de qualidade no
+                  desenvolvimento e gestão de projetos de engenharia no país e conta com profissionais altamente
+                  qualificados e motivados para garantir a excelência na entrega dos projetos de engenharia,
+                  maximizando valor aos nossos clientes, respeitando as normas que regulamentam o exercício da
+                  profissão e atuando com ética, responsabilidade e conhecimento técnico de ponta.
                 </p>
 
                 <p className="mt-4 text-sm leading-relaxed text-slate-500">
-                  Com mais de 12 anos de experiencia, nossos gestores ja desenvolveram mais de 500 empreendimentos,
+                  Com mais de 12 anos de experiência, nossos gestores já desenvolveram mais de 500 empreendimentos,
                   desde o residencial, comercial, mistos, industrial, shopping centers, hospitalar e mobilidade urbana
-                  por todo o pais.
+                  por todo o país.
                 </p>
               </div>
 
@@ -301,9 +325,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
                 <div className="absolute inset-x-5 bottom-5 md:inset-x-6 md:bottom-6">
                   <div className="inline-flex max-w-full rounded-2xl border border-white/20 bg-slate-950/55 px-4 py-3 backdrop-blur-sm">
                     <div className="text-white">
-                      <p className="text-[11px] font-mono uppercase tracking-[0.25em] text-sky-200/85">
-                        Diretores
-                      </p>
+                      <p className="text-[11px] font-mono uppercase tracking-[0.25em] text-sky-200/85">Diretores</p>
                       <h4 className="mt-2 font-display text-xl font-bold">
                         Denis Salles, Cristiano Salles e Eric Salles
                       </h4>
@@ -327,9 +349,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
             }`}
           >
             <div className="border-b border-slate-200 bg-white px-6 py-5">
-              <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#1992BB]">
-                Video Institucional
-              </p>
+              <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#1992BB]">Vídeo Institucional</p>
               <h3 className="mt-2 max-w-4xl font-display text-2xl font-extrabold leading-tight tracking-tight text-[#0f4f7b] md:text-3xl">
                 {VIDEO_LEAD_TEXT}
               </h3>
@@ -340,7 +360,7 @@ export default function VideoCarousel({ isHighContrast }: VideoCarouselProps) {
                 <div className="mb-5 overflow-hidden rounded-2xl border border-slate-200 bg-black shadow-xl lg:float-left lg:mb-6 lg:mr-8 lg:w-[58%] xl:w-[62%]">
                   <video controls preload="metadata" className="aspect-[16/10] w-full bg-black lg:aspect-video">
                     <source src={ABOUT_VIDEO_URL} type="video/mp4" />
-                    Seu navegador nao suporta reproducao de video.
+                    Seu navegador não suporta reprodução de vídeo.
                   </video>
                 </div>
 
