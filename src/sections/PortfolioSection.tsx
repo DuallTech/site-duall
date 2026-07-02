@@ -7,47 +7,60 @@ import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from 
 type PortfolioEntry = {
   id: string;
   title: string;
-  client: string;
+  client?: string;
   category: string;
   imageFileName: string;
+  imageClassName?: string;
 };
 
 const portfolioEntries: PortfolioEntry[] = [
-  { id: 'port_1', title: 'Eden West', client: 'Cyrela', category: 'Residencial', imageFileName: 'Eden-West.jpg' },
-  { id: 'port_2', title: 'Gran Alphaville', client: 'P4 Engenharia / RSF', category: 'Residencial', imageFileName: 'Gran-Alphaville.jpg' },
-  { id: 'port_3', title: 'Res. Ventis', client: 'Urben', category: 'Residencial', imageFileName: 'Ventis.jpg' },
-  { id: 'port_4', title: 'Res. Marques de Olinda', client: 'Fratta', category: 'Residencial', imageFileName: 'Res.-Marques-de-Olinda.jpg' },
-  { id: 'port_5', title: 'Res. Borghese Boulevard 2', client: 'Tarraf', category: 'Residencial', imageFileName: 'Res.-Borghese-Boulevard-2.jpg' },
-  { id: 'port_6', title: 'Res. Hildebrando 131', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Hidelbrando-131.jpg' },
-  { id: 'port_7', title: 'Res. My Way Guanabara', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'My-Way-Guanabara.jpg' },
-  { id: 'port_8', title: 'Res. Apogeo', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Apogeo.jpg' },
-  { id: 'port_9', title: 'Res. Reserva Urano', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'RP25-Urano.jpg' },
-  { id: 'port_10', title: 'Misto Alameda Franca', client: 'Idea Zarvos', category: 'Misto', imageFileName: 'Alameda-Franca.jpg' },
-  { id: 'port_11', title: 'Misto Jazz Moema Chanes', client: 'Gerporj-I / Rev3', category: 'Misto', imageFileName: 'MISTO-JAZZ-MOEMA-CHANES.jpg' },
-  { id: 'port_12', title: 'Misto Botani', client: 'Gamaro', category: 'Misto', imageFileName: 'Misto-Botani.jpg' },
-  { id: 'port_13', title: 'Res. Terrae', client: 'Gamaro', category: 'Residencial', imageFileName: 'Terrae.jpg' },
-  { id: 'port_14', title: 'Res. Torres de Ozanam', client: 'Santa Angela', category: 'Residencial', imageFileName: 'RES.TORRES-OZANAM.jpg' },
-  { id: 'port_15', title: 'Res. Soma', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Soma,jpg.webp' },
-  { id: 'port_16', title: 'Res. Viva Jaguaribe', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Viva-Jaguaribe.jpg' },
-  { id: 'port_17', title: 'Res. Mirai Guarapiranga', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Guarapiranga.webp' },
-  { id: 'port_18', title: 'Res. Mirai Cidade Lider', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Cidade-Lider.webp' },
-  { id: 'port_19', title: 'Res. Mirai Campinas Jardim do Lago', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Campinas-Jardim-do-Lago.webp' },
-  { id: 'port_20', title: 'Res. Monreal', client: 'Tarraf', category: 'Residencial', imageFileName: 'Monreal.webp' },
-  { id: 'port_21', title: 'Res. Pereque Acu', client: 'Stylos', category: 'Residencial', imageFileName: 'Pereque-Açu.webp' },
-  { id: 'port_22', title: 'Res. Vale Verde', client: 'Planeta', category: 'Residencial', imageFileName: 'Vale-Verde.webp' },
-  { id: 'port_23', title: 'Res. Bonnard 307', client: 'CNA Spitaletti', category: 'Residencial', imageFileName: 'Bonnard-307.webp' },
-  { id: 'port_24', title: 'Res. Bless Jardim Esperanca', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Bless-Jardim-Esperança.webp' },
-  { id: 'port_25', title: 'Res. HM59 Osasco', client: 'HM', category: 'Residencial', imageFileName: 'Res-HM59-Osasco.webp' },
-  { id: 'port_26', title: 'Res. Vivendas de Limeira HM54', client: 'HM', category: 'Residencial', imageFileName: 'Res.-Vivendas-de-Limeira.webp' },
-  { id: 'port_27', title: 'Res. Villa Parka Osasco', client: 'Emccamp', category: 'Residencial', imageFileName: 'Villa-Park-Osasco.webp' },
-  { id: 'port_28', title: 'Res. Terras Altas', client: 'Embraplan', category: 'Residencial', imageFileName: 'Terras-Altas.webp' },
-  { id: 'port_29', title: 'Res. Ozz Quitauna', client: 'Econ', category: 'Residencial', imageFileName: 'Ozz-Quituana.webp' },
-  { id: 'port_30', title: 'Res. Moove', client: 'Bild', category: 'Residencial', imageFileName: 'Moove.webp' },
-  { id: 'port_31', title: 'Res. Tomas Alves', client: 'Canopus', category: 'Residencial', imageFileName: 'Tomas-Alves.webp' },
-  { id: 'port_32', title: 'E/ Life Mandaqui', client: 'Econ', category: 'Residencial', imageFileName: 'Life Mandaqui.webp' },
-  { id: 'port_33', title: 'The Place', client: 'Fratta', category: 'Residencial', imageFileName: 'The Place.webp' },
-  { id: 'port_34', title: 'The Gardens', client: 'Embraplan', category: 'Residencial', imageFileName: 'The Gardens.webp' },
-  { id: 'port_35', title: 'Res. Kairos', client: 'Bild', category: 'Residencial', imageFileName: 'res-kairos.webp' },
+  {
+    id: 'port_1',
+    title: 'Tarraf Square',
+    client: 'Tarraf',
+    category: 'Misto',
+    imageFileName: 'Tarraf-Square-principal.jpg',
+    imageClassName: 'object-center object-[center_18%]',
+  },
+  { id: 'port_2', title: 'Casa Eden', client: 'Cyrela', category: 'Residencial', imageFileName: 'Casa-Eden-Principal.jpg' },
+  { id: 'port_3', title: 'Misto Mata', client: 'Idea! Zarvos', category: 'Misto', imageFileName: 'Misto-Mata-Principal.png' },
+  { id: 'port_4', title: 'Lavandisca', client: 'SKR', category: 'Residencial', imageFileName: 'Lavandisca- Principal.jpeg' },
+  { id: 'port_bless_principal', title: 'Bless Jardim Esperanca', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Bless-Jardim-Esperança-Principal.webp' },
+  { id: 'port_5', title: 'Eden West', client: 'Cyrela', category: 'Residencial', imageFileName: 'Eden-West.jpg' },
+  { id: 'port_6', title: 'Gran Alphaville', client: 'P4 Engenharia / RSF', category: 'Residencial', imageFileName: 'Gran-Alphaville.jpg' },
+  { id: 'port_7', title: 'Res. Ventis', client: 'Urben', category: 'Residencial', imageFileName: 'Ventis.jpg' },
+  { id: 'port_8', title: 'Res. Marques de Olinda', client: 'Fratta', category: 'Residencial', imageFileName: 'Res.-Marques-de-Olinda.jpg' },
+  { id: 'port_9', title: 'Res. Borghese Boulevard 2', client: 'Tarraf', category: 'Residencial', imageFileName: 'Res.-Borghese-Boulevard-2.jpg' },
+  { id: 'port_10', title: 'Res. Hildebrando 131', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Hidelbrando-131.jpg' },
+  { id: 'port_11', title: 'Res. My Way Guanabara', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'My-Way-Guanabara.jpg' },
+  { id: 'port_12', title: 'Res. Apogeo', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Apogeo.jpg' },
+  { id: 'port_13', title: 'Res. Reserva Urano', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'RP25-Urano.jpg' },
+  { id: 'port_14', title: 'Misto Alameda Franca', client: 'Idea Zarvos', category: 'Misto', imageFileName: 'Alameda-Franca.jpg' },
+  { id: 'port_15', title: 'Misto Jazz Moema Chanes', client: 'Gerporj-I / Rev3', category: 'Misto', imageFileName: 'MISTO-JAZZ-MOEMA-CHANES.jpg' },
+  { id: 'port_16', title: 'Misto Botani', client: 'Gamaro', category: 'Misto', imageFileName: 'Misto-Botani.jpg' },
+  { id: 'port_17', title: 'Res. Terrae', client: 'Gamaro', category: 'Residencial', imageFileName: 'Terrae.jpg' },
+  { id: 'port_18', title: 'Res. Torres de Ozanam', client: 'Santa Angela', category: 'Residencial', imageFileName: 'RES.TORRES-OZANAM.jpg' },
+  { id: 'port_19', title: 'Res. Soma', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Soma,jpg.webp' },
+  { id: 'port_20', title: 'Res. Viva Jaguaribe', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Viva-Jaguaribe.jpg' },
+  { id: 'port_21', title: 'Res. Mirai Guarapiranga', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Guarapiranga.webp' },
+  { id: 'port_22', title: 'Res. Mirai Cidade Lider', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Cidade-Lider.webp' },
+  { id: 'port_23', title: 'Res. Mirai Campinas Jardim do Lago', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Campinas-Jardim-do-Lago.webp' },
+  { id: 'port_24', title: 'Res. Monreal', client: 'Tarraf', category: 'Residencial', imageFileName: 'Monreal.webp' },
+  { id: 'port_25', title: 'Res. Pereque Acu', client: 'Stylos', category: 'Residencial', imageFileName: 'Pereque-AÃ§u.webp' },
+  { id: 'port_26', title: 'Res. Vale Verde', client: 'Planeta', category: 'Residencial', imageFileName: 'Vale-Verde.webp' },
+  { id: 'port_27', title: 'Res. Bonnard 307', client: 'CNA Spitaletti', category: 'Residencial', imageFileName: 'Bonnard-307.webp' },
+  { id: 'port_28', title: 'Res. Bless Jardim Esperanca', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Bless-Jardim-EsperanÃ§a.webp' },
+  { id: 'port_29', title: 'Res. HM59 Osasco', client: 'HM', category: 'Residencial', imageFileName: 'Res-HM59-Osasco.webp' },
+  { id: 'port_30', title: 'Res. Vivendas de Limeira HM54', client: 'HM', category: 'Residencial', imageFileName: 'Res.-Vivendas-de-Limeira.webp' },
+  { id: 'port_31', title: 'Res. Villa Parka Osasco', client: 'Emccamp', category: 'Residencial', imageFileName: 'Villa-Park-Osasco.webp' },
+  { id: 'port_32', title: 'Res. Terras Altas', client: 'Embraplan', category: 'Residencial', imageFileName: 'Terras-Altas.webp' },
+  { id: 'port_33', title: 'Res. Ozz Quitauna', client: 'Econ', category: 'Residencial', imageFileName: 'Ozz-Quituana.webp' },
+  { id: 'port_34', title: 'Res. Moove', client: 'Bild', category: 'Residencial', imageFileName: 'Moove.webp' },
+  { id: 'port_35', title: 'Res. Tomas Alves', client: 'Canopus', category: 'Residencial', imageFileName: 'Tomas-Alves.webp' },
+  { id: 'port_36', title: 'E/ Life Mandaqui', client: 'Econ', category: 'Residencial', imageFileName: 'Life Mandaqui.webp' },
+  { id: 'port_37', title: 'The Place', client: 'Fratta', category: 'Residencial', imageFileName: 'The Place.webp' },
+  { id: 'port_38', title: 'The Gardens', client: 'Embraplan', category: 'Residencial', imageFileName: 'The Gardens.webp' },
+  { id: 'port_39', title: 'Res. Kairos', client: 'Bild', category: 'Residencial', imageFileName: 'res-kairos.webp' },
 ];
 
 const portfolioImageModules = import.meta.glob('../assets/images/projetos/*.{png,jpg,jpeg,webp}', {
@@ -63,13 +76,12 @@ const portfolioImageByFileName = Object.fromEntries(
 );
 
 function getPortfolioWrapperClass(index: number) {
-  if (index === 0) return 'lg:col-span-7';
-  if (index === 1) return 'lg:col-span-5';
+  if (index === 0 || index === 1) return 'lg:col-span-6';
   return 'lg:col-span-4';
 }
 
 function getPortfolioImageHeight(index: number) {
-  if (index === 0 || index === 1) return 'h-[280px] md:h-[320px] lg:h-[340px]';
+  if (index === 0 || index === 1) return 'h-[280px] md:h-[320px] lg:h-[360px]';
   return 'h-[210px] md:h-[225px]';
 }
 
@@ -108,7 +120,6 @@ export default function PortfolioSection() {
             >
               Projetos ja desenvolvidos pela Duall.
             </h2>
-            
           </motion.div>
 
           <motion.button
@@ -148,7 +159,9 @@ export default function PortfolioSection() {
                   <img
                     src={project.imageUrl}
                     alt={`Projeto ${project.title}`}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+                      project.imageClassName ?? 'object-center'
+                    }`}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
                   <div className="absolute left-4 top-4 rounded-full bg-[#315676] px-3.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md">
@@ -159,11 +172,9 @@ export default function PortfolioSection() {
                 <div className="bg-white px-5 py-4 md:px-5 md:py-5">
                   <h3
                     className={`font-display font-extrabold leading-tight tracking-tight text-[#2D3845] ${
-                      isFeatured
-                        ? 'text-[2rem] md:text-[2.25rem]'
-                        : isSideFeature
-                          ? 'text-[1.45rem] md:text-[1.7rem]'
-                          : 'text-[1.28rem] md:text-[1.45rem]'
+                      isFeatured || isSideFeature
+                        ? 'text-[1.8rem] md:text-[2.1rem]'
+                        : 'text-[1.28rem] md:text-[1.45rem]'
                     }`}
                   >
                     {project.title}
@@ -174,7 +185,7 @@ export default function PortfolioSection() {
                     <p className={`${isFeatured || isSideFeature ? 'text-[15px] leading-7' : 'text-[14px] leading-6'}`}>
                       Cliente:
                       {' '}
-                      <span className="font-semibold text-[#315676]">{project.client}</span>
+                      <span className="font-semibold text-[#315676]">{project.client ?? 'Cyrela'}</span>
                     </p>
                   </div>
                 </div>
@@ -229,7 +240,11 @@ export default function PortfolioSection() {
                         className="overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
                       >
                         <div className="relative h-56 overflow-hidden bg-slate-100">
-                          <img src={project.imageUrl} alt={`Projeto ${project.title}`} className="h-full w-full object-cover" />
+                          <img
+                            src={project.imageUrl}
+                            alt={`Projeto ${project.title}`}
+                            className={`h-full w-full object-cover ${project.imageClassName ?? 'object-center'}`}
+                          />
                           <div className="absolute left-3 top-3 rounded-full bg-[#315676] px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] text-white">
                             {project.category}
                           </div>
@@ -245,7 +260,7 @@ export default function PortfolioSection() {
                             <span>
                               Cliente:
                               {' '}
-                              <span className="font-semibold text-[#315676]">{project.client}</span>
+                              <span className="font-semibold text-[#315676]">{project.client ?? 'em confirmacao'}</span>
                             </span>
                           </p>
                         </div>
