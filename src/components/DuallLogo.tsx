@@ -1,5 +1,5 @@
-import duallLogoUrl from '../assets/images/Logo Horizontal - WEB@4x.png';
-import duallLogoWhiteUrl from '../assets/images/Logo Horizontal - branco@4x.png';
+import duallLogoUrl from '../assets/images/logo-duall-horizontal.png';
+import duallLogoWhiteUrl from '../assets/images/logo-duall-horizontal-branco.png';
 
 interface DuallLogoProps {
   isDark?: boolean;
