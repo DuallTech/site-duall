@@ -16,6 +16,15 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
+import imgEletricas from '../assets/images/atuacao/projeto-instalacao-eletrica.png';
+import imgSistemas from '../assets/images/atuacao/instalacao-sistemas.png';
+import imgHidraulica from '../assets/images/atuacao/projeto-hidraulica.png';
+import imgBim from '../assets/images/atuacao/bim-modelagem3d.png';
+import imgIncendio from '../assets/images/atuacao/projeto-combate-incendio.png';
+import imgBombeiro from '../assets/images/atuacao/corpo-de-bombeiro.png';
+import imgSolar from '../assets/images/atuacao/projeto-aquecimento-solar.png';
+import imgConcessionaria from '../assets/images/atuacao/aprovacao-concessionaria.png';
+
 const SERVICE_AREAS = [
   {
     id: 'instalacoes-eletricas',
@@ -42,7 +51,7 @@ const SERVICE_AREAS = [
       'Aprovações: Entrada e medição de energia;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+      imgEletricas,
       'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80',
     ],
@@ -65,7 +74,7 @@ const SERVICE_AREAS = [
       'Infraestrutura para recarga de veículos elétricos;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
+      imgSistemas,
       'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
     ],
@@ -88,7 +97,7 @@ const SERVICE_AREAS = [
       'Sistemas de filtragem e tratamento de água;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
+      imgHidraulica,
       'https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1581094751180-2292a8cf2723?auto=format&fit=crop&w=1200&q=80',
     ],
@@ -111,7 +120,7 @@ const SERVICE_AREAS = [
       'Integração arquitetura, estrutura e instalações em modelo único;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80',
+      imgBim,
       'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
     ],
@@ -134,7 +143,7 @@ const SERVICE_AREAS = [
       'Rotas de fuga e planos de evacuação;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1551524559-8af4e6624178?auto=format&fit=crop&w=1200&q=80',
+      imgIncendio,
       'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=1200&q=80',
     ],
@@ -156,7 +165,7 @@ const SERVICE_AREAS = [
       'Consultoria em licenciamento e alvará de funcionamento;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80',
+      imgBombeiro,
       'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1200&q=80',
     ],
@@ -178,7 +187,7 @@ const SERVICE_AREAS = [
       'Monitoramento de desempenho e eficiência energética;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80',
+      imgSolar,
       'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1200&q=80',
     ],
@@ -201,7 +210,7 @@ const SERVICE_AREAS = [
       'Ligação definitiva e vistoria técnica final;',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1200&q=80',
+      imgConcessionaria,
       'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
     ],

@@ -161,14 +161,16 @@ export default function SpecialitiesSection() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
           variants={fadeInUpVariants}
-          className="text-center max-w-3xl mx-auto space-y-3 mb-16"
+          className="max-w-2xl space-y-3 mb-16"
         >
-          <span className="text-[#1992BB] text-xs font-bold uppercase tracking-wider font-mono">Especialidades Técnicas Integradas</span>
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#1992BB]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#1992BB] font-mono">
+            <span className="h-px w-4 bg-[#1992BB]" />
+            Especialidades Técnicas Integradas
+          </span>
           <h2 id="spec-heading" className="text-3xl md:text-4xl font-display font-extrabold text-[#1c2e3f] tracking-tight">
             Instalações Prediais Inteligentes em BIM
           </h2>
-          <div className="h-1.5 w-24 bg-[#355979] mx-auto rounded-full" />
-          <p className="text-slate-600 text-base leading-relaxed">
+          <p className="text-slate-500 text-base leading-relaxed">
             Projetos tridimensionais integrados de alto desempenho com coordenação única, reduzindo interferências e retrabalho no canteiro de obras.
           </p>
         </motion.div>
