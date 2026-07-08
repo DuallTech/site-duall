@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Building2, FileText, X } from 'lucide-react';
+import { Building2, FileText, MapPin, Ruler, X } from 'lucide-react';
 
 import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from './animations';
 
@@ -11,6 +11,50 @@ type PortfolioEntry = {
   category: string;
   imageFileName: string;
   imageClassName?: string;
+};
+
+type PortfolioProjectDetails = {
+  area?: string;
+  location?: string;
+};
+
+const portfolioProjectDetails: Record<string, PortfolioProjectDetails> = {
+  port_bless_principal: { area: '10.138 m²', location: 'Barueri, SP' },
+  port_5: { area: '79.542 m²', location: 'São Paulo, SP' },
+  port_6: { area: '2.698 m²', location: 'Barueri, SP' },
+  port_7: { area: '27.129 m²', location: 'Ribeirão Preto, SP' },
+  port_8: { area: '3.523 m²', location: 'São Paulo, SP' },
+  port_9: { area: '26.332 m²', location: 'São José do Rio Preto, SP' },
+  port_10: { area: '6.417 m²', location: 'Osasco, SP' },
+  port_11: { area: '19.546 m²', location: 'Campinas, SP' },
+  port_12: { area: '43.100 m²', location: 'Ribeirão Preto, SP' },
+  port_13: { area: '41.801 m²', location: 'Barueri, SP' },
+  port_14: { area: '10.791 m²', location: 'São Paulo, SP' },
+  port_15: { area: '3.069 m²', location: 'São Paulo, SP' },
+  port_16: { area: '28.054 m²', location: 'São Paulo, SP' },
+  port_17: { area: '10.640 m²', location: 'São Paulo, SP' },
+  port_18: { area: '19.161 m²', location: 'Jundiai, SP' },
+  port_19: { area: '2.000 m²', location: 'São Paulo, SP' },
+  port_20: { area: '4.876 m²', location: 'Osasco, SP' },
+  port_21: { area: '43.976 m²', location: 'São Paulo, SP' },
+  port_22: { area: '18.073 m²', location: 'São Paulo, SP' },
+  port_23: { area: '11.329 m²', location: 'Campinas, SP' },
+  port_24: { area: '18.448 m²', location: 'São José do Rio Preto, SP' },
+  port_25: { area: '62.802 m²', location: 'Ubatuba, SP' },
+  port_26: { area: '31.750 m²', location: 'Sorocaba, SP' },
+  port_27: { area: '19.258 m²', location: 'Barueri, SP' },
+  port_28: { area: '10.138 m²', location: 'Barueri, SP' },
+  port_29: { area: '23.064 m²', location: 'Osasco, SP' },
+  port_30: { area: '43.538 m²', location: 'Limeira, SP' },
+  port_31: { area: '12.547 m²', location: 'Osasco, SP' },
+  port_32: { area: '31.653 m²', location: 'Piracicaba, SP' },
+  port_33: { area: '38.582 m²', location: 'Osasco, SP' },
+  port_34: { area: '7.472 m²', location: 'Araraquara, SP' },
+  port_35: { area: '1.196 m²', location: 'São Paulo, SP' },
+  port_36: { area: '18.506 m²', location: 'São Paulo, SP' },
+  port_39: { area: '16.424 m²', location: 'Ribeirão Preto, SP' },
+  port_40: { area: '30.571 m²', location: 'Ribeirão Preto, SP' },
+  port_41: { area: '64.524 m²', location: 'Cajamar, SP' },
 };
 
 const portfolioEntries: PortfolioEntry[] = [
@@ -25,7 +69,13 @@ const portfolioEntries: PortfolioEntry[] = [
   { id: 'port_2', title: 'Casa Eden', client: 'Cyrela', category: 'Residencial', imageFileName: 'Casa-Eden-Principal.jpg' },
   { id: 'port_3', title: 'Misto Mata', client: 'Idea! Zarvos', category: 'Misto', imageFileName: 'Misto-Mata-Principal.png' },
   { id: 'port_4', title: 'Lavandisca', client: 'SKR', category: 'Residencial', imageFileName: 'Lavandisca- Principal.jpeg' },
-  { id: 'port_bless_principal', title: 'Bless Jardim Esperanca', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Bless-Jardim-Esperança-Principal.webp' },
+  {
+    id: 'port_bless_principal',
+    title: 'Bless Jardim Esperanca',
+    client: 'P4 Engenharia',
+    category: 'Residencial',
+    imageFileName: 'Bless-Jardim-Esperança-Principal.webp',
+  },
   { id: 'port_5', title: 'Eden West', client: 'Cyrela', category: 'Residencial', imageFileName: 'Eden-West.jpg' },
   { id: 'port_6', title: 'Gran Alphaville', client: 'P4 Engenharia / RSF', category: 'Residencial', imageFileName: 'Gran-Alphaville.jpg' },
   { id: 'port_7', title: 'Res. Ventis', client: 'Urben', category: 'Residencial', imageFileName: 'Ventis.jpg' },
@@ -44,12 +94,18 @@ const portfolioEntries: PortfolioEntry[] = [
   { id: 'port_20', title: 'Res. Viva Jaguaribe', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Viva-Jaguaribe.jpg' },
   { id: 'port_21', title: 'Res. Mirai Guarapiranga', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Guarapiranga.webp' },
   { id: 'port_22', title: 'Res. Mirai Cidade Lider', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Cidade-Lider.webp' },
-  { id: 'port_23', title: 'Res. Mirai Campinas Jardim do Lago', client: 'Sugoi', category: 'Residencial', imageFileName: 'Mirai-Campinas-Jardim-do-Lago.webp' },
+  {
+    id: 'port_23',
+    title: 'Res. Mirai Campinas Jardim do Lago',
+    client: 'Sugoi',
+    category: 'Residencial',
+    imageFileName: 'Mirai-Campinas-Jardim-do-Lago.webp',
+  },
   { id: 'port_24', title: 'Res. Monreal', client: 'Tarraf', category: 'Residencial', imageFileName: 'Monreal.webp' },
-  { id: 'port_25', title: 'Res. Pereque Acu', client: 'Stylos', category: 'Residencial', imageFileName: 'Pereque-AÃ§u.webp' },
+  { id: 'port_25', title: 'Res. Pereque Acu', client: 'Stylos', category: 'Residencial', imageFileName: 'Pereque-Açu.webp' },
   { id: 'port_26', title: 'Res. Vale Verde', client: 'Planeta', category: 'Residencial', imageFileName: 'Vale-Verde.webp' },
   { id: 'port_27', title: 'Res. Bonnard 307', client: 'CNA Spitaletti', category: 'Residencial', imageFileName: 'Bonnard-307.webp' },
-  { id: 'port_28', title: 'Res. Bless Jardim Esperanca', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Bless-Jardim-EsperanÃ§a.webp' },
+  { id: 'port_28', title: 'Res. Bless Jardim Esperanca', client: 'P4 Engenharia', category: 'Residencial', imageFileName: 'Bless-Jardim-Esperança.webp' },
   { id: 'port_29', title: 'Res. HM59 Osasco', client: 'HM', category: 'Residencial', imageFileName: 'Res-HM59-Osasco.webp' },
   { id: 'port_30', title: 'Res. Vivendas de Limeira HM54', client: 'HM', category: 'Residencial', imageFileName: 'Res.-Vivendas-de-Limeira.webp' },
   { id: 'port_31', title: 'Res. Villa Parka Osasco', client: 'Emccamp', category: 'Residencial', imageFileName: 'Villa-Park-Osasco.webp' },
@@ -58,9 +114,9 @@ const portfolioEntries: PortfolioEntry[] = [
   { id: 'port_34', title: 'Res. Moove', client: 'Bild', category: 'Residencial', imageFileName: 'Moove.webp' },
   { id: 'port_35', title: 'Res. Tomas Alves', client: 'Canopus', category: 'Residencial', imageFileName: 'Tomas-Alves.webp' },
   { id: 'port_36', title: 'E/ Life Mandaqui', client: 'Econ', category: 'Residencial', imageFileName: 'Life Mandaqui.webp' },
-  { id: 'port_37', title: 'The Place', client: 'Fratta', category: 'Residencial', imageFileName: 'The Place.webp' },
-  { id: 'port_38', title: 'The Gardens', client: 'Embraplan', category: 'Residencial', imageFileName: 'The Gardens.webp' },
-  { id: 'port_39', title: 'Res. Kairos', client: 'Bild', category: 'Residencial', imageFileName: 'res-kairos.webp' },
+  { id: 'port_39', title: 'Res. Kairos', client: 'Bild', category: 'Residencial', imageFileName: 'Res Kairos.webp' },
+  { id: 'port_40', title: 'Tayga', client: 'BILD', category: 'Residencial', imageFileName: 'tayga-1.jpg' },
+  { id: 'port_41', title: 'KlubHaus Cajamar', client: 'Hausbau / CLLB', category: 'Residencial', imageFileName: 'KlubHaus-Cajamar.jpg' },
 ];
 
 const portfolioImageModules = import.meta.glob('../assets/images/projetos/*.{png,jpg,jpeg,webp}', {
@@ -94,6 +150,8 @@ export default function PortfolioSection() {
         .map((project) => ({
           ...project,
           imageUrl: portfolioImageByFileName[project.imageFileName],
+          area: portfolioProjectDetails[project.id]?.area,
+          location: portfolioProjectDetails[project.id]?.location,
         }))
         .filter((project) => Boolean(project.imageUrl)),
     [],
@@ -129,7 +187,7 @@ export default function PortfolioSection() {
             variants={fadeInUpVariants}
             type="button"
             onClick={() => setIsPortfolioModalOpen(true)}
-            className="inline-flex shrink-0 items-center justify-center gap-2.5 rounded-md bg-[#315676] px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_4px_16px_rgba(49,86,118,0.18)] transition-all duration-200 hover:-translate-y-px hover:bg-[#254261]"
+            className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2.5 rounded-md bg-[#315676] px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_4px_16px_rgba(49,86,118,0.18)] transition-all duration-200 hover:-translate-y-px hover:bg-[#254261]"
           >
             <FileText size={16} />
             <span>Ver Portfolio Completo</span>
@@ -164,6 +222,28 @@ export default function PortfolioSection() {
                     }`}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+                  <div className="pointer-events-none absolute inset-x-4 bottom-4 z-10 translate-y-3 rounded-2xl border border-white/20 bg-[#0e2135]/88 p-3 text-white opacity-0 shadow-[0_18px_50px_rgba(6,17,31,0.28)] backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    <div className="space-y-2">
+                      {project.area && (
+                        <div className="flex items-center gap-2 text-[12px] leading-5">
+                          <Ruler size={14} className="shrink-0 text-[#9FD3FF]" />
+                          <span>Area: {project.area}</span>
+                        </div>
+                      )}
+                      {project.location && (
+                        <div className="flex items-center gap-2 text-[12px] leading-5">
+                          <MapPin size={14} className="shrink-0 text-[#9FD3FF]" />
+                          <span>Localizacao: {project.location}</span>
+                        </div>
+                      )}
+                      {project.client && (
+                        <div className="flex items-center gap-2 text-[12px] leading-5">
+                          <Building2 size={14} className="shrink-0 text-[#9FD3FF]" />
+                          <span>Cliente: {project.client}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                   <div className="absolute left-4 top-4 rounded-full bg-[#315676] px-3.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md">
                     {project.category}
                   </div>
@@ -180,14 +260,16 @@ export default function PortfolioSection() {
                     {project.title}
                   </h3>
 
-                  <div className="mt-3 flex items-center gap-2 text-[#5E6B7A]">
-                    <Building2 size={16} className="shrink-0 text-[#315676]" />
-                    <p className={`${isFeatured || isSideFeature ? 'text-[15px] leading-7' : 'text-[14px] leading-6'}`}>
-                      Cliente:
-                      {' '}
-                      <span className="font-semibold text-[#315676]">{project.client ?? 'Cyrela'}</span>
-                    </p>
-                  </div>
+                  {project.client && (
+                    <div className="mt-3 flex items-center gap-2 text-[#5E6B7A]">
+                      <Building2 size={16} className="shrink-0 text-[#315676]" />
+                      <p className={`${isFeatured || isSideFeature ? 'text-[15px] leading-7' : 'text-[14px] leading-6'}`}>
+                        Cliente:
+                        {' '}
+                        <span className="font-semibold text-[#315676]">{project.client}</span>
+                      </p>
+                    </div>
+                  )}
                 </div>
               </motion.article>
             );
@@ -237,14 +319,36 @@ export default function PortfolioSection() {
                     {portfolioProjects.map((project) => (
                       <article
                         key={project.id}
-                        className="overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
+                        className="group overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
                       >
                         <div className="relative h-56 overflow-hidden bg-slate-100">
                           <img
                             src={project.imageUrl}
                             alt={`Projeto ${project.title}`}
-                            className={`h-full w-full object-cover ${project.imageClassName ?? 'object-center'}`}
+                            className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${project.imageClassName ?? 'object-center'}`}
                           />
+                          <div className="pointer-events-none absolute inset-x-3 bottom-3 z-10 translate-y-3 rounded-2xl border border-white/20 bg-[#0e2135]/88 p-3 text-white opacity-0 shadow-[0_18px_50px_rgba(6,17,31,0.28)] backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                            <div className="space-y-2">
+                              {project.area && (
+                                <div className="flex items-center gap-2 text-[12px] leading-5">
+                                  <Ruler size={14} className="shrink-0 text-[#9FD3FF]" />
+                                  <span>Area: {project.area}</span>
+                                </div>
+                              )}
+                              {project.location && (
+                                <div className="flex items-center gap-2 text-[12px] leading-5">
+                                  <MapPin size={14} className="shrink-0 text-[#9FD3FF]" />
+                                  <span>Localizacao: {project.location}</span>
+                                </div>
+                              )}
+                              {project.client && (
+                                <div className="flex items-center gap-2 text-[12px] leading-5">
+                                  <Building2 size={14} className="shrink-0 text-[#9FD3FF]" />
+                                  <span>Cliente: {project.client}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                           <div className="absolute left-3 top-3 rounded-full bg-[#315676] px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.16em] text-white">
                             {project.category}
                           </div>
@@ -255,14 +359,16 @@ export default function PortfolioSection() {
                             {project.title}
                           </h4>
 
-                          <p className="flex items-center gap-2 text-[14px] leading-6 text-[#5E6B7A]">
-                            <Building2 size={15} className="shrink-0 text-[#315676]" />
-                            <span>
-                              Cliente:
-                              {' '}
-                              <span className="font-semibold text-[#315676]">{project.client ?? 'em confirmacao'}</span>
-                            </span>
-                          </p>
+                          {project.client && (
+                            <p className="flex items-center gap-2 text-[14px] leading-6 text-[#5E6B7A]">
+                              <Building2 size={15} className="shrink-0 text-[#315676]" />
+                              <span>
+                                Cliente:
+                                {' '}
+                                <span className="font-semibold text-[#315676]">{project.client}</span>
+                              </span>
+                            </p>
+                          )}
                         </div>
                       </article>
                     ))}

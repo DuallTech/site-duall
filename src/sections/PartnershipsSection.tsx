@@ -32,7 +32,7 @@ export default function PartnershipsSection() {
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
       variants={fadeInUpVariants}
-      className="relative left-1/2 right-1/2 mt-24 w-screen -translate-x-1/2 bg-white py-16 md:py-20 border-y border-slate-200 shadow-[0_24px_80px_rgba(15,23,42,0.08)]"
+      className="relative left-1/2 right-1/2 mt-24 w-screen -translate-x-1/2 scroll-mt-28 md:scroll-mt-36 bg-white py-16 md:py-20 border-y border-slate-200 shadow-[0_24px_80px_rgba(15,23,42,0.08)]"
     >
       <div className="mx-auto max-w-[1680px] px-3 sm:px-4 lg:px-6">
         <div className="mb-12 text-center max-w-4xl mx-auto">
