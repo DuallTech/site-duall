@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { label: 'Início', href: '#' },
   { label: 'A Duall', href: '#a-duall' },
   { label: 'Especialidades', href: '#especialidades' },
+  { label: 'BIM', href: '#comparador-bim' },
   { label: 'Simulador', href: '#navegador-ifc' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'Parcerias', href: '#parcerias' },
@@ -28,10 +29,11 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [mobileOpen]);
 
   const closeMenu = () => setMobileOpen(false);
@@ -58,7 +60,6 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
             <DuallLogo isDark={isHighContrast ? true : !isScrolled} />
           </a>
 
-          {/* Desktop nav */}
           <nav role="navigation" className="hidden lg:flex items-center gap-7">
             {NAV_LINKS.map((link) => (
               <a
@@ -85,32 +86,25 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
             </a>
           </nav>
 
-          {/* Mobile hamburger button */}
           <button
             className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg transition"
-            onClick={() => setMobileOpen(prev => !prev)}
+            onClick={() => setMobileOpen((prev) => !prev)}
             aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={mobileOpen}
           >
-            {mobileOpen
-              ? <X size={24} className={isScrolled ? 'text-slate-800' : 'text-white'} />
-              : <Menu size={24} className={isScrolled ? 'text-slate-800' : 'text-white'} />
-            }
+            {mobileOpen ? (
+              <X size={24} className={isScrolled ? 'text-slate-800' : 'text-white'} />
+            ) : (
+              <Menu size={24} className={isScrolled ? 'text-slate-800' : 'text-white'} />
+            )}
           </button>
         </div>
       </header>
 
-
-      {/* Mobile drawer overlay */}
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-20 bg-black/50 lg:hidden"
-          onClick={closeMenu}
-          aria-hidden="true"
-        />
+        <div className="fixed inset-0 z-20 bg-black/50 lg:hidden" onClick={closeMenu} aria-hidden="true" />
       )}
 
-      {/* Mobile drawer */}
       <div
         className={`fixed top-0 right-0 bottom-0 z-40 w-72 bg-[#1c2e3f] shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
           mobileOpen ? 'translate-x-0' : 'translate-x-full'
@@ -119,7 +113,6 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
         aria-modal="true"
         aria-label="Menu de navegação"
       >
-        {/* Drawer header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
           <DuallLogo isDark />
           <button
@@ -131,7 +124,6 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
           </button>
         </div>
 
-        {/* Nav links */}
         <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
           {NAV_LINKS.map((link) => (
             <a
@@ -145,7 +137,6 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
           ))}
         </nav>
 
-        {/* Drawer footer CTA */}
         <div className="px-4 pb-8 pt-4 border-t border-white/10 space-y-3">
           <a
             href="#contato"
