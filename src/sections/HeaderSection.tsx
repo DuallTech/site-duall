@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: 'Especialidades', href: '#especialidades' },
   { label: 'BIM', href: '#comparador-bim' },
   { label: 'Simulador', href: '#navegador-ifc' },
-  { label: 'Portfolio', href: '#portfolio' },
+  { label: 'Projetos', href: '#portfolio' },
   { label: 'Parcerias', href: '#parcerias' },
   { label: 'Depoimentos', href: '#depoimentos' },
   { label: 'Contato', href: '#contato' },
