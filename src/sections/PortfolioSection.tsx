@@ -63,13 +63,7 @@ const portfolioProjectDetails: Record<string, PortfolioProjectDetails> = {
 
 const portfolioEntries: PortfolioEntry[] = [
   {
-    id: 'port_1',
-    title: 'Misto Infinity Square',
-    client: 'Tarraf',
-    category: 'Misto',
-    imageFileName: 'Tarraf-Square-principal.jpg',
-    imageClassName: 'object-center object-[center_18%]',
-  },
+    id: 'port_1', title: 'Misto Infinity Square', client: 'Tarraf', category: 'Misto', imageFileName: 'Tarraf-Square-principal.jpg', imageClassName: 'object-center object-[center_18%]',},
   { id: 'port_2', title: 'Residencial Casa Eden', client: 'Cyrela', category: 'Residencial', imageFileName: 'Casa-Eden-Principal.jpg' },
   { id: 'port_3', title: 'Misto Mata', client: 'Idea! Zarvos', category: 'Misto', imageFileName: 'Misto-Mata-Principal.png' },
   { id: 'port_4', title: 'Misto Lavandisca', client: 'SKR', category: 'Residencial', imageFileName: 'Lavandisca- Principal.jpeg' },
@@ -134,6 +128,7 @@ const portfolioImageByFileName = Object.fromEntries(
     imageUrl,
   ]),
 );
+
 
 function getPortfolioWrapperClass(index: number) {
   if (index === 0 || index === 1) return 'lg:col-span-6';

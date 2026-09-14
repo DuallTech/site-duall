@@ -22,7 +22,6 @@ export default function ContactForm({ isHighContrast }: ContactFormProps) {
     message: ''
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -60,13 +59,7 @@ export default function ContactForm({ isHighContrast }: ContactFormProps) {
       return;
     }
 
-    setIsLoading(true);
-
-    // Simulate server request
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSubmitted(true);
-    }, 1500);
+    setIsSubmitted(true);
   };
 
   const getSuccessWhatsAppLink = () => {
@@ -200,19 +193,9 @@ export default function ContactForm({ isHighContrast }: ContactFormProps) {
 
             <button
               type="submit"
-              disabled={isLoading}
-              className={`w-full py-3.5 px-6 rounded-xl font-bold font-sans text-sm transition-all flex items-center justify-center gap-2 transform active:scale-95 disabled:opacity-50 cursor-pointer ${currentThemeClasses.button}`}
+              className={`w-full py-3.5 px-6 rounded-xl font-bold font-sans text-sm transition-all flex items-center justify-center gap-2 transform active:scale-95 cursor-pointer ${currentThemeClasses.button}`}
             >
-              {isLoading ? (
-                <>
-                  <div className="h-4 w-4 border-2 border-t-transparent border-slate-950 animate-spin rounded-full" />
-                  Carregando...
-                </>
-              ) : (
-                <>
-                  Solicitar Contato Técnico <Send size={15} />
-                </>
-              )}
+              Solicitar Contato Técnico <Send size={15} />
             </button>
           </motion.form>
         ) : (
@@ -228,12 +211,12 @@ export default function ContactForm({ isHighContrast }: ContactFormProps) {
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-xl font-display font-extrabold text-white">Mensagem Enviada!</h3>
+              <h3 className="text-xl font-display font-extrabold text-white">Quase lá!</h3>
               <p className="text-slate-300 text-sm max-w-sm mx-auto leading-relaxed">
-                Prezado <strong>{formData.name}</strong>, seus dados técnicos foram recebidos por nosso time de engenharia.
+                Prezado <strong>{formData.name}</strong>, para concluir sua solicitação, envie os dados para nosso time de engenharia pelo WhatsApp.
               </p>
               <p className="text-slate-400 text-xs max-w-xs mx-auto">
-                Para acelerar seu atendimento e agendar sua consulta técnica imediata, clique no botão abaixo para nos enviar as informações diretamente no WhatsApp.
+                Clique no botão abaixo: seus dados já estarão preenchidos na mensagem.
               </p>
             </div>
 
