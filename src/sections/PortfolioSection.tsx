@@ -19,6 +19,10 @@ type PortfolioProjectDetails = {
 };
 
 const portfolioProjectDetails: Record<string, PortfolioProjectDetails> = {
+  port_1: { area: '43.116 m²', location: 'São José do Rio Preto, SP' },
+  port_2: { area: '30.334 m²', location: 'Itaim Bibi, São Paulo, SP' },
+  port_3: { area: '33.336 m²', location: 'Itaim Bibi, São Paulo, SP' },
+  port_4: { area: '14.554 m²', location: 'Moema, São Paulo, SP' },
   port_bless_principal: { area: '10.138 m²', location: 'Barueri, SP' },
   port_5: { area: '79.542 m²', location: 'São Paulo, SP' },
   port_6: { area: '2.698 m²', location: 'Barueri, SP' },
@@ -59,16 +63,10 @@ const portfolioProjectDetails: Record<string, PortfolioProjectDetails> = {
 
 const portfolioEntries: PortfolioEntry[] = [
   {
-    id: 'port_1',
-    title: 'Tarraf Square',
-    client: 'Tarraf',
-    category: 'Misto',
-    imageFileName: 'Tarraf-Square-principal.jpg',
-    imageClassName: 'object-center object-[center_18%]',
-  },
-  { id: 'port_2', title: 'Casa Eden', client: 'Cyrela', category: 'Residencial', imageFileName: 'Casa-Eden-Principal.jpg' },
+    id: 'port_1', title: 'Misto Infinity Square', client: 'Tarraf', category: 'Misto', imageFileName: 'Tarraf-Square-principal.jpg', imageClassName: 'object-center object-[center_18%]',},
+  { id: 'port_2', title: 'Residencial Casa Eden', client: 'Cyrela', category: 'Residencial', imageFileName: 'Casa-Eden-Principal.jpg' },
   { id: 'port_3', title: 'Misto Mata', client: 'Idea! Zarvos', category: 'Misto', imageFileName: 'Misto-Mata-Principal.png' },
-  { id: 'port_4', title: 'Lavandisca', client: 'SKR', category: 'Residencial', imageFileName: 'Lavandisca- Principal.jpeg' },
+  { id: 'port_4', title: 'Misto Lavandisca', client: 'SKR', category: 'Residencial', imageFileName: 'Lavandisca- Principal.jpeg' },
   {
     id: 'port_bless_principal',
     title: 'Bless Jardim Esperanca',
@@ -131,6 +129,7 @@ const portfolioImageByFileName = Object.fromEntries(
   ]),
 );
 
+
 function getPortfolioWrapperClass(index: number) {
   if (index === 0 || index === 1) return 'lg:col-span-6';
   return 'lg:col-span-4';
@@ -190,7 +189,7 @@ export default function PortfolioSection() {
             className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2.5 rounded-md bg-[#315676] px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_4px_16px_rgba(49,86,118,0.18)] transition-all duration-200 hover:-translate-y-px hover:bg-[#254261]"
           >
             <FileText size={16} />
-            <span>Ver Portfolio Completo</span>
+            <span>Ver Portfolio</span>
           </motion.button>
         </div>
 
@@ -297,10 +296,10 @@ export default function PortfolioSection() {
                 <div className="flex items-start justify-between gap-6 border-b border-slate-200 bg-white px-6 py-5 md:px-8">
                   <div className="max-w-4xl">
                     <span className="text-[11px] font-mono font-bold uppercase tracking-[0.28em] text-[#315676]">
-                      Portfolio Completo
+                      Portfolio
                     </span>
                     <h3 className="mt-3 font-display text-2xl font-extrabold leading-tight tracking-tight text-[#2D3845] md:text-4xl">
-                      Empreendimentos da Duall Engenharia
+                      Principais Empreendimentos da Duall Engenharia
                     </h3>
                   </div>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, CheckCircle2, Compass, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Compass } from 'lucide-react';
 
 import {
   heroImageVariants,
@@ -14,13 +14,6 @@ const heroImages = [
   'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?q=80&w=2070&auto=format&fit=crop',
-];
-
-const heroFeatures = [
-  { title: 'Desenvolvimento BIM Completo', desc: 'Fluxo integral estruturado em Autodesk Revit' },
-  { title: '+18 Anos de Experiência ativa', desc: 'Grande portfólio corporativo e residencial vertical' },
-  { title: 'Sustentabilidade LEED & EDGE', desc: 'Projetos em conformidade ecológica total' },
-  { title: 'Detalhamento Nível LOD 400', desc: 'Prevenção garantida de interferências em canteiro' },
 ];
 
 export default function HeroSection() {
@@ -82,22 +75,8 @@ export default function HeroSection() {
             </motion.h1>
 
             <motion.p variants={staggerItemVariants} className="text-slate-200 text-lg sm:text-xl font-light font-sans leading-relaxed max-w-2xl mx-auto">
-              Um time de engenheiros incansáveis em busca da <strong className="text-[#EDA700] font-semibold">melhor solução tecnológica</strong> para garantir segurança física e economia inteligente no seu empreendimento!
+              Um time de engenheiros em busca da <strong className="text-[#EDA700] font-semibold">melhor solução tecnológica</strong> para garantir segurança física e economia inteligente no seu empreendimento!
             </motion.p>
-
-            <motion.div variants={staggerItemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-left max-w-3xl w-full">
-              {heroFeatures.map((feat) => (
-                <div key={feat.title} className="flex gap-3 bg-slate-950/40 backdrop-blur-xs p-4 rounded-xl border border-white/5">
-                  <div className="w-6 h-6 rounded-full bg-[#EDA700]/15 border border-[#EDA700]/40 text-[#EDA700] flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle2 size={13} />
-                  </div>
-                  <div>
-                    <h4 className="text-slate-100 font-bold text-sm leading-tight">{feat.title}</h4>
-                    <p className="text-slate-300 text-xs mt-0.5 leading-tight">{feat.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
 
             <motion.div variants={staggerItemVariants} className="pt-6 flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto">
               <a
@@ -115,55 +94,6 @@ export default function HeroSection() {
             </motion.div>
           </motion.div>
         </div>
-
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          variants={staggerContainerVariants}
-          className="mt-16 pt-8 border-t border-white/10 relative z-10"
-        >
-          <motion.p variants={staggerItemVariants} className="text-slate-400 text-xs font-mono tracking-widest text-center uppercase mb-6">
-            Tecnologias licenciadas & Certificações Globais de Engenharia
-          </motion.p>
-
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 items-center justify-items-center opacity-70">
-            <motion.div variants={staggerItemVariants} className="text-center group hover:opacity-100 transition duration-150">
-              <div className="text-white font-display font-extrabold text-sm tracking-wide bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-1.5 justify-center">
-                <span className="text-sky-400 font-bold font-mono">R</span> AUTODESK REVIT
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono mt-1 block">Modelagem LOD 400</span>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants} className="text-center group hover:opacity-100 transition duration-150">
-              <div className="text-white font-display font-black text-sm tracking-widest bg-white/5 border border-white/10 px-4 py-1.5 rounded-lg flex items-center justify-center text-center">
-                CTE
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono mt-1 block">Selo de Qualidade</span>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants} className="text-center group hover:opacity-100 transition duration-150">
-              <div className="font-display font-extrabold text-xs tracking-wider bg-[#105e42]/20 border border-[#105e42]/30 px-3 py-1.5 rounded-lg text-emerald-400 flex items-center justify-center gap-1">
-                <ShieldCheck size={12} /> LEED CERTIFIED
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono mt-1 block">Líder Sustentabilidade</span>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants} className="text-center group hover:opacity-100 transition duration-150">
-              <div className="text-white font-display font-bold text-xs bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg flex items-center justify-center text-center">
-                GBC BRASIL
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono mt-1 block">Membro Conselheiro</span>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants} className="text-center group hover:opacity-100 transition duration-150 col-span-2 md:col-span-1">
-              <div className="text-[#EDA700] font-display font-extrabold text-sm tracking-wider bg-[#1992BB]/10 border border-[#1992BB]/20 px-4 py-1.5 rounded-lg flex items-center justify-center text-center">
-                Edge
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono mt-1 block font-semibold">Eficiência Energética</span>
-            </motion.div>
-          </div>
-        </motion.div>
       </div>
 
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-2.5 bg-slate-950/45 backdrop-blur-xs px-4 py-2.5 rounded-full border border-white/5 shadow-lg">
