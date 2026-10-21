@@ -1,19 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { ChevronDown, Menu, X } from 'lucide-react';
 
 import DuallLogo from '../components/DuallLogo';
-
-const NAV_LINKS = [
-  { label: 'Início', href: '#' },
-  { label: 'A Duall', href: '#a-duall' },
-  { label: 'Especialidades', href: '#especialidades' },
-  { label: 'BIM', href: '#comparador-bim' },
-  { label: 'Simulador', href: '#navegador-ifc' },
-  { label: 'Projetos', href: '#portfolio' },
-  { label: 'Parcerias', href: '#parcerias' },
-  { label: 'Depoimentos', href: '#depoimentos' },
-  { label: 'Contato', href: '#contato' },
-] as const;
+import { NAV, SITE } from '../content/site';
+import { SOLUTIONS } from '../content/solutions';
 
 interface HeaderSectionProps {
   isHighContrast: boolean;
@@ -22,12 +13,16 @@ interface HeaderSectionProps {
 export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => setMobileOpen(false), [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
@@ -36,61 +31,80 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
     };
   }, [mobileOpen]);
 
-  const closeMenu = () => setMobileOpen(false);
+  const linkTone = isScrolled ? (isHighContrast ? 'text-white' : 'text-slate-700') : 'text-white';
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    `font-display text-sm font-semibold transition hover:text-[#EDA700] ${linkTone} ${isActive ? 'text-[#EDA700]!' : ''}`;
 
   return (
     <>
       <header
-        role="banner"
-        className={`fixed top-0 inset-x-0 z-30 transition-all duration-300 ${
+        className={`fixed inset-x-0 top-0 z-30 transition-all duration-300 ${
           isScrolled
             ? isHighContrast
-              ? 'bg-black border-b border-white py-2'
-              : 'bg-white/95 backdrop-blur-md shadow-md py-3'
+              ? 'border-b border-white bg-black py-2'
+              : 'bg-white/90 py-2.5 shadow-md backdrop-blur-xl'
             : 'bg-transparent py-5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <a
-            href="#"
-            className="focus:outline-hidden"
-            aria-label="Ir para o topo da página do Duall Engenharia"
-            onClick={closeMenu}
-          >
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link to="/" aria-label="Duall Engenharia, página inicial">
             <DuallLogo isDark={isHighContrast ? true : !isScrolled} />
-          </a>
+          </Link>
 
-          <nav role="navigation" className="hidden lg:flex items-center gap-7">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className={`font-display text-sm font-semibold transition hover:text-[#EDA700] ${
-                  isScrolled
-                    ? isHighContrast
-                      ? 'text-white'
-                      : 'text-slate-700'
-                    : 'text-white'
-                }`}
-              >
-                {link.label}
-              </a>
-            ))}
+          <nav aria-label="Principal" className="hidden items-center gap-5 xl:gap-8 lg:flex">
+            {NAV.map((item) =>
+              item.href === '/solucoes' ? (
+                <div key={item.href} className="group relative">
+                  <NavLink to={item.href} className={(s) => `${linkClass(s)} inline-flex items-center gap-1 py-2`}>
+                    {item.label}
+                    <ChevronDown size={14} className="transition group-hover:rotate-180 group-focus-within:rotate-180" />
+                  </NavLink>
+                  <div className="invisible absolute left-1/2 top-full w-72 -translate-x-1/2 translate-y-2 opacity-0 transition duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    <ul className="mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
+                      {SOLUTIONS.map((s) => (
+                        <li key={s.slug}>
+                          <Link
+                            to={`/solucoes/${s.slug}`}
+                            className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-[#315676]"
+                          >
+                            {s.short}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <NavLink key={item.href} to={item.href} className={linkClass}>
+                  {item.label}
+                </NavLink>
+              ),
+            )}
             <a
-              href="https://talentos.duallengenharia.com.br/login"
+              href={SITE.careersUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-1 px-4 py-1.5 rounded-full border border-[#EDA700] text-[#EDA700] text-sm font-semibold hover:bg-[#EDA700] hover:text-slate-900 transition whitespace-nowrap"
+              className={`whitespace-nowrap rounded-full border border-[#EDA700] px-4 py-1.5 text-sm font-semibold transition hover:bg-[#EDA700] hover:text-slate-900 ${
+                isScrolled && !isHighContrast ? 'text-[#a87400]' : 'text-[#EDA700]'
+              }`}
             >
-              Trabalhe Conosco
+              Trabalhe conosco
             </a>
+            <Link
+              to="/contato"
+              className="whitespace-nowrap rounded-full bg-[#EDA700] px-5 py-2 text-sm font-bold text-slate-900 transition hover:bg-[#ffb81a]"
+            >
+              Solicitar proposta
+            </Link>
           </nav>
 
           <button
-            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg transition"
+            type="button"
+            className="flex h-10 w-10 items-center justify-center rounded-lg lg:hidden"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={mobileOpen}
+            aria-controls="menu-mobile"
           >
             {mobileOpen ? (
               <X size={24} className={isScrolled ? 'text-slate-800' : 'text-white'} />
@@ -102,57 +116,71 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
       </header>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-20 bg-black/50 lg:hidden" onClick={closeMenu} aria-hidden="true" />
+        <div className="fixed inset-0 z-20 bg-black/50 lg:hidden" onClick={() => setMobileOpen(false)} aria-hidden="true" />
       )}
 
       <div
-        className={`fixed top-0 right-0 bottom-0 z-40 w-72 bg-[#1c2e3f] shadow-2xl transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
-          mobileOpen ? 'translate-x-0' : 'translate-x-full'
+        id="menu-mobile"
+        className={`fixed bottom-0 right-0 top-0 z-40 flex w-80 max-w-[88vw] transform flex-col bg-[#14202f] shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
+          mobileOpen ? 'translate-x-0' : 'invisible translate-x-full'
         }`}
         role="dialog"
         aria-modal="true"
         aria-label="Menu de navegação"
       >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+        <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
           <DuallLogo isDark />
           <button
-            onClick={closeMenu}
-            className="w-9 h-9 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition"
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-white/10 hover:text-white"
             aria-label="Fechar menu"
           >
             <X size={20} />
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={closeMenu}
-              className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-200 font-semibold text-base hover:bg-white/8 hover:text-[#EDA700] transition"
-            >
-              {link.label}
-            </a>
+        <nav aria-label="Principal (mobile)" className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
+          {NAV.map((item) => (
+            <div key={item.href}>
+              <Link
+                to={item.href}
+                className="block rounded-xl px-4 py-3 text-base font-semibold text-slate-100 transition hover:bg-white/10 hover:text-[#EDA700]"
+              >
+                {item.label}
+              </Link>
+              {item.href === '/solucoes' && (
+                <ul className="ml-4 border-l border-white/10 pl-2">
+                  {SOLUTIONS.map((s) => (
+                    <li key={s.slug}>
+                      <Link
+                        to={`/solucoes/${s.slug}`}
+                        className="block rounded-lg px-4 py-2 text-sm text-slate-300 transition hover:text-[#EDA700]"
+                      >
+                        {s.short}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           ))}
         </nav>
 
-        <div className="px-4 pb-8 pt-4 border-t border-white/10 space-y-3">
-          <a
-            href="#contato"
-            onClick={closeMenu}
-            className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#EDA700] text-slate-900 font-bold text-sm hover:bg-[#d49500] transition active:scale-95"
+        <div className="space-y-3 border-t border-white/10 px-4 pb-8 pt-4">
+          <Link
+            to="/contato"
+            className="flex w-full items-center justify-center rounded-xl bg-[#EDA700] py-3.5 text-sm font-bold text-slate-900 transition hover:bg-[#ffb81a]"
           >
-            Solicitar Proposta
-          </a>
+            Solicitar proposta
+          </Link>
           <a
-            href="https://talentos.duallengenharia.com.br/login"
+            href={SITE.careersUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={closeMenu}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[#EDA700] text-[#EDA700] font-semibold text-sm hover:bg-[#EDA700]/10 transition active:scale-95"
+            className="flex w-full items-center justify-center rounded-xl border border-[#EDA700] py-3 text-sm font-semibold text-[#EDA700] transition hover:bg-[#EDA700]/10"
           >
-            Trabalhe Conosco
+            Trabalhe conosco
           </a>
         </div>
       </div>

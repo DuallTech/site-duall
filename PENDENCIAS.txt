@@ -1,0 +1,49 @@
+PENDENCIAS DO SITE DUALL (GEO)
+==============================
+
+1. DADOS A CONFIRMAR COM A DUALL
+   (Nao aparecem no site nem no schema ate serem preenchidos)
+   - Dominio final do site novo (hoje: https://duallengenharia.com.br; trocar via VITE_SITE_URL no build)
+   - Ano de fundacao (hoje: 2015, "11 anos de atuacao") [VALIDAR]. O site antigo dizia 18 anos.
+   - Enderecos e telefones das unidades Americana e Santos -> src/content/site.ts (SITE.units)
+   - NUMEROS COM DADOS MOCK (ficticios) NO SITE: faixa "A Duall em numeros" (Home e /a-duall).
+     Valores provisorios: +500 empreendimentos, +3 mi de m2 de area projetada, +40 cidades atendidas.
+     So os "11 anos" vem do documento [VALIDAR]. Substituir pelos dados reais em src/content/clients.ts (NUMBERS)
+     e remover "mock: true". NAO PUBLICAR com os valores mock. Eles tambem aparecem no llms-full.txt gerado no build.
+   - Data e local do 3o Workshop Tecnico Duall
+   - Abrangencia geografica de atuacao (resposta "Onde a Duall atua?" na FAQ)
+   - Links de LinkedIn e Instagram (hoje usam os do site atual) e numero de WhatsApp oficial
+
+2. TEXTOS PARA VALIDAR COM A DUALL
+   - H1 "Know-how em projetos de instalacoes eletricas e hidraulicas" (estende a assinatura da marca)
+   - Se BIM deve liderar o posicionamento (title e H1 mudariam)
+   - Descricao da Consultoria ATP (card, pagina e FAQ)
+   - Lista de clientes e autorizacao de uso dos logos
+   - Autorizacao para citar clientes e empreendimentos pelo nome
+   - Realidade aumentada: nao citada no site; confirmar como funciona antes de incluir
+   - Texto de consentimento do formulario e Politica de privacidade (revisao do responsavel por LGPD).
+     A politica atual e apenas um texto-base curto.
+
+3. CONTEUDO A PRODUZIR / ENTREGAR
+   - Artigos: lista vazia em src/content/articles.ts (cada artigo adicionado gera pagina, schema e sitemap)
+   - Imagem Open Graph 1200x630 do "bairro Duall" (hoje: copia provisoria do hero em public/og-duall.jpg)
+   - Imagem final do celular com o PDF do Duall Dynamic (hoje: ilustracao SVG decorativa) e ajuste do alt
+   - Fotos atualizadas de lideranca e equipe
+   - Por projeto do portfolio: desafio, solucao, disciplinas e etapa de atuacao
+     (hoje as paginas mostram so cliente, tipo, local e area)
+   - Selecao dos cases em destaque na Home: hoje o carrossel mostra todos os projetos do portfolio
+     (o documento sugere 4 a 6 cards). Definir se reduz. Tambem: cases em 3D / foco em eletrica e hidraulica, como pedido pelo cliente
+
+4. INTEGRACOES
+   - Chatbot: fornecedor e script de instalacao. O botao "Falar com a Duall" chama
+     window.DuallChatbot.open(); sem o script, leva ao formulario em /contato.
+   - Formulario de contato: sem backend (confirma na pagina e oferece continuar no WhatsApp)
+     Definir destino dos envios (e-mail, CRM,  etc.).
+
+5. AJUSTES TECNICOS
+   - Hospedagem: precisa servir rota/index.html e 404.html (nao usar fallback SPA para index.html)
+   - Otimizar arquivos pesados no build: testeA.ifc (35 MB), testeH.ifc (69 MB),
+     Casa-Eden-Principal.jpg e Misto-Mata-Principal.png (2 MB cada)
+   - Dados do portfolio: "Misto Lavandisca" esta com tipo "Residencial" (conferir)
+   - Apos publicar: enviar sitemap.xml no Google Search Console / Bing e criar/atualizar o
+     Google Business Profile com nome, endereco e telefone identicos ao site e ao LinkedIn

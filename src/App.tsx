@@ -3,78 +3,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import AccessibilityPanel from './components/AccessibilityPanel';
-import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
-import AreasAtuacaoSection from './sections/AreasAtuacaoSection';
-import ContactSection from './sections/ContactSection';
-import SpecialitiesSection from './sections/SpecialitiesSection';
-import DifferentialsSection from './sections/DifferentialsSection';
-import FooterSection from './sections/FooterSection';
-import HeaderSection from './sections/HeaderSection';
-import HeroSection from './sections/HeroSection';
-import PartnershipsSection from './sections/PartnershipsSection';
-import PortfolioSection from './sections/PortfolioSection';
-import SimulatorSection from './sections/SimulatorSection';
-import StatsSection from './sections/StatsSection';
-import TestimonialsSection from './sections/TestimonialsSection';
+import Layout from './components/Layout';
+import { AboutPage } from './pages/AboutPages';
+import { ArticlePage, ArticlesPage, ContentHubPage, WorkshopPage } from './pages/ContentPages';
+import HomePage from './pages/HomePage';
+import NotFoundPage, { ContactPage, PrivacyPage } from './pages/MiscPages';
+import { ProjectPage, ProjectsPage } from './pages/ProjectPages';
+import { SolutionPage, SolutionsPage } from './pages/SolutionPages';
 
 export default function App() {
-  const [isHighContrast, setIsHighContrast] = useState(false);
-  const [textSize, setTextSize] = useState<'normal' | 'large' | 'extra'>('normal');
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    if (textSize === 'large') {
-      root.style.fontSize = '18px';
-      return;
-    }
-
-    if (textSize === 'extra') {
-      root.style.fontSize = '20px';
-      return;
-    }
-
-    root.style.fontSize = '16px';
-  }, [textSize]);
-
-  useEffect(() => {
-    if (isHighContrast) {
-      document.body.classList.add('high-contrast');
-      return;
-    }
-
-    document.body.classList.remove('high-contrast');
-  }, [isHighContrast]);
-
   return (
-    <div className={`min-h-screen font-sans ${isHighContrast ? 'bg-black text-white' : 'bg-slate-50 text-slate-800'}`}>
-      <AccessibilityPanel
-        onHighContrastToggle={setIsHighContrast}
-        isHighContrast={isHighContrast}
-        onTextSizeChange={setTextSize}
-        textSize={textSize}
-      />
-
-      <HeaderSection isHighContrast={isHighContrast} />
-
-      <main id="main-content" role="main">
-        <HeroSection />
-        <StatsSection />
-        <DifferentialsSection isHighContrast={isHighContrast} />
-        <AreasAtuacaoSection />
-        <SpecialitiesSection />
-        <SimulatorSection />
-        <PortfolioSection />
-        <PartnershipsSection />
-        <TestimonialsSection />
-        <ContactSection isHighContrast={isHighContrast} />
-      </main>
-
-      <FooterSection isHighContrast={isHighContrast} />
-      <FloatingWhatsAppButton />
-    </div>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="projetos" element={<ProjectsPage />} />
+        <Route path="projetos/:slug" element={<ProjectPage />} />
+        <Route path="solucoes" element={<SolutionsPage />} />
+        <Route path="solucoes/:slug" element={<SolutionPage />} />
+        <Route path="a-duall" element={<AboutPage />} />
+        <Route path="conteudo" element={<ContentHubPage />} />
+        <Route path="conteudo/artigos" element={<ArticlesPage />} />
+        <Route path="conteudo/artigos/:slug" element={<ArticlePage />} />
+        <Route path="conteudo/workshop-tecnico" element={<WorkshopPage />} />
+        <Route path="contato" element={<ContactPage />} />
+        <Route path="politica-de-privacidade" element={<PrivacyPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 }

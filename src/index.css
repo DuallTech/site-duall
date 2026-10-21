@@ -73,6 +73,10 @@
     scroll-behavior: auto !important;
   }
   
+  .animate-ticker {
+    animation: none !important;
+  }
+
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -107,3 +111,251 @@
   text-decoration: underline !important;
   color: #7dd3fc !important;
 }
+
+
+/* Grade técnica de fundo (seções escuras) */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+
+/* Entrada do hero: CSS puro, sem esperar o JavaScript (o texto é o LCP). */
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero-in {
+  animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Revelação ao rolar: scroll-driven animations, sem JS. Onde não há suporte, o conteúdo já aparece normal. */
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* Duall Dynamic: celular animado (ciclo de 12s = 3 páginas de 4s) */
+@keyframes dd-float {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50% { transform: translateY(-14px) rotate(1.2deg); }
+}
+@keyframes dd-page {
+  0% { opacity: 0; transform: translateX(16px); }
+  4%, 30% { opacity: 1; transform: none; }
+  34%, 100% { opacity: 0; transform: translateX(-16px); }
+}
+@keyframes dd-draw {
+  0% { stroke-dashoffset: 1; }
+  14%, 100% { stroke-dashoffset: 0; }
+}
+@keyframes dd-line {
+  0% { transform: scaleX(0); }
+  10%, 100% { transform: scaleX(1); }
+}
+@keyframes dd-ping {
+  0% { transform: scale(1); opacity: 0.55; }
+  70%, 100% { transform: scale(3.4); opacity: 0; }
+}
+@keyframes dd-scan {
+  0% { transform: translateY(0); opacity: 0; }
+  10%, 90% { opacity: 0.8; }
+  100% { transform: translateY(114px); opacity: 0; }
+}
+@keyframes dd-dot {
+  0%, 30% { opacity: 1; }
+  34%, 100% { opacity: 0; }
+}
+@keyframes dd-tap {
+  0%, 70%, 100% { transform: scale(1); }
+  76% { transform: scale(0.94); }
+  84% { transform: scale(1.03); }
+}
+@keyframes dd-chip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.dd-float { animation: dd-float 7s ease-in-out infinite; }
+.dd-page { animation: dd-page 12s ease-in-out infinite both; animation-delay: calc(var(--p) * 4s); }
+.dd-draw {
+  stroke-dasharray: 1;
+  animation: dd-draw 12s ease-in-out infinite both;
+  animation-delay: calc(var(--p) * 4s + 0.35s + var(--l, 0) * 0.25s);
+}
+.dd-line, .dd-tap, .dd-ping { transform-box: fill-box; }
+.dd-line {
+  transform-origin: left center;
+  animation: dd-line 12s ease-out infinite both;
+  animation-delay: calc(var(--p) * 4s + 0.5s + var(--l, 0) * 0.12s);
+}
+.dd-ping {
+  transform-origin: center;
+  animation: dd-ping 2.2s ease-out infinite;
+  animation-delay: calc(var(--p) * 4s + 1.2s);
+}
+.dd-scan { animation: dd-scan 4s linear infinite; }
+.dd-dot { opacity: 0; animation: dd-dot 12s linear infinite; animation-delay: calc(var(--p) * 4s); }
+.dd-tap { transform-origin: center; animation: dd-tap 4s ease-in-out infinite; }
+.dd-chip { animation: dd-chip 5s ease-in-out infinite; animation-delay: calc(var(--p) * -1.6s); }
+
+/* Sem animação: mostra só a primeira página, já desenhada. */
+@media (prefers-reduced-motion: reduce) {
+  .dd-float, .dd-draw, .dd-line, .dd-ping, .dd-scan, .dd-dot, .dd-tap, .dd-chip { animation: none !important; }
+  .dd-page { animation: none !important; opacity: 0; }
+  .dd-page[data-first] { opacity: 1; }
+  .dd-ping, .dd-scan { display: none; }
+  .dd-dot { opacity: 0; }
+  .dd-dot[data-first] { opacity: 1; }
+}
+
+/* Seção de conteúdo técnico: identidade de prancha de engenharia */
+.bg-blueprint {
+  background-color: #eaf0f6;
+  background-image:
+    linear-gradient(rgba(49, 86, 118, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 86, 118, 0.14) 1px, transparent 1px),
+    linear-gradient(rgba(49, 86, 118, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 86, 118, 0.07) 1px, transparent 1px);
+  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px #eda700;
+}
+
+/* Brilho que varre o ingresso */
+.ticket-shine {
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.14) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+.ticket:hover .ticket-shine {
+  transform: translateX(120%);
+  transition: transform 0.9s ease;
+}
+
+@keyframes ct-write {
+  0% { transform: scaleX(0); }
+  35%, 85% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+@keyframes ct-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.ct-write { animation: ct-write 5s ease-in-out infinite; }
+.ct-cursor { animation: ct-cursor 1s steps(1) infinite; }
+
+/* Linhas que se desenham ao rolar (scroll-driven; sem suporte, aparecem prontas) */
+@keyframes draw-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .draw-x {
+      transform-origin: left center;
+      animation: draw-x linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-write, .ct-cursor { animation: none !important; }
+}
+
+/* ===== Identidade geral: transições, progresso e brilhos ===== */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.page-in { animation: page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Barra dourada de progresso de leitura (scroll-driven) */
+@keyframes scroll-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.scroll-progress {
+  display: none;
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 3px;
+  background: linear-gradient(90deg, #eda700, #ffd36b);
+  transform-origin: left center;
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      display: block;
+      animation: scroll-grow linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+/* Manchas de luz que flutuam nas seções escuras */
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.12); }
+  66% { transform: translate(-30px, 24px) scale(0.94); }
+}
+.blob { animation: blob 16s ease-in-out infinite; }
+.blob-slow { animation: blob 24s ease-in-out infinite reverse; }
+
+/* Borda luminosa que gira (formulário) */
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes spin-angle { to { --angle: 360deg; } }
+.glow-border {
+  background: conic-gradient(from var(--angle), rgba(237, 167, 0, 0) 55%, #eda700 80%, rgba(237, 167, 0, 0) 100%);
+  animation: spin-angle 6s linear infinite;
+}
+
+/* Texto vazado claro (marca gigante, palavras-fantasma) */
+.text-outline-light {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.1);
+}
+
+/* Cantoneiras de desenho técnico em volta de imagens */
+.corner-marks > i {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: #eda700;
+  border-style: solid;
+  border-width: 0;
+  transition: transform 0.5s ease;
+}
+.corner-marks > i:nth-child(1) { top: -8px; left: -8px; border-top-width: 3px; border-left-width: 3px; }
+.corner-marks > i:nth-child(2) { top: -8px; right: -8px; border-top-width: 3px; border-right-width: 3px; }
+.corner-marks > i:nth-child(3) { bottom: -8px; left: -8px; border-bottom-width: 3px; border-left-width: 3px; }
+.corner-marks > i:nth-child(4) { bottom: -8px; right: -8px; border-bottom-width: 3px; border-right-width: 3px; }
+.corner-marks:hover > i:nth-child(1) { transform: translate(-4px, -4px); }
+.corner-marks:hover > i:nth-child(2) { transform: translate(4px, -4px); }
+.corner-marks:hover > i:nth-child(3) { transform: translate(-4px, 4px); }
+.corner-marks:hover > i:nth-child(4) { transform: translate(4px, 4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob, .blob-slow, .glow-border, .page-in { animation: none !important; }
+}
+
+/* Âncoras (#unidades, #clientes) não ficam escondidas pelo cabeçalho fixo */
+[id] { scroll-margin-top: 7rem; }

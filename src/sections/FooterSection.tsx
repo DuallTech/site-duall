@@ -1,75 +1,100 @@
-import { Instagram, Linkedin, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Instagram, Linkedin, MapPin, Phone } from 'lucide-react';
 
 import DuallLogo from '../components/DuallLogo';
+import { SITE } from '../content/site';
 import { getWhatsAppGlobalUrl } from '../utils/whatsapp';
 
 interface FooterSectionProps {
   isHighContrast: boolean;
 }
 
+const FOOTER_MENU = [
+  { label: 'Projetos', href: '/projetos' },
+  { label: 'Soluções', href: '/solucoes' },
+  { label: 'A Duall', href: '/a-duall' },
+  { label: 'Conteúdo', href: '/conteudo' },
+  { label: 'Contato', href: '/contato' },
+  { label: 'Trabalhe conosco', href: SITE.careersUrl },
+] as const;
+
+const socialClass =
+  'flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-slate-300 transition hover:border-[#EDA700] hover:text-[#EDA700]';
+
 export default function FooterSection({ isHighContrast }: FooterSectionProps) {
   return (
-    <footer
-      role="contentinfo"
-      className={`py-12 bg-[#090f19] text-white border-t ${
-        isHighContrast ? 'border-white bg-black' : 'border-slate-800/80'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-white/10">
-          <DuallLogo isDark={true} />
+    <footer className={`relative overflow-hidden border-t text-white ${isHighContrast ? 'border-white bg-black' : 'border-slate-800/80 bg-[#090f19]'}`}>
+      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#EDA700] to-transparent" aria-hidden="true" />
+      <div className="relative mx-auto max-w-7xl space-y-10 px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid gap-10 md:grid-cols-12">
+          <div className="space-y-4 md:col-span-5">
+            <DuallLogo isDark />
+            <p className="font-display text-lg font-semibold text-white">
+              {SITE.name} <span className="text-[#EDA700]">|</span> {SITE.signature}
+            </p>
+            <div className="flex gap-3 pt-2">
+              <a href={SITE.social.linkedin} target="_blank" rel="noopener noreferrer" className={socialClass} aria-label="Duall Engenharia no LinkedIn">
+                <Linkedin size={18} />
+              </a>
+              <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" className={socialClass} aria-label="Duall Engenharia no Instagram">
+                <Instagram size={18} />
+              </a>
+              <a
+                href={getWhatsAppGlobalUrl('Olá Duall, vim do site e gostaria de falar sobre um projeto.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={socialClass}
+                aria-label="Falar com a Duall pelo WhatsApp"
+              >
+                <Phone size={18} />
+              </a>
+            </div>
+          </div>
 
-          <div className="flex gap-4">
-            <a
-              href="https://www.linkedin.com/company/duall-engenharia/posts/?feedView=all"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-[#0077B5]/10 border border-[#0077B5]/30 text-[#0077B5] hover:bg-[#0077B5]/20 hover:border-[#0077B5] flex items-center justify-center transition"
-              aria-label="Visitar perfil da Duall Engenharia no LinkedIn"
-            >
-              <Linkedin size={18} />
-            </a>
-            <a
-              href="https://www.instagram.com/duallengenharia"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-[#E1306C]/10 border border-[#E1306C]/30 text-[#E1306C] hover:bg-[#E1306C]/20 hover:border-[#E1306C] flex items-center justify-center transition"
-              aria-label="Visitar perfil do Duall Engenharia no Instagram"
-            >
-              <Instagram size={18} />
-            </a>
-            <a
-              href={getWhatsAppGlobalUrl('Olá Duall, vim do site oficial e gostaria de agendar uma reunião comercial de projetos.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] hover:bg-[#25D366]/20 hover:border-[#25D366] flex items-center justify-center transition"
-              aria-label="Falar conosco via canal direto no WhatsApp"
-            >
-              <Phone size={18} />
-            </a>
+          <nav aria-label="Rodapé" className="md:col-span-3">
+            <h2 className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-slate-400">Navegação</h2>
+            <ul className="space-y-2.5 text-sm">
+              {FOOTER_MENU.map((item) => (
+                <li key={item.href}>
+                  {item.href.startsWith('http') ? (
+                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-slate-300 transition hover:text-[#EDA700]">
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link to={item.href} className="text-slate-300 transition hover:text-[#EDA700]">
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="md:col-span-4">
+            <h2 className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-slate-400">Unidades</h2>
+            <ul className="space-y-3 text-sm text-slate-300">
+              {SITE.units.map((unit) => (
+                <li key={unit.city} className="flex items-start gap-2.5">
+                  <MapPin size={16} className="mt-0.5 shrink-0 text-[#EDA700]" aria-hidden="true" />
+                  <span>
+                    {unit.city}, {unit.region}
+                    {unit.street && <span className="block text-slate-400">{unit.street}</span>}
+                  </span>
+                </li>
+              ))}
+              <li className="flex items-start gap-2.5">
+                <Phone size={16} className="mt-0.5 shrink-0 text-[#EDA700]" aria-hidden="true" />
+                <span>WhatsApp: {SITE.whatsappDisplay}</span>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
-          <div className="text-center md:text-left space-y-1.5">
-            <p>© {new Date().getFullYear()} Duall Engenharia Ltda. Todos os direitos reservados.</p>
-            <p className="text-[10px] text-slate-500 font-mono">
-              CNPJ sob regulação comercial de Engenharia de Construção Civil brasileira.
-            </p>
-            <a
-              href="https://talentos.duallengenharia.com.br/login"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[11px] text-slate-400 hover:text-[#EDA700] transition font-medium"
-            >
-              Trabalhe Conosco →
-            </a>
-          </div>
-
-          <div className="text-center md:text-right text-[10px] text-slate-400 space-y-1">
-            <p className="font-semibold text-[#EDA700]">Duall Projetos e Instalações Prediais BIM LOD 400</p>
-            <p className="text-slate-500">Desenvolvido em total conformidade WCAG 2.1 AA | Teclado & Leitores de Tela</p>
-          </div>
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-400 md:flex-row">
+          <p>© {new Date().getFullYear()} Duall Engenharia. Todos os direitos reservados.</p>
+          <Link to="/politica-de-privacidade" className="transition hover:text-[#EDA700]">
+            Política de privacidade
+          </Link>
         </div>
       </div>
     </footer>
