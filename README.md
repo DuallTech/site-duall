@@ -14,7 +14,7 @@ React 19 · Vite 6 · Tailwind CSS 4 · Three.js · Pré-renderização estátic
 
 ## Sobre
 
-Site institucional da [Duall Engenharia](https://duallengenharia.com.br), escritório de projetos de instalações elétricas, hidráulicas, infraestrutura para sistemas, BIM, Duall Dynamic e Consultoria ATP.
+Site institucional da [Duall Engenharia](https://duallengenharia.com.br), escritório de projetos de instalações elétricas, hidráulicas, infraestrutura para sistemas, BIM e Consultoria ATP.
 
 O site é construído para ser **lido por buscadores e sistemas de IA** (GEO): cada rota é pré-renderizada em HTML estático, com metadados, dados estruturados (JSON-LD), sitemap, `robots.txt` e `llms.txt`. O JavaScript apenas "hidrata" a página depois.
 
@@ -30,9 +30,9 @@ O site é construído para ser **lido por buscadores e sistemas de IA** (GEO): c
 
 | Rota | Página |
 | --- | --- |
-| `/` | Home (hero, projetos, soluções, Duall Dynamic, clientes e números, conteúdo e FAQ, contato) |
+| `/` | Home (hero, projetos, soluções, clientes e números, conteúdo e FAQ, contato) |
 | `/projetos` · `/projetos/[slug]` | Portfólio e página de cada empreendimento |
-| `/solucoes` · `/solucoes/[slug]` | Hub e as 6 soluções: `eletrica`, `hidraulica`, `sistemas`, `bim`, `duall-dynamic`, `consultoria-atp` |
+| `/solucoes` · `/solucoes/[slug]` | Hub e as 5 soluções: `eletrica`, `hidraulica`, `sistemas`, `bim`, `consultoria-atp` |
 | `/a-duall` | Quem somos, unidades, clientes e depoimentos |
 | Trabalhe conosco | Sem página própria: botões na navbar, no rodapé e na Home abrem direto o portal de talentos (`SITE.careersUrl`) |
 | `/conteudo` · `/conteudo/artigos` · `/conteudo/artigos/[slug]` · `/conteudo/workshop-tecnico` | Artigos e Workshop Técnico |
@@ -96,7 +96,7 @@ O script de pré-render ([scripts/prerender.mjs](scripts/prerender.mjs)) renderi
 src/
 ├─ content/        Conteúdo do site (editar aqui)
 │  ├─ site.ts        dados institucionais, unidades, navegação
-│  ├─ solutions.ts   soluções e textos do Duall Dynamic
+│  ├─ solutions.ts   soluções
 │  ├─ projects.ts    portfólio (gera /projetos/[slug])
 │  ├─ articles.ts    artigos (gera /conteudo/artigos/[slug])
 │  ├─ faq.ts         perguntas frequentes (HTML + JSON-LD)
@@ -127,6 +127,6 @@ Dados ainda a confirmar com a Duall estão listados em [PENDENCIAS.txt](PENDENCI
 - Um único `<h1>` por página, hierarquia de títulos e HTML semântico
 - Título, descrição, canonical e Open Graph por rota
 - JSON-LD: Organization, WebSite, FAQPage, Service, ItemList, BreadcrumbList, CreativeWork, Article e Event
-- Mesma definição repetida de forma idêntica onde importa (ex.: Duall Dynamic na Home e na página própria)
+- Mesma definição repetida de forma idêntica onde importa 
 - Nenhum número ou dado entra sem origem confirmada pela Duall
 - Texto sempre em HTML real, nunca dentro de imagem ou canvas

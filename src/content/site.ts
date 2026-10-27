@@ -6,10 +6,10 @@
 const envUrl = (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SITE_URL;
 
 export const SITE = {
-  name: 'Duall Engenharia',
+  name: 'Duall Engenharia ',
   // [VALIDAR domínio final do site novo]
   url: (envUrl ?? 'https://duallengenharia.com.br').replace(/\/$/, ''),
-  signature: 'Know-how em projetos de instalações',
+  signature: ' Know-how em projetos de instalações',
   description:
     'Projetos de instalações elétricas e hidráulicas para empreendimentos residenciais, comerciais e mistos de médio e alto padrão.',
   locale: 'pt-BR',
@@ -33,6 +33,7 @@ export const NAV = [
   { label: 'Soluções', href: '/solucoes' },
   { label: 'A Duall', href: '/a-duall' },
   { label: 'Conteúdo', href: '/conteudo' },
+  { label: 'FAQ', href: '/faq' },
   { label: 'Contato', href: '/contato' },
 ] as const;
 

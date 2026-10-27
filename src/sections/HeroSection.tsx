@@ -1,53 +1,47 @@
-import heroFallback from '../assets/images/duall_hero_building_1782134245778.jpg';
-import { ButtonLink, ChatButton, ClientOnly, Container } from '../components/ui';
+import HeroSkyline from '../components/HeroSkyline';
+import { ButtonLink, ChatButton } from '../components/ui';
 
-const FALLBACK_ALT =
-  'Volumes tridimensionais de edifícios residenciais, comerciais e mistos projetados pela Duall Engenharia.';
-
-/** Bloco 1. Título e parágrafo em HTML real, fora do canvas; a cena 3D carrega depois do texto. */
+/** Bloco 1. Título e parágrafo em HTML real, centralizados; o fundo é uma cidade em traço de prancha, só decorativa. */
 export default function HeroSection() {
   return (
-    <section className="relative isolate flex min-h-svh items-center overflow-hidden bg-[#0d1929] pb-20 pt-32 text-white">
+    <section className="relative isolate flex min-h-svh items-center justify-center overflow-hidden bg-[#0d1929] pb-48 pt-32 text-center text-white sm:pb-56">
       <div className="bg-grid pointer-events-none absolute inset-0 -z-20 opacity-50" aria-hidden="true" />
 
-      <div className="absolute inset-y-0 right-0 -z-10 w-full opacity-60 lg:w-[62%] lg:opacity-100">
-        <ClientOnly
-          load={() => import('../components/HeroScene')}
-          fallback={
-            <img
-              src={heroFallback}
-              alt={FALLBACK_ALT}
-              fetchPriority="low"
-              className="h-full w-full object-cover opacity-40 mix-blend-luminosity"
-            />
-          }
-        />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[62%]" aria-hidden="true">
+        <HeroSkyline />
       </div>
+
+      {/* Brilhos no mesmo ciclo dos sistemas */}
+      <div className="bp-phase-a pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_90%,rgba(25,146,187,0.22),transparent_55%)]" aria-hidden="true" />
+      <div className="bp-phase-b pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_85%,rgba(237,167,0,0.2),transparent_55%)]" aria-hidden="true" />
+      <div className="bp-phase-c pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_100%,rgba(242,85,93,0.14),transparent_50%)]" aria-hidden="true" />
+      {/* Funde a base do hero com a faixa de números logo abaixo */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-b from-transparent to-[#0d1929]" aria-hidden="true" />
+      {/* Escurece o miolo para o texto respirar sobre a cidade */}
       <div
-        className="absolute inset-0 -z-10 bg-linear-to-r from-[#0d1929] via-[#0d1929]/80 to-transparent lg:via-[#0d1929]/70"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_55%_at_50%_42%,#0d1929_35%,transparent_100%)] opacity-90"
         aria-hidden="true"
       />
 
-      <Container>
-        <div className="max-w-2xl space-y-7">
+      <div className="mx-auto w-full max-w-[1680px] px-6 sm:px-10 lg:px-14 xl:px-20">
+        <div className="mx-auto flex max-w-5xl flex-col items-center space-y-8">
           <p
             style={{ animationDelay: '0s' }}
-            className="hero-in inline-flex items-center gap-2 rounded-full border border-[#EDA700]/30 bg-[#EDA700]/10 px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-[#EDA700]"
+            className="hero-in font-display text-sm font-extrabold uppercase tracking-[0.14em] text-[#FFC21A] sm:text-base"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#EDA700]" aria-hidden="true" />
             Duall Engenharia
           </p>
 
           <h1
             style={{ animationDelay: '0.08s' }}
-            className="hero-in font-display text-4xl font-extrabold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.6rem]"
+            className="hero-in font-display text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
           >
             Know-how em projetos de <span className="text-[#EDA700]">instalações elétricas e hidráulicas</span>
           </h1>
 
           <p
             style={{ animationDelay: '0.16s' }}
-            className="hero-in text-lg leading-relaxed text-slate-300"
+            className="hero-in max-w-3xl text-lg leading-relaxed text-slate-300 sm:text-xl"
           >
             A Duall Engenharia desenvolve projetos de instalações elétricas e hidráulicas para empreendimentos
             residenciais, comerciais e mistos de médio e alto padrão. Cada projeto é entregue com comprometimento com o
@@ -62,7 +56,7 @@ export default function HeroSection() {
             <ChatButton variant="ghost">Falar com a Duall</ChatButton>
           </div>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

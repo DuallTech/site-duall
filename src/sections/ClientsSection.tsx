@@ -4,7 +4,7 @@ import { ButtonLink, Container, Eyebrow } from '../components/ui';
 import { CLIENTS, NUMBERS } from '../content/clients';
 
 /** Carrossel infinito de logos. A segunda cópia é só visual: fica fora da árvore de acessibilidade e dos rastreadores. */
-export function ClientLogoMarquee() {
+export function ClientLogoMarquee({ reverse = false }: { reverse?: boolean }) {
   const card =
     'group flex h-40 w-40 shrink-0 items-center justify-center rounded-xs border border-slate-200 bg-slate-50 px-3 py-2 shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition-all duration-300 hover:border-[#1992BB]/35 hover:bg-white';
   const img = 'max-h-28 max-w-36 w-auto object-contain opacity-95 transition-opacity duration-300 group-hover:opacity-100';
@@ -21,7 +21,7 @@ export function ClientLogoMarquee() {
         aria-hidden="true"
       />
 
-      <div className="animate-ticker flex w-max py-3">
+      <div className={`${reverse ? 'animate-ticker-reverse' : 'animate-ticker'} flex w-max py-3`}>
         <ul className="flex gap-6 pr-6">
           {CLIENTS.map((client) => (
             <li key={client.name} className={card}>
@@ -47,7 +47,7 @@ export function ClientLogoMarquee() {
   );
 }
 
-/** Número que conta de 0 até o valor ao entrar na tela. O HTML estático já traz o valor final. */
+
 function CountUp({ value }: { value: string }) {
   const match = value.match(/^(\D*)(\d+)(.*)$/);
   const target = match ? Number(match[2]) : 0;
@@ -91,14 +91,37 @@ function CountUp({ value }: { value: string }) {
 }
 
 /** Faixa azul escura com os números da Duall. */
-export function NumbersBand() {
+export function NumbersBand({ blend = false }: { blend?: boolean }) {
   if (!NUMBERS.length) return null;
 
   return (
-    <div className="relative isolate overflow-hidden bg-[#0d1929] py-20 text-white">
-      <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-40" aria-hidden="true" />
-      <div className="blob pointer-events-none absolute -left-24 top-0 -z-10 h-72 w-72 rounded-full bg-[#315676]/50 blur-3xl" aria-hidden="true" />
-      <div className="blob-slow pointer-events-none absolute -right-20 bottom-0 -z-10 h-72 w-72 rounded-full bg-[#EDA700]/15 blur-3xl" aria-hidden="true" />
+    <div className={`relative isolate overflow-hidden bg-[#0d1929] text-white ${blend ? 'pb-10 pt-2' : 'py-20'}`}>
+      {!blend && (
+        <>
+          <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-40" aria-hidden="true" />
+          <div className="blob pointer-events-none absolute -left-24 top-0 -z-10 h-72 w-72 rounded-full bg-[#315676]/50 blur-3xl" aria-hidden="true" />
+          <div className="blob-slow pointer-events-none absolute -right-20 bottom-0 -z-10 h-72 w-72 rounded-full bg-[#EDA700]/15 blur-3xl" aria-hidden="true" />
+        </>
+      )}
+      {blend ? (
+        <Container className="space-y-7">
+          <p className="reveal text-center font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400">
+            A Duall em números
+          </p>
+          <dl className="reveal grid grid-cols-2 gap-y-6 lg:grid-cols-4">
+            {NUMBERS.map((item) => (
+              <div key={item.label} className="border-white/10 px-4 text-center lg:border-l lg:first:border-l-0">
+                <dd className="font-display text-4xl font-extrabold leading-none tracking-tight text-[#EDA700] md:text-5xl">
+                  <CountUp value={item.value} />
+                </dd>
+                <dt className="mx-auto mt-2 max-w-[14rem] font-mono text-[10px] font-bold uppercase leading-snug tracking-[0.18em] text-slate-400">
+                  {item.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
+        </Container>
+      ) : (
       <Container className="space-y-12">
         <div className="reveal space-y-4">
           <Eyebrow light>Em números</Eyebrow>
@@ -116,14 +139,15 @@ export function NumbersBand() {
           ))}
         </dl>
       </Container>
+      )}
     </div>
   );
 }
 
-/** Bloco 5. Clientes e números. */
-export default function ClientsSection({ showLink = false }: { showLink?: boolean }) {
+/** Clientes (só na página A Duall). Os números ficam em NumbersBand, logo abaixo do hero da Home. */
+export default function ClientsSection({ dual = false }: { dual?: boolean }) {
   return (
-    <section aria-labelledby="clientes" className="bg-white pt-24">
+    <section aria-labelledby="clientes" className="bg-white py-24">
       <Container>
         <div className="reveal max-w-3xl space-y-5">
           <Eyebrow>Clientes</Eyebrow>
@@ -140,19 +164,15 @@ export default function ClientsSection({ showLink = false }: { showLink?: boolea
         </div>
       </Container>
 
-      <div className="reveal mt-14">
+      <div className="reveal mt-14 space-y-3">
         <ClientLogoMarquee />
-      </div>
-
-      <div className={`flex justify-center ${showLink ? 'mb-24 mt-10' : 'mb-24'}`}>
-        {showLink && (
-          <ButtonLink to="/a-duall#clientes" variant="outline">
-            Conhecer nossos clientes
-          </ButtonLink>
+        {dual && (
+          <div aria-hidden="true">
+            <ClientLogoMarquee reverse />
+          </div>
         )}
       </div>
 
-      <NumbersBand />
     </section>
   );
 }

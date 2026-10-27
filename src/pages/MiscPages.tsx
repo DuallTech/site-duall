@@ -66,7 +66,7 @@ export default function NotFoundPage() {
         actions={
           <>
             <ButtonLink to="/">Voltar ao início</ButtonLink>
-            <ButtonLink to="/projetos" variant="ghost">
+            <ButtonLink to="/projetos" variant="outline">
               Ver projetos
             </ButtonLink>
           </>

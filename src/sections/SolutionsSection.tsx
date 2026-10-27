@@ -1,16 +1,15 @@
 import type { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Box, Droplets, FileSearch, Network, Smartphone, Zap, type LucideIcon } from 'lucide-react';
+import { ArrowUpRight, Box, Droplets, FileSearch, Network, Zap, type LucideIcon } from 'lucide-react';
 
 import { ButtonLink, Container, Eyebrow } from '../components/ui';
 import { SOLUTIONS } from '../content/solutions';
 
-const ICONS: Record<string, LucideIcon> = {
+export const SOLUTION_ICONS: Record<string, LucideIcon> = {
   eletrica: Zap,
   hidraulica: Droplets,
   sistemas: Network,
   bim: Box,
-  'duall-dynamic': Smartphone,
   'consultoria-atp': FileSearch,
 };
 
@@ -32,7 +31,7 @@ const resetTilt = (event: MouseEvent<HTMLElement>) => {
   event.currentTarget.style.setProperty('--ry', '0deg');
 };
 
-/** Bloco 3. Seis cards compactos com frase curta; o texto completo aparece ao interagir (e está sempre no HTML). */
+/** Bloco 3. Cards compactos com frase curta; o texto completo fica na página de cada solução. */
 export default function SolutionsSection() {
   return (
     <section aria-labelledby="solucoes" className="relative isolate overflow-hidden bg-[#0d1929] py-20 text-white">
@@ -50,27 +49,27 @@ export default function SolutionsSection() {
 
         <div className="reveal mb-10 grid items-end gap-6 lg:grid-cols-12 lg:gap-12">
           <div className="space-y-4 lg:col-span-6">
-            <Eyebrow light>Escopo</Eyebrow>
+            <Eyebrow light line={false}>Escopo</Eyebrow>
             <h2 id="solucoes" className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight md:text-5xl">
               Soluções em projetos de instalações
             </h2>
           </div>
           <p className="leading-relaxed text-slate-300 lg:col-span-6">
             O escopo da Duall Engenharia cobre as disciplinas de instalações de um empreendimento: da entrada de energia
-            e de água à infraestrutura para sistemas, com modelagem BIM, Duall Dynamic e avaliação técnica de projetos de
+            e de água à infraestrutura para sistemas, com modelagem BIM e avaliação técnica de projetos de
             terceiros.
           </p>
         </div>
 
-        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {SOLUTIONS.map((solution, index) => {
-            const Icon = ICONS[solution.slug] ?? Box;
+            const Icon = SOLUTION_ICONS[solution.slug] ?? Box;
             return (
               <li key={solution.slug} className="reveal">
                 <article
                   onMouseMove={trackPointer}
                   onMouseLeave={resetTilt}
-                  className="group relative flex h-full min-h-[15.5rem] flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition-[transform,border-color,box-shadow] duration-200 [transform:perspective(900px)_rotateX(var(--rx,0deg))_rotateY(var(--ry,0deg))] hover:border-[#EDA700]/60 hover:shadow-[0_24px_50px_-20px_rgba(237,167,0,0.4)]"
+                  className="group relative flex h-full min-h-[15rem] flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-[#111f33] p-5 transition-[transform,border-color,box-shadow] duration-200 [transform:perspective(900px)_rotateX(var(--rx,0deg))_rotateY(var(--ry,0deg))] hover:border-[#EDA700]/60 hover:shadow-[0_24px_50px_-20px_rgba(237,167,0,0.4)]"
                 >
                   {/* Luz que segue o mouse */}
                   <span
@@ -99,17 +98,6 @@ export default function SolutionsSection() {
                     Saiba mais
                     <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1" />
                   </span>
-
-                  {/* Painel com o texto completo: sobe por cima do card ao passar o mouse ou focar com o teclado */}
-                  <div className="pointer-events-none absolute inset-0 flex translate-y-full flex-col justify-between gap-3 bg-[#14263a]/95 p-6 opacity-0 backdrop-blur-sm transition duration-500 ease-out group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100">
-                    <div className="space-y-2">
-                      <p className="font-display text-base font-bold text-white">{solution.short}</p>
-                      <p className="text-[13px] leading-relaxed text-slate-200">{solution.summary}</p>
-                    </div>
-                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-[#EDA700] px-4 py-2 text-xs font-bold text-slate-900">
-                      Abrir página <ArrowUpRight size={14} aria-hidden="true" />
-                    </span>
-                  </div>
                 </article>
               </li>
             );

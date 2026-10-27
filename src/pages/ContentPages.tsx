@@ -1,7 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 
-import CtaBand from '../components/CtaBand';
 import { ButtonLink, Container, PageHero } from '../components/ui';
 import { ARTICLES, getArticle } from '../content/articles';
 import { SITE } from '../content/site';
@@ -46,7 +45,6 @@ export function ContentHubPage() {
           <TicketCard />
         </Container>
       </section>
-      <CtaBand />
     </>
   );
 }
@@ -128,7 +126,6 @@ export function ArticlePage() {
           )}
         </Container>
       </article>
-      <CtaBand />
     </>
   );
 }

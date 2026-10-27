@@ -12,7 +12,6 @@ PENDENCIAS DO SITE DUALL (GEO)
      e remover "mock: true". NAO PUBLICAR com os valores mock. Eles tambem aparecem no llms-full.txt gerado no build.
    - Data e local do 3o Workshop Tecnico Duall
    - Abrangencia geografica de atuacao (resposta "Onde a Duall atua?" na FAQ)
-   - Links de LinkedIn e Instagram (hoje usam os do site atual) e numero de WhatsApp oficial
 
 2. TEXTOS PARA VALIDAR COM A DUALL
    - H1 "Know-how em projetos de instalacoes eletricas e hidraulicas" (estende a assinatura da marca)
@@ -27,7 +26,6 @@ PENDENCIAS DO SITE DUALL (GEO)
 3. CONTEUDO A PRODUZIR / ENTREGAR
    - Artigos: lista vazia em src/content/articles.ts (cada artigo adicionado gera pagina, schema e sitemap)
    - Imagem Open Graph 1200x630 do "bairro Duall" (hoje: copia provisoria do hero em public/og-duall.jpg)
-   - Imagem final do celular com o PDF do Duall Dynamic (hoje: ilustracao SVG decorativa) e ajuste do alt
    - Fotos atualizadas de lideranca e equipe
    - Por projeto do portfolio: desafio, solucao, disciplinas e etapa de atuacao
      (hoje as paginas mostram so cliente, tipo, local e area)

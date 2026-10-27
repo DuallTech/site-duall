@@ -21,6 +21,7 @@ export function getRoutes(): string[] {
     '/conteudo/artigos',
     ...ARTICLES.map((a) => `/conteudo/artigos/${a.slug}`),
     '/conteudo/workshop-tecnico',
+    '/faq',
     '/contato',
     '/politica-de-privacidade',
   ];

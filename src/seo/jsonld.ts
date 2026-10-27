@@ -33,7 +33,6 @@ export const organizationLd = (): Json => ({
     'Projetos de instalações hidráulicas',
     'Infraestrutura para sistemas',
     'Modelagem BIM',
-    'Duall Dynamic',
     'Avaliação Técnica de Projeto',
   ],
   contactPoint: {

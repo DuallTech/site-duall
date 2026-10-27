@@ -9,14 +9,14 @@ export function Container({ children, className = '' }: { children: ReactNode; c
   return <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
 }
 
-export function Eyebrow({ children, light = false }: { children: ReactNode; light?: boolean }) {
+export function Eyebrow({ children, light = false, line = true }: { children: ReactNode; light?: boolean; line?: boolean }) {
   return (
     <p
       className={`flex items-center gap-3 font-mono text-[11px] font-bold uppercase tracking-[0.28em] ${
         light ? 'text-[#EDA700]' : 'text-[#315676]'
       }`}
     >
-      <span className={`h-px w-6 ${light ? 'bg-[#EDA700]' : 'bg-[#315676]'}`} />
+      {line && <span className={`h-px w-6 ${light ? 'bg-[#EDA700]' : 'bg-[#315676]'}`} />}
       {children}
     </p>
   );
@@ -86,7 +86,7 @@ export function ChatButton({ variant = 'ghost', children = 'Falar com a Duall' }
 
 export function Breadcrumbs({ items, light = false }: { items: Array<{ name: string; path: string }>; light?: boolean }) {
   return (
-    <nav aria-label="Você está em" className={`text-xs ${light ? 'text-white/60' : 'text-slate-500'}`}>
+    <nav aria-label="Você está em" className={`text-xs ${light ? 'text-white/75' : 'text-slate-500'}`}>
       <ol className="flex flex-wrap items-center gap-1.5">
         {items.map((item, i) => {
           const last = i === items.length - 1;
@@ -120,6 +120,8 @@ export function PageHero({
   crumbs,
   actions,
   compact = false,
+  ghost,
+  eyebrowLine = true,
 }: {
   eyebrow: string;
   title: string;
@@ -128,38 +130,42 @@ export function PageHero({
   actions?: ReactNode;
   /** Versão baixa do cabeçalho, para páginas em que o conteúdo precisa aparecer sem rolar. */
   compact?: boolean;
+  /** Palavra-fantasma ao fundo (padrão: primeira palavra do eyebrow). */
+  ghost?: string;
+  /** Mostra o traço dourado antes do eyebrow. */
+  eyebrowLine?: boolean;
 }) {
   const step = (n: number) => ({ animationDelay: `${n * 0.09}s` });
 
   return (
-    <section className={`relative isolate overflow-hidden bg-[#0d1929] text-white ${compact ? 'pb-8 pt-28 md:pb-10 md:pt-32' : 'pb-16 pt-36 md:pb-24 md:pt-44'}`}>
-      <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-60" aria-hidden="true" />
-      <div className="blob pointer-events-none absolute -right-24 -top-32 -z-10 h-[30rem] w-[30rem] rounded-full bg-[#315676]/45 blur-3xl" aria-hidden="true" />
+    <section className={`relative isolate overflow-hidden bg-gradient-to-b from-white to-[#eef3f8] text-[#2D3845] ${compact ? 'pb-5 pt-24 md:pb-6 md:pt-24' : 'pb-10 pt-28 md:pb-12 md:pt-32'}`}>
+      <div className="bg-grid-light pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
+      <div className="blob pointer-events-none absolute -right-24 -top-32 -z-10 h-[30rem] w-[30rem] rounded-full bg-[#315676]/10 blur-3xl" aria-hidden="true" />
       <div className="blob-slow pointer-events-none absolute -bottom-40 left-1/4 -z-10 h-80 w-80 rounded-full bg-[#EDA700]/15 blur-3xl" aria-hidden="true" />
 
       {/* Palavra-fantasma */}
       <p
-        className={`text-outline-light pointer-events-none absolute -bottom-6 right-4 -z-10 hidden select-none font-display text-[9rem] font-extrabold uppercase leading-none xl:text-[12rem] ${compact ? '' : 'lg:block'}`}
+        className={`text-outline-dark pointer-events-none absolute -bottom-6 right-4 -z-10 hidden select-none font-display text-[7rem] font-extrabold uppercase leading-none xl:text-[9rem] ${compact ? '' : 'lg:block'}`}
         aria-hidden="true"
       >
-        {eyebrow.split(' ')[0]}
+        {ghost ?? eyebrow.split(' ')[0]}
       </p>
 
-      <Container className={compact ? 'space-y-3' : 'space-y-6'}>
+      <Container className={compact ? 'space-y-2' : 'space-y-4'}>
         <div className="hero-in" style={step(0)}>
-          <Breadcrumbs items={crumbs} light />
+          <Breadcrumbs items={crumbs} />
         </div>
         <div className="hero-in" style={step(1)}>
-          <Eyebrow light>{eyebrow}</Eyebrow>
+          <Eyebrow line={eyebrowLine}>{eyebrow}</Eyebrow>
         </div>
         <h1
-          className={`hero-in max-w-4xl font-display font-extrabold leading-[1.05] tracking-tight ${compact ? 'text-3xl sm:text-4xl lg:text-5xl' : 'text-4xl sm:text-5xl lg:text-6xl'}`}
+          className={`hero-in max-w-4xl font-display font-extrabold leading-[1.05] tracking-tight ${compact ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-3xl sm:text-4xl lg:text-5xl'}`}
           style={step(2)}
         >
           {title}
         </h1>
         {lead && (
-          <p className="hero-in max-w-3xl text-lg leading-relaxed text-slate-300" style={step(3)}>
+          <p className={`hero-in max-w-3xl leading-relaxed text-slate-600 ${compact ? 'text-sm md:text-base' : 'text-base md:text-lg'}`} style={step(3)}>
             {lead}
           </p>
         )}

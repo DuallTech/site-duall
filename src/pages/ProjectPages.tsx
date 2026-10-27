@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Building2, MapPin, Ruler } from 'lucide-react';
 
-import CtaBand from '../components/CtaBand';
 import ProjectCard from '../components/ProjectCard';
 import { Container, PageHero } from '../components/ui';
 import { CLIENT_NAMES, PROJECTS, getProject, projectImage, type ProjectCategory } from '../content/projects';
@@ -50,6 +49,7 @@ export function ProjectsPage() {
         ]}
       />
       <PageHero
+        compact
         eyebrow="Portfólio"
         title="Projetos de instalações em empreendimentos de médio e alto padrão"
         lead="O portfólio da Duall Engenharia reúne projetos de instalações para empreendimentos residenciais, comerciais e mistos de alta complexidade técnica."
@@ -59,58 +59,66 @@ export function ProjectsPage() {
         ]}
       />
 
-      <section className="bg-white py-16">
-        <Container className="space-y-10">
-          <div className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:flex-row md:items-end md:justify-between">
-            <div role="group" aria-label="Filtrar por tipo" className="flex flex-wrap gap-2">
-              {CATEGORIES.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  aria-pressed={category === c}
-                  onClick={() => setCategory(c)}
-                  className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                    category === c
-                      ? 'border-[#315676] bg-[#315676] text-white'
-                      : 'border-slate-300 bg-white text-slate-700 hover:border-[#315676]'
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-            <div className="md:w-72">
-              <label htmlFor="filtro-cliente" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">
-                Cliente
-              </label>
-              <select
-                id="filtro-cliente"
-                value={client}
-                onChange={(e) => setClient(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800 focus:border-[#315676] focus:outline-none focus:ring-2 focus:ring-[#315676]/25"
-              >
-                <option>Todos</option>
-                {CLIENT_NAMES.map((c) => (
-                  <option key={c}>{c}</option>
+      <section className="bg-white py-6">
+        <Container>
+          {/* Filtros e lista formam um bloco só: a página fica parada e a rolagem acontece dentro da lista */}
+          <div className="flex h-[max(26rem,calc(100svh-21rem))] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/60">
+            <div className="flex shrink-0 flex-col gap-3 border-b border-slate-200 bg-slate-50 p-3 md:flex-row md:items-center md:justify-between">
+              <div role="group" aria-label="Filtrar por tipo" className="flex flex-wrap items-center gap-2">
+                {CATEGORIES.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    aria-pressed={category === c}
+                    onClick={() => setCategory(c)}
+                    className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
+                      category === c
+                        ? 'border-[#315676] bg-[#315676] text-white'
+                        : 'border-slate-300 bg-white text-slate-700 hover:border-[#315676]'
+                    }`}
+                  >
+                    {c}
+                  </button>
                 ))}
-              </select>
+                <p role="status" className="ml-2 text-sm text-slate-500">
+                  {filtered.length} {filtered.length === 1 ? 'projeto' : 'projetos'}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 md:w-72">
+                <label htmlFor="filtro-cliente" className="shrink-0 text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Cliente
+                </label>
+                <select
+                  id="filtro-cliente"
+                  value={client}
+                  onChange={(e) => setClient(e.target.value)}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-[#315676] focus:outline-none focus:ring-2 focus:ring-[#315676]/25"
+                >
+                  <option>Todos</option>
+                  {CLIENT_NAMES.map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div
+              role="region"
+              aria-label="Lista de projetos"
+              tabIndex={0}
+              className="min-h-0 flex-1 overflow-y-auto p-4 [scrollbar-color:#315676_transparent] [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-[#315676]"
+            >
+              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {filtered.map((project, i) => (
+                  <li key={project.slug}>
+                    <ProjectCard project={project} priority={i < 3} />
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-
-          <p role="status" className="text-sm text-slate-500">
-            {filtered.length} {filtered.length === 1 ? 'projeto' : 'projetos'}
-          </p>
-
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((project, i) => (
-              <li key={project.slug} className="reveal">
-                <ProjectCard project={project} priority={i < 3} />
-              </li>
-            ))}
-          </ul>
         </Container>
       </section>
-      <CtaBand />
     </>
   );
 }
@@ -242,7 +250,6 @@ export function ProjectPage() {
           </Container>
         </section>
       )}
-      <CtaBand />
     </>
   );
 }

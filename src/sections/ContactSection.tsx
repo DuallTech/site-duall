@@ -1,14 +1,32 @@
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { ArrowRight, Briefcase, Instagram, MapPin, Phone, ShieldCheck } from 'lucide-react';
 
 import ContactForm from '../components/ContactForm';
-import { ChatButton, Container, Eyebrow } from '../components/ui';
+import { Container } from '../components/ui';
 import { SITE } from '../content/site';
 import { getWhatsAppGlobalUrl } from '../utils/whatsapp';
 
-/** Bloco 7. CTA final, com o chatbot como primeiro filtro de contato. Reutilizado em /contato. */
+function InfoRow({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
+  return (
+    <li className="flex items-start gap-4">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[#EDA700]">
+        {icon}
+      </span>
+      <div className="space-y-0.5">
+        <p className="font-display text-sm font-extrabold uppercase tracking-wide text-white">{title}</p>
+        <div className="text-sm leading-snug text-slate-400">{children}</div>
+      </div>
+    </li>
+  );
+}
+
+const link = 'font-mono text-[13px] font-semibold text-[#EDA700] transition hover:text-[#ffb81a]';
+
+/** Bloco 7. Contato: informações à esquerda e formulário à direita. Reutilizado em /contato. */
 export default function ContactSection({ asPage = false }: { asPage?: boolean }) {
   const Heading = asPage ? 'h1' : 'h2';
+  const cities = SITE.units.map((u) => `${u.city} - ${u.region}`).join(' e ');
 
   return (
     <section
@@ -16,40 +34,62 @@ export default function ContactSection({ asPage = false }: { asPage?: boolean })
       aria-labelledby="contact-heading"
       className={`relative isolate scroll-mt-20 overflow-hidden bg-[#0d1929] pb-24 text-white ${asPage ? 'pt-40' : 'pt-24'}`}
     >
-      <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-40" aria-hidden="true" />
-      <div className="blob pointer-events-none absolute -left-32 top-0 -z-10 h-[26rem] w-[26rem] rounded-full bg-[#315676]/45 blur-3xl" aria-hidden="true" />
-      <div className="blob-slow pointer-events-none absolute -right-24 bottom-0 -z-10 h-80 w-80 rounded-full bg-[#EDA700]/15 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute -right-24 bottom-0 -z-10 h-80 w-80 rounded-full bg-[#EDA700]/10 blur-3xl" aria-hidden="true" />
       <Container>
-        <div className="grid items-start gap-14 lg:grid-cols-12">
-          <div className="space-y-7 lg:col-span-6">
-            {!asPage && (
-              <blockquote className="border-l-2 border-[#EDA700] pl-5 font-display text-xl font-semibold leading-snug text-white/90 md:text-2xl">
-                “Entendemos que, quando um projeto nasce, expectativas são criadas.”
-              </blockquote>
-            )}
-            <Eyebrow light>Contato</Eyebrow>
-            <Heading
-              id="contact-heading"
-              className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight md:text-5xl"
-            >
-              Fale com a Duall sobre o seu empreendimento
-            </Heading>
-            <p className="text-lg leading-relaxed text-slate-300">
-              Envie as informações do empreendimento pelo formulário, pelo WhatsApp ou pelo chatbot. A equipe técnica da
-              Duall Engenharia retorna para alinhar escopo, prazo e documentação.
-            </p>
-
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <ChatButton variant="gold">Abrir o chat</ChatButton>
-              <a
-                href={getWhatsAppGlobalUrl('Olá, Duall Engenharia! Gostaria de falar sobre um projeto de instalações.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-6 py-3.5 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
+        <div className="grid items-stretch gap-14 lg:grid-cols-12">
+          <div className="space-y-8 lg:col-span-6">
+            <div className="space-y-6">
+              <p className="inline-flex rounded-full bg-[#EDA700]/15 px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#EDA700]">
+                Contato e proposta de projetos
+              </p>
+              <Heading
+                id="contact-heading"
+                className="font-display text-4xl font-extrabold leading-[1.05] tracking-tight md:text-5xl lg:text-6xl"
               >
-                <MessageCircle size={16} aria-hidden="true" />
-                WhatsApp {SITE.whatsappDisplay}
-              </a>
+                Fale com a Duall sobre o seu empreendimento
+              </Heading>
+              <p className="text-lg leading-relaxed text-slate-300">
+                Envie as informações do empreendimento pelo formulário ao lado, pelo WhatsApp ou pelo chatbot. A equipe
+                técnica da Duall Engenharia retorna para alinhar escopo, prazo e documentação.
+              </p>
+            </div>
+
+            <ul className="space-y-5 border-t border-white/10 pt-8">
+              <InfoRow icon={<MapPin size={20} aria-hidden="true" />} title="Cidades atendidas fisicamente">
+                Unidades em {cities}.
+              </InfoRow>
+              <InfoRow icon={<Phone size={20} aria-hidden="true" />} title="WhatsApp">
+                <a
+                  href={getWhatsAppGlobalUrl('Olá, Duall Engenharia! Gostaria de falar sobre um projeto de instalações.')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={link}
+                >
+                  {SITE.whatsappDisplay}
+                </a>
+              </InfoRow>
+              <InfoRow icon={<Instagram size={20} aria-hidden="true" />} title="Mídias sociais oficiais">
+                <a href={SITE.social.instagram} target="_blank" rel="noopener noreferrer" className={link}>
+                  Instagram: @duallengenharia
+                </a>
+              </InfoRow>
+              <InfoRow icon={<Briefcase size={20} aria-hidden="true" />} title="Faça parte da nossa equipe">
+                <a href={SITE.careersUrl} target="_blank" rel="noopener noreferrer" className={link}>
+                  Trabalhe conosco →
+                </a>
+              </InfoRow>
+            </ul>
+
+            <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/20 p-5 text-xs leading-relaxed text-slate-400">
+              <ShieldCheck size={18} className="mt-0.5 shrink-0 text-[#EDA700]" aria-hidden="true" />
+              <p>
+                Seus dados são usados apenas para o retorno deste contato e não são compartilhados com terceiros. Saiba
+                mais na{' '}
+                <Link to="/politica-de-privacidade" className="font-semibold text-[#EDA700] underline">
+                  Política de privacidade
+                </Link>
+                .
+              </p>
             </div>
 
             {!asPage && (
@@ -58,31 +98,9 @@ export default function ContactSection({ asPage = false }: { asPage?: boolean })
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             )}
-
-            <ul className="space-y-4 border-t border-white/10 pt-7 text-sm text-slate-300">
-              {SITE.units.map((unit) => (
-                <li key={unit.city} className="flex items-start gap-3">
-                  <MapPin size={18} className="mt-0.5 shrink-0 text-[#EDA700]" aria-hidden="true" />
-                  <span>
-                    Unidade {unit.city}, {unit.region}
-                    {unit.street && <span className="block text-slate-400">{unit.street}</span>}
-                    {unit.phone && <span className="block text-slate-400">{unit.phone}</span>}
-                  </span>
-                </li>
-              ))}
-              <li className="flex items-start gap-3">
-                <Phone size={18} className="mt-0.5 shrink-0 text-[#EDA700]" aria-hidden="true" />
-                <span>
-                  Quer trabalhar na Duall?{' '}
-                  <a href={SITE.careersUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#EDA700] underline">
-                    Trabalhe conosco
-                  </a>
-                </span>
-              </li>
-            </ul>
           </div>
 
-          <div className="glow-border rounded-[1.65rem] p-[2px] lg:col-span-6">
+          <div className="flex lg:col-span-6">
             <ContactForm />
           </div>
         </div>

@@ -8,6 +8,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import { AboutPage } from './pages/AboutPages';
 import { ArticlePage, ArticlesPage, ContentHubPage, WorkshopPage } from './pages/ContentPages';
+import { FaqPage } from './pages/FaqPage';
 import HomePage from './pages/HomePage';
 import NotFoundPage, { ContactPage, PrivacyPage } from './pages/MiscPages';
 import { ProjectPage, ProjectsPage } from './pages/ProjectPages';
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="conteudo/artigos" element={<ArticlesPage />} />
         <Route path="conteudo/artigos/:slug" element={<ArticlePage />} />
         <Route path="conteudo/workshop-tecnico" element={<WorkshopPage />} />
+        <Route path="faq" element={<FaqPage />} />
         <Route path="contato" element={<ContactPage />} />
         <Route path="politica-de-privacidade" element={<PrivacyPage />} />
         <Route path="*" element={<NotFoundPage />} />

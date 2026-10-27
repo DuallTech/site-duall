@@ -156,13 +156,13 @@ function DimensionLine({ label }: { label: string }) {
   );
 }
 
-/** Bloco 6. Conteúdo técnico, evento e perguntas frequentes (o FAQ também vai em JSON-LD). */
+/** Bloco 6. Conteúdo técnico e evento. As perguntas frequentes ficam na página /faq. */
 export default function ContentFaqSection() {
   const latest = [...ARTICLES].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 
   return (
     <section aria-labelledby="conteudo" className="bg-blueprint relative overflow-hidden py-24">
-      <Container className="space-y-20">
+      <Container>
         <div className="space-y-12">
           <div className="reveal space-y-6">
             <DimensionLine label="Conteúdo técnico" />
@@ -226,14 +226,6 @@ export default function ContentFaqSection() {
               <TicketCard />
             </div>
           </div>
-        </div>
-
-        <div className="reveal space-y-6">
-          <DimensionLine label="Perguntas frequentes" />
-          <h3 className="font-display text-2xl font-bold text-[#2D3845] md:text-3xl">
-            Perguntas frequentes sobre a Duall Engenharia
-          </h3>
-          <FaqList />
         </div>
       </Container>
     </section>

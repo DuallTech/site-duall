@@ -9,17 +9,12 @@ export const FAQ: FaqItem[] = [
   {
     question: 'O que a Duall Engenharia faz?',
     answer:
-      'A Duall Engenharia desenvolve projetos de instalações elétricas, hidráulicas e de infraestrutura para sistemas, além de modelagem BIM, Duall Dynamic e Consultoria ATP, para empreendimentos residenciais, comerciais e mistos de médio e alto padrão.',
+      'A Duall Engenharia desenvolve projetos de instalações elétricas, hidráulicas e de infraestrutura para sistemas, além de modelagem BIM e Consultoria ATP, para empreendimentos residenciais, comerciais e mistos de médio e alto padrão.',
   },
   {
     question: 'Quais tipos de empreendimento a Duall Engenharia atende?',
     answer:
       'A Duall Engenharia atende empreendimentos residenciais, comerciais e mistos de médio e alto padrão, com portfólio em projetos de alta complexidade técnica.',
-  },
-  {
-    question: 'O que é o Duall Dynamic?',
-    answer:
-      'Duall Dynamic é a ferramenta da Duall Engenharia que reúne as informações de um projeto de instalações em um arquivo PDF acessível em dispositivos móveis, com clareza, agilidade e documentação precisa.',
   },
   {
     question: 'A Duall Engenharia entrega projetos em BIM?',

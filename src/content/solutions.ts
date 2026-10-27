@@ -1,5 +1,5 @@
 /**
- * Soluções da Duall. O `summary` é a mesma frase usada no card da Home e na abertura da página interna.
+ * Soluções da Duall. O `summary` é o texto de abertura da página interna.
  */
 
 export interface Solution {
@@ -7,24 +7,14 @@ export interface Solution {
   name: string;
   /** Título curto para menus e cards. */
   short: string;
-  /** Frase curta do card da Home (o texto completo, `summary`, aparece ao interagir). */
+  /** Frase curta do card da Home (o texto completo, `summary`, fica na página da solução). */
   teaser: string;
-  /** Texto completo: primeira frase da página interna e painel do card da Home. */
+  /** Texto completo: abertura da página interna. */
   summary: string;
   scope: string[];
   seoTitle: string;
   seoDescription: string;
 }
-
-export const DUALL_DYNAMIC_DEFINITION =
-  'Duall Dynamic é a ferramenta da Duall Engenharia que reúne as informações de um projeto de instalações em um arquivo PDF acessível em dispositivos móveis. Ela foi criada para dar facilidade, clareza, agilidade e usabilidade às informações do projeto, melhorar a experiência do cliente e garantir a segurança do projeto por meio de uma documentação precisa.';
-
-export const DUALL_DYNAMIC_BENEFITS = [
-  'Facilidade e clareza na consulta das informações do projeto',
-  'Agilidade no acesso, em um único arquivo PDF',
-  'Usabilidade em dispositivos móveis',
-  'Documentação precisa, que garante a segurança do projeto',
-];
 
 export const SOLUTIONS: Solution[] = [
   {
@@ -101,18 +91,6 @@ export const SOLUTIONS: Solution[] = [
     seoTitle: 'Modelagem BIM para instalações | Duall Engenharia',
     seoDescription:
       'Modelagem BIM da Duall Engenharia: modelo tridimensional, arquivos IFC, lista de quantitativos e identificação de incompatibilidades entre disciplinas.',
-  },
-  {
-    slug: 'duall-dynamic',
-    name: 'Duall Dynamic',
-    short: 'Duall Dynamic',
-    teaser: 'O projeto reunido em um PDF acessível no celular.',
-    summary:
-      'Ferramenta própria da Duall que reúne as informações do projeto em um arquivo PDF acessível em dispositivos móveis, com clareza, agilidade e documentação precisa.',
-    scope: DUALL_DYNAMIC_BENEFITS,
-    seoTitle: 'Duall Dynamic: o projeto em um PDF no celular | Duall Engenharia',
-    seoDescription:
-      'Duall Dynamic é a ferramenta da Duall Engenharia que reúne as informações de um projeto de instalações em um PDF acessível em dispositivos móveis.',
   },
   {
     slug: 'consultoria-atp',

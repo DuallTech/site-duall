@@ -24,6 +24,9 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
 
   useEffect(() => setMobileOpen(false), [pathname]);
 
+  // Só a Home tem hero escuro: nas demais páginas o cabeçalho já nasce sobre fundo claro.
+  const solid = isScrolled || pathname !== '/';
+
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => {
@@ -31,7 +34,7 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
     };
   }, [mobileOpen]);
 
-  const linkTone = isScrolled ? (isHighContrast ? 'text-white' : 'text-slate-700') : 'text-white';
+  const linkTone = solid ? (isHighContrast ? 'text-white' : 'text-slate-700') : 'text-white';
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `font-display text-sm font-semibold transition hover:text-[#EDA700] ${linkTone} ${isActive ? 'text-[#EDA700]!' : ''}`;
 
@@ -39,7 +42,7 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
     <>
       <header
         className={`fixed inset-x-0 top-0 z-30 transition-all duration-300 ${
-          isScrolled
+          solid
             ? isHighContrast
               ? 'border-b border-white bg-black py-2'
               : 'bg-white/90 py-2.5 shadow-md backdrop-blur-xl'
@@ -48,7 +51,7 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link to="/" aria-label="Duall Engenharia, página inicial">
-            <DuallLogo isDark={isHighContrast ? true : !isScrolled} />
+            <DuallLogo isDark={isHighContrast ? true : !solid} />
           </Link>
 
           <nav aria-label="Principal" className="hidden items-center gap-5 xl:gap-8 lg:flex">
@@ -85,7 +88,7 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
               target="_blank"
               rel="noopener noreferrer"
               className={`whitespace-nowrap rounded-full border border-[#EDA700] px-4 py-1.5 text-sm font-semibold transition hover:bg-[#EDA700] hover:text-slate-900 ${
-                isScrolled && !isHighContrast ? 'text-[#a87400]' : 'text-[#EDA700]'
+                solid && !isHighContrast ? 'text-[#a87400]' : 'text-[#EDA700]'
               }`}
             >
               Trabalhe conosco
@@ -107,9 +110,9 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
             aria-controls="menu-mobile"
           >
             {mobileOpen ? (
-              <X size={24} className={isScrolled ? 'text-slate-800' : 'text-white'} />
+              <X size={24} className={solid ? 'text-slate-800' : 'text-white'} />
             ) : (
-              <Menu size={24} className={isScrolled ? 'text-slate-800' : 'text-white'} />
+              <Menu size={24} className={solid ? 'text-slate-800' : 'text-white'} />
             )}
           </button>
         </div>

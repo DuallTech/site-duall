@@ -148,80 +148,6 @@
   }
 }
 
-/* Duall Dynamic: celular animado (ciclo de 12s = 3 páginas de 4s) */
-@keyframes dd-float {
-  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
-  50% { transform: translateY(-14px) rotate(1.2deg); }
-}
-@keyframes dd-page {
-  0% { opacity: 0; transform: translateX(16px); }
-  4%, 30% { opacity: 1; transform: none; }
-  34%, 100% { opacity: 0; transform: translateX(-16px); }
-}
-@keyframes dd-draw {
-  0% { stroke-dashoffset: 1; }
-  14%, 100% { stroke-dashoffset: 0; }
-}
-@keyframes dd-line {
-  0% { transform: scaleX(0); }
-  10%, 100% { transform: scaleX(1); }
-}
-@keyframes dd-ping {
-  0% { transform: scale(1); opacity: 0.55; }
-  70%, 100% { transform: scale(3.4); opacity: 0; }
-}
-@keyframes dd-scan {
-  0% { transform: translateY(0); opacity: 0; }
-  10%, 90% { opacity: 0.8; }
-  100% { transform: translateY(114px); opacity: 0; }
-}
-@keyframes dd-dot {
-  0%, 30% { opacity: 1; }
-  34%, 100% { opacity: 0; }
-}
-@keyframes dd-tap {
-  0%, 70%, 100% { transform: scale(1); }
-  76% { transform: scale(0.94); }
-  84% { transform: scale(1.03); }
-}
-@keyframes dd-chip {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.dd-float { animation: dd-float 7s ease-in-out infinite; }
-.dd-page { animation: dd-page 12s ease-in-out infinite both; animation-delay: calc(var(--p) * 4s); }
-.dd-draw {
-  stroke-dasharray: 1;
-  animation: dd-draw 12s ease-in-out infinite both;
-  animation-delay: calc(var(--p) * 4s + 0.35s + var(--l, 0) * 0.25s);
-}
-.dd-line, .dd-tap, .dd-ping { transform-box: fill-box; }
-.dd-line {
-  transform-origin: left center;
-  animation: dd-line 12s ease-out infinite both;
-  animation-delay: calc(var(--p) * 4s + 0.5s + var(--l, 0) * 0.12s);
-}
-.dd-ping {
-  transform-origin: center;
-  animation: dd-ping 2.2s ease-out infinite;
-  animation-delay: calc(var(--p) * 4s + 1.2s);
-}
-.dd-scan { animation: dd-scan 4s linear infinite; }
-.dd-dot { opacity: 0; animation: dd-dot 12s linear infinite; animation-delay: calc(var(--p) * 4s); }
-.dd-tap { transform-origin: center; animation: dd-tap 4s ease-in-out infinite; }
-.dd-chip { animation: dd-chip 5s ease-in-out infinite; animation-delay: calc(var(--p) * -1.6s); }
-
-/* Sem animação: mostra só a primeira página, já desenhada. */
-@media (prefers-reduced-motion: reduce) {
-  .dd-float, .dd-draw, .dd-line, .dd-ping, .dd-scan, .dd-dot, .dd-tap, .dd-chip { animation: none !important; }
-  .dd-page { animation: none !important; opacity: 0; }
-  .dd-page[data-first] { opacity: 1; }
-  .dd-ping, .dd-scan { display: none; }
-  .dd-dot { opacity: 0; }
-  .dd-dot[data-first] { opacity: 1; }
-}
-
 /* Seção de conteúdo técnico: identidade de prancha de engenharia */
 .bg-blueprint {
   background-color: #eaf0f6;
@@ -329,9 +255,20 @@
 }
 
 /* Texto vazado claro (marca gigante, palavras-fantasma) */
+.bg-grid-light {
+  background-image:
+    linear-gradient(rgba(49, 86, 118, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 86, 118, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+}
+.text-outline-dark {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(49, 86, 118, 0.14);
+}
 .text-outline-light {
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.1);
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.18);
 }
 
 /* Cantoneiras de desenho técnico em volta de imagens */
@@ -359,3 +296,147 @@
 
 /* Âncoras (#unidades, #clientes) não ficam escondidas pelo cabeçalho fixo */
 [id] { scroll-margin-top: 7rem; }
+
+/* ===== Fundo técnico do hero (HeroSkyline) =====
+   Ciclo de 12s: primeiro a água (azul) entra em operação, depois a elétrica (dourado). */
+@keyframes bp-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes bp-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes bp-phase {
+  0%, 44% { opacity: 1; }
+  52%, 92% { opacity: 0.22; }
+  100% { opacity: 1; }
+}
+@keyframes bp-branch {
+  0% { stroke-dashoffset: 1; opacity: 0.2; }
+  10%, 44% { stroke-dashoffset: 0; opacity: 1; }
+  52%, 92% { stroke-dashoffset: 0; opacity: 0.35; }
+  100% { stroke-dashoffset: 1; opacity: 0.2; }
+}
+@keyframes bp-spin {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes bp-drop {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(46px); opacity: 0; }
+}
+@keyframes bp-ping {
+  from { transform: scale(0.6); opacity: 1; }
+  to { transform: scale(2.4); opacity: 0; }
+}
+@keyframes bp-magnify {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(0, 72px); }
+  50% { transform: translate(0, 108px); }
+  75% { transform: translate(0, 144px); }
+}
+@keyframes bp-rise {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes bp-sweep {
+  from { transform: translateX(0); }
+  to { transform: translateX(1900px); }
+}
+@keyframes bp-trolley {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(150px); }
+}
+@keyframes bp-flow {
+  to { stroke-dashoffset: -28; }
+}
+@keyframes bp-scan {
+  0% { transform: translateY(0); opacity: 0; }
+  12%, 85% { opacity: 1; }
+  100% { transform: translateY(-600px); opacity: 0; }
+}
+@keyframes bp-glow {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+
+.bp-draw {
+  stroke-dasharray: 1;
+  animation: bp-draw 2.2s cubic-bezier(0.6, 0, 0.2, 1) both;
+  animation-delay: var(--d, 0s);
+}
+.bp-fade { animation: bp-fade 1s ease-out both; animation-delay: var(--d, 0s); }
+.bp-phase-a { animation: bp-phase 12s ease-in-out infinite; }
+.bp-phase-b { animation: bp-phase 12s ease-in-out infinite; animation-delay: -6s; }
+.bp-spin { animation: bp-spin 14s linear infinite; }
+.bp-drop { animation: bp-drop 1.8s ease-in infinite; }
+.bp-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bp-ping 2s ease-out infinite;
+}
+.bp-magnify { animation: bp-magnify 8s ease-in-out infinite; }
+.bp-rise {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: bp-rise 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0s);
+}
+.bp-sweep { animation: bp-sweep 10s linear infinite; }
+.bp-trolley { animation: bp-trolley 9s ease-in-out infinite; }
+.bp-phase-c { animation: bp-phase 12s ease-in-out infinite; animation-delay: -3s; }
+.bp-flow { stroke-dasharray: 2 12; animation: bp-flow 1.4s linear infinite; }
+.bp-scan { animation: bp-scan 7s ease-in-out infinite; }
+.bp-branch {
+  stroke-dasharray: 1;
+  animation: bp-branch 12s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.bp-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bp-glow 3s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-draw, .bp-fade, .bp-phase-a, .bp-phase-b, .bp-phase-c, .bp-flow, .bp-scan, .bp-branch, .bp-glow, .bp-rise, .bp-sweep, .bp-trolley, .bp-spin, .bp-drop, .bp-ping, .bp-magnify { animation: none !important; }
+  .bp-branch { stroke-dashoffset: 0; }
+  .bp-pulse { display: none; }
+}
+
+/* Selos que flutuam levemente, defasados */
+@keyframes chip-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+.chip-float { animation: chip-float 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .chip-float { animation: none !important; } }
+
+/* Página A Duall: anel de princípios, carrossel em sentido oposto e parallax */
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+.ring-spin, .ring-spin-rev { transform-box: view-box; transform-origin: 150px 150px; }
+.ring-spin { animation: ring-spin 60s linear infinite; }
+.ring-spin-rev { animation: ring-spin 40s linear infinite reverse; }
+
+@keyframes ticker-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.animate-ticker-reverse { animation: ticker-reverse 65s linear infinite; }
+.animate-ticker-reverse:hover { animation-play-state: paused; }
+
+@keyframes parallax-y {
+  from { transform: scale(1.15) translateY(-5%); }
+  to { transform: scale(1.15) translateY(5%); }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax-img { animation: parallax-y linear both; animation-timeline: view(); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-spin, .ring-spin-rev, .animate-ticker-reverse { animation: none !important; }
+}
