@@ -17,9 +17,9 @@ export default function HomePage() {
       />
       <HeroSection />
       <NumbersBand blend />
+      <AboutSummarySection />
       <FeaturedProjectsSection />
       <SolutionsSection />
-      <AboutSummarySection />
       <ContentFaqSection />
       <ContactSection />
     </>

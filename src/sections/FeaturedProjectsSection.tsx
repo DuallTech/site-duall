@@ -1,175 +1,154 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin, Ruler } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Building2, FileText, MapPin, Ruler } from 'lucide-react';
 
-import { ButtonLink, Container, Eyebrow } from '../components/ui';
 import { PROJECTS, projectImage, type Project } from '../content/projects';
+import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from './animations';
 
-const arrowClass =
-  'flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#315676]/25 bg-white text-[#315676] shadow-md transition hover:border-[#315676] hover:bg-[#315676] hover:text-white disabled:pointer-events-none disabled:opacity-30';
+const viewport = { once: true, margin: '-100px' } as const;
 
-/** Card em formato de pôster: a foto ocupa tudo e os detalhes sobem ao passar o mouse (sempre visíveis no toque). */
-function PosterCard({ project, priority }: { project: Project; priority: boolean }) {
-  const image = projectImage(project.imageFileName);
-
+/** Detalhes do projeto (área, localização, cliente) que aparecem sobre a foto ao passar o mouse. */
+function ProjectDetails({ project, className }: { project: Project; className: string }) {
   return (
-    <article className="group relative aspect-[4/5] overflow-hidden rounded-3xl bg-slate-900 shadow-[0_20px_50px_-24px_rgba(13,25,41,0.55)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_34px_60px_-24px_rgba(13,25,41,0.7)]">
-      {image && (
-        <img
-          src={image}
-          alt={`${project.title}, ${project.category.toLowerCase()}, projeto de instalações desenvolvido pela Duall Engenharia.`}
-          loading={priority ? 'eager' : 'lazy'}
-          decoding="async"
-          className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110 ${project.imageClassName ?? 'object-center'}`}
-        />
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0d1929] via-[#0d1929]/35 to-transparent transition-opacity duration-500 group-hover:opacity-95" aria-hidden="true" />
-      {/* Área clicável do card inteiro (o título acima é o link acessível) */}
-      <Link
-        to={`/projetos/${project.slug}`}
-        tabIndex={-1}
-        aria-hidden="true"
-        className="absolute inset-0 z-20"
-      />
-
-      <span className="absolute left-4 top-4 rounded-full border border-white/30 bg-white/15 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur">
-        {project.category}
-      </span>
-
-      <div className="absolute inset-x-0 bottom-0 space-y-3 p-6 text-white">
-        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#EDA700]">{project.client}</p>
-        <h3 className="font-display text-2xl font-extrabold leading-tight">
-          <Link to={`/projetos/${project.slug}`}>{project.title}</Link>
-        </h3>
-
-        <div className="grid grid-rows-[1fr] transition-all duration-500 md:grid-rows-[0fr] md:group-focus-within:grid-rows-[1fr] md:group-hover:grid-rows-[1fr]">
-          <div className="overflow-hidden">
-            <ul className="space-y-1.5 pb-1 pt-1 text-sm text-slate-200">
-              {project.location && (
-                <li className="flex items-center gap-2">
-                  <MapPin size={14} className="text-[#EDA700]" aria-hidden="true" /> {project.location}
-                </li>
-              )}
-              {project.area && (
-                <li className="flex items-center gap-2">
-                  <Ruler size={14} className="text-[#EDA700]" aria-hidden="true" /> {project.area}
-                </li>
-              )}
-            </ul>
-            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#EDA700] px-4 py-2 text-xs font-bold text-slate-900">
-              Ver projeto <ArrowUpRight size={14} aria-hidden="true" />
-            </span>
+    <div className={className}>
+      <div className="space-y-2">
+        {project.area && (
+          <div className="flex items-center gap-2 text-[12px] leading-5">
+            <Ruler size={14} className="shrink-0 text-[#9FD3FF]" />
+            <span>Area: {project.area}</span>
           </div>
+        )}
+        {project.location && (
+          <div className="flex items-center gap-2 text-[12px] leading-5">
+            <MapPin size={14} className="shrink-0 text-[#9FD3FF]" />
+            <span>Localizacao: {project.location}</span>
+          </div>
+        )}
+        <div className="flex items-center gap-2 text-[12px] leading-5">
+          <Building2 size={14} className="shrink-0 text-[#9FD3FF]" />
+          <span>Cliente: {project.client}</span>
         </div>
       </div>
-    </article>
+    </div>
   );
 }
 
-/** Bloco 2. Todos os projetos do portfólio em carrossel, três por vez. Todos os cards ficam no HTML. */
+/** Bloco 2. Os cinco primeiros projetos em destaque na home, com link para a página completa de projetos. */
 export default function FeaturedProjectsSection() {
-  const trackRef = useRef<HTMLUListElement>(null);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(true);
-  const [progress, setProgress] = useState(0.1);
-
-  const update = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    setCanPrev(track.scrollLeft > 4);
-    setCanNext(track.scrollLeft + track.clientWidth < track.scrollWidth - 4);
-    setProgress(Math.min(1, (track.scrollLeft + track.clientWidth) / track.scrollWidth));
-  }, []);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    update();
-    track.addEventListener('scroll', update, { passive: true });
-    const observer = new ResizeObserver(update);
-    observer.observe(track);
-    return () => {
-      track.removeEventListener('scroll', update);
-      observer.disconnect();
-    };
-  }, [update]);
-
-  const page = (direction: 1 | -1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    track.scrollBy({ left: direction * (track.clientWidth + 20), behavior: 'smooth' });
-  };
+  const projects = useMemo(
+    () => PROJECTS.map((project) => ({ ...project, imageUrl: projectImage(project.imageFileName) })).filter((project) => Boolean(project.imageUrl)),
+    [],
+  );
 
   return (
-    <section aria-labelledby="projetos-destaque" className="relative overflow-hidden bg-[#f6f3ee] py-24">
-      <Container>
-        <div className="reveal mb-14 grid items-end gap-8 lg:grid-cols-12">
-          <div className="space-y-5 lg:col-span-8">
-            <Eyebrow>Portfólio</Eyebrow>
+    <section
+      id="portfolio"
+      aria-labelledby="projetos-destaque"
+      className="border-t border-slate-200/80 bg-white py-24"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-14 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            variants={fadeInUpVariants}
+            className="max-w-3xl text-left"
+          >
+            <div className="flex items-center gap-3 text-[11px] font-mono font-bold uppercase tracking-[0.28em] text-[#315676]">
+              <span className="h-px w-5 bg-[#315676]" />
+              <span>Portfolio de Obras</span>
+            </div>
             <h2
               id="projetos-destaque"
-              className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-[#2D3845] md:text-5xl"
+              className="mt-5 font-display text-3xl font-extrabold leading-[1] tracking-tight text-[#2D3845] md:text-4xl lg:text-[3.35rem]"
             >
-              Projetos de instalações em empreendimentos de médio e alto padrão
+              Projetos ja desenvolvidos pela Duall.
             </h2>
-            <p className="max-w-2xl text-lg leading-relaxed text-slate-600">
-              O portfólio da Duall Engenharia reúne projetos de instalações para empreendimentos residenciais, comerciais
-              e mistos de alta complexidade técnica. Em cada projeto, o site apresenta o desafio do empreendimento, a
-              solução proposta pela Duall e a etapa em que a equipe atuou.
-            </p>
-          </div>
+          </motion.div>
 
-          <div className="flex items-end gap-4 lg:col-span-4 lg:justify-end">
-            <p className="text-outline select-none font-display text-[6.5rem] font-extrabold leading-[0.8]" aria-hidden="true">
-              {PROJECTS.length}
-            </p>
-            <p className="pb-2 font-mono text-[11px] font-bold uppercase leading-snug tracking-[0.2em] text-[#315676]">
-              projetos
-              <br />
-              no portfólio
-            </p>
-          </div>
-        </div>
-
-        <div className="reveal" role="region" aria-roledescription="carrossel" aria-label="Projetos do portfólio">
-          <ul
-            ref={trackRef}
-            className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-1 pb-8 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewport}
+            variants={fadeInUpVariants}
+            className="shrink-0"
           >
-            {PROJECTS.map((project, i) => (
-              <li
-                key={project.slug}
-                className="w-[85%] shrink-0 snap-start sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]"
+            <Link
+              to="/projetos"
+              className="inline-flex items-center justify-center gap-2.5 rounded-md bg-[#315676] px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_4px_16px_rgba(49,86,118,0.18)] transition-all duration-200 hover:-translate-y-px hover:bg-[#254261]"
+            >
+              <FileText size={16} aria-hidden="true" />
+              <span>Ver Portfolio</span>
+            </Link>
+          </motion.div>
+        </div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewport}
+          variants={staggerContainerVariants}
+          className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5"
+        >
+          {projects.slice(0, 5).map((project, index) => {
+            const isFeatured = index === 0;
+            const isSideFeature = index === 1;
+            const wrapper = index < 2 ? 'lg:col-span-6' : 'lg:col-span-4';
+            const imageHeight = index < 2 ? 'h-[280px] md:h-[320px] lg:h-[360px]' : 'h-[210px] md:h-[225px]';
+
+            return (
+              <motion.article
+                key={project.id}
+                variants={staggerItemVariants}
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
+                className={`${wrapper} group h-full overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-[0_6px_22px_rgba(15,23,42,0.07)]`}
               >
-                <PosterCard project={project} priority={i < 3} />
-              </li>
-            ))}
-          </ul>
+                <div className={`relative overflow-hidden ${imageHeight}`}>
+                  <img
+                    src={project.imageUrl}
+                    alt={`Projeto ${project.title}`}
+                    loading={index < 3 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
+                      project.imageClassName ?? 'object-center'
+                    }`}
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+                  <ProjectDetails
+                    project={project}
+                    className="pointer-events-none absolute inset-x-4 bottom-4 z-10 translate-y-3 rounded-2xl border border-white/20 bg-[#0e2135]/88 p-3 text-white opacity-0 shadow-[0_18px_50px_rgba(6,17,31,0.28)] backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+                  />
+                  <div className="absolute left-4 top-4 rounded-full bg-[#315676] px-3.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md">
+                    {project.category}
+                  </div>
+                </div>
 
-          <div className="flex items-center gap-6">
-            <div className="h-1 flex-1 overflow-hidden rounded-full bg-[#315676]/15" aria-hidden="true">
-              <div
-                className="h-full origin-left rounded-full bg-gradient-to-r from-[#315676] to-[#EDA700] transition-transform duration-500"
-                style={{ transform: `scaleX(${progress})` }}
-              />
-            </div>
-            <div className="flex gap-3">
-              <button type="button" onClick={() => page(-1)} disabled={!canPrev} aria-label="Projetos anteriores" className={arrowClass}>
-                <ChevronLeft size={22} aria-hidden="true" />
-              </button>
-              <button type="button" onClick={() => page(1)} disabled={!canNext} aria-label="Próximos projetos" className={arrowClass}>
-                <ChevronRight size={22} aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        </div>
+                <div className="bg-white px-5 py-4 md:px-5 md:py-5">
+                  <h3
+                    className={`font-display font-extrabold leading-tight tracking-tight text-[#2D3845] ${
+                      isFeatured || isSideFeature
+                        ? 'text-[1.8rem] md:text-[2.1rem]'
+                        : 'text-[1.28rem] md:text-[1.45rem]'
+                    }`}
+                  >
+                    {project.title}
+                  </h3>
 
-        <div className="mt-12 flex justify-center">
-          <ButtonLink to="/projetos" variant="dark">
-            Ver todos os projetos
-          </ButtonLink>
-        </div>
-      </Container>
+                  <div className="mt-3 flex items-center gap-2 text-[#5E6B7A]">
+                    <Building2 size={16} className="shrink-0 text-[#315676]" />
+                    <p className={`${isFeatured || isSideFeature ? 'text-[15px] leading-7' : 'text-[14px] leading-6'}`}>
+                      Cliente: <span className="font-semibold text-[#315676]">{project.client}</span>
+                    </p>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
+        </motion.div>
+      </div>
     </section>
   );
 }
