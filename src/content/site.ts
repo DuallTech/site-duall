@@ -29,9 +29,9 @@ export const SITE = {
 } as const;
 
 export const NAV = [
+  { label: 'A Duall', href: '/a-duall' },
   { label: 'Projetos', href: '/projetos' },
   { label: 'Soluções', href: '/solucoes' },
-  { label: 'A Duall', href: '/a-duall' },
   { label: 'Conteúdo', href: '/conteudo' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contato', href: '/contato' },

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Briefcase, Instagram, MapPin, Phone, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Briefcase, Instagram, MapPin, Phone } from 'lucide-react';
 
 import ContactForm from '../components/ContactForm';
 import { Container } from '../components/ui';
@@ -79,18 +79,6 @@ export default function ContactSection({ asPage = false }: { asPage?: boolean })
                 </a>
               </InfoRow>
             </ul>
-
-            <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/20 p-5 text-xs leading-relaxed text-slate-400">
-              <ShieldCheck size={18} className="mt-0.5 shrink-0 text-[#EDA700]" aria-hidden="true" />
-              <p>
-                Seus dados são usados apenas para o retorno deste contato e não são compartilhados com terceiros. Saiba
-                mais na{' '}
-                <Link to="/politica-de-privacidade" className="font-semibold text-[#EDA700] underline">
-                  Política de privacidade
-                </Link>
-                .
-              </p>
-            </div>
 
             {!asPage && (
               <Link to="/contato" className="group inline-flex items-center gap-2 text-sm font-bold text-[#EDA700]">

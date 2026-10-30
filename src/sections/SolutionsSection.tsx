@@ -1,9 +1,31 @@
-import type { MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Box, Droplets, FileSearch, Network, Zap, type LucideIcon } from 'lucide-react';
+import {
+  ArrowRight,
+  Blocks,
+  Box,
+  Droplet,
+  Droplets,
+  FileSearch,
+  Flame,
+  Landmark,
+  Layers,
+  Network,
+  ShieldCheck,
+  SunMedium,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react';
 
+import imgBim from '../assets/images/atuacao/bim-modelagem3d.png';
+import imgBombeiro from '../assets/images/atuacao/corpo-de-bombeiro.png';
+import imgConcessionaria from '../assets/images/atuacao/aprovacao-concessionaria.png';
+import imgEletrica from '../assets/images/atuacao/projeto-instalacao-eletrica.png';
+import imgHidraulica from '../assets/images/atuacao/projeto-hidraulica.png';
+import imgIncendio from '../assets/images/atuacao/projeto-combate-incendio.png';
+import imgSistemas from '../assets/images/atuacao/instalacao-sistemas.png';
+import imgSolar from '../assets/images/atuacao/projeto-aquecimento-solar.png';
 import { ButtonLink, Container, Eyebrow } from '../components/ui';
-import { SOLUTIONS } from '../content/solutions';
 
 export const SOLUTION_ICONS: Record<string, LucideIcon> = {
   eletrica: Zap,
@@ -13,25 +35,179 @@ export const SOLUTION_ICONS: Record<string, LucideIcon> = {
   'consultoria-atp': FileSearch,
 };
 
-/** Luz que acompanha o mouse e leve inclinação 3D do card. */
-const trackPointer = (event: MouseEvent<HTMLElement>) => {
-  const el = event.currentTarget;
-  const rect = el.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-  el.style.setProperty('--mx', `${x}px`);
-  el.style.setProperty('--my', `${y}px`);
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  el.style.setProperty('--rx', `${((0.5 - y / rect.height) * 7).toFixed(2)}deg`);
-  el.style.setProperty('--ry', `${((x / rect.width - 0.5) * 9).toFixed(2)}deg`);
-};
+interface Area {
+  id: string;
+  eyebrow: string;
+  title: string;
+  icon: LucideIcon;
+  /** Página interna correspondente; áreas sem página própria levam à lista de soluções. */
+  to: string;
+  images: string[];
+}
 
-const resetTilt = (event: MouseEvent<HTMLElement>) => {
-  event.currentTarget.style.setProperty('--rx', '0deg');
-  event.currentTarget.style.setProperty('--ry', '0deg');
-};
+/** As oito áreas de atuação. Cada card alterna três fotos. */
+const AREAS: Area[] = [
+  {
+    id: 'instalacoes-eletricas',
+    eyebrow: 'Projetos de',
+    title: 'Instalações Elétricas',
+    icon: Zap,
+    to: '/solucoes/eletrica',
+    images: [
+      imgEletrica,
+      'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+  {
+    id: 'instalacoes-para-sistemas',
+    eyebrow: 'Projetos de',
+    title: 'Instalações para Sistemas',
+    icon: Blocks,
+    to: '/solucoes/sistemas',
+    images: [
+      imgSistemas,
+      'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+  {
+    id: 'instalacoes-hidraulicas',
+    eyebrow: 'Projetos de',
+    title: 'Instalações Hidráulicas',
+    icon: Droplet,
+    to: '/solucoes/hidraulica',
+    images: [
+      imgHidraulica,
+      'https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1581094751180-2292a8cf2723?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+  {
+    id: 'projetos-bim',
+    eyebrow: 'Projetos',
+    title: 'BIM — Modelagem 3D',
+    icon: Layers,
+    to: '/solucoes/bim',
+    images: [
+      imgBim,
+      'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+  {
+    id: 'combate-incendio',
+    eyebrow: 'Projetos de',
+    title: 'Combate a Incêndio',
+    icon: Flame,
+    to: '/solucoes',
+    images: [
+      imgIncendio,
+      'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+  {
+    id: 'corpo-de-bombeiro',
+    eyebrow: 'Aprovação',
+    title: 'Corpo de Bombeiro',
+    icon: ShieldCheck,
+    to: '/solucoes',
+    images: [
+      imgBombeiro,
+      'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+  {
+    id: 'aquecimento-solar',
+    eyebrow: 'Projetos de',
+    title: 'Aquecimento Solar',
+    icon: SunMedium,
+    to: '/solucoes',
+    images: [
+      imgSolar,
+      'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+  {
+    id: 'aprovacao-concessionaria',
+    eyebrow: 'Aprovação',
+    title: 'Concessionária',
+    icon: Landmark,
+    to: '/solucoes',
+    images: [
+      imgConcessionaria,
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+    ],
+  },
+];
 
-/** Bloco 3. Cards compactos com frase curta; o texto completo fica na página de cada solução. */
+const ROTATE_MS = 7000;
+
+/** Card com três fotos que se alternam em crossfade. Cada card começa com um atraso, para não trocar todos ao mesmo tempo. */
+function AreaCard({ area, index }: { area: Area; index: number }) {
+  const { icon: Icon, images } = area;
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let interval: number | undefined;
+    const timeout = window.setTimeout(() => {
+      interval = window.setInterval(() => {
+        setCurrent((value) => (value + 1) % images.length);
+      }, ROTATE_MS);
+    }, index * 500);
+
+    return () => {
+      window.clearTimeout(timeout);
+      if (interval !== undefined) window.clearInterval(interval);
+    };
+  }, [images.length, index]);
+
+  return (
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_6px_22px_rgba(15,23,42,0.07)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_-24px_rgba(237,167,0,0.45)]">
+      <div className="relative h-44 overflow-hidden bg-slate-200">
+        {images.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-1000 ease-out group-hover:scale-105 ${
+              i === current ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" aria-hidden="true" />
+        <span className="absolute bottom-0 left-4 flex h-10 w-10 translate-y-1/2 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#315676] shadow-md transition duration-500 group-hover:rotate-6 group-hover:bg-[#EDA700] group-hover:text-slate-900">
+          <Icon size={18} aria-hidden="true" />
+        </span>
+      </div>
+
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-8">
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#1992BB]">{area.eyebrow}</p>
+        <h3 className="mt-1.5 font-display text-lg font-extrabold leading-tight text-[#1c2e3f]">
+          <Link to={area.to} className="after:absolute after:inset-0 after:z-10 after:content-['']">
+            {area.title}
+          </Link>
+        </h3>
+        <span className="mt-auto inline-flex items-center gap-2 border-t border-slate-200 pt-3 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500 transition group-hover:text-[#EDA700]">
+          Ver detalhes
+          <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+        </span>
+      </div>
+    </article>
+  );
+}
+
+/** Bloco 3. Oito áreas de atuação com fotos que se alternam; o texto completo fica nas páginas de soluções. */
 export default function SolutionsSection() {
   return (
     <section aria-labelledby="solucoes" className="relative isolate overflow-hidden bg-[#0d1929] py-20 text-white">
@@ -56,52 +232,16 @@ export default function SolutionsSection() {
           </div>
           <p className="leading-relaxed text-slate-300 lg:col-span-6">
             O escopo da Duall Engenharia cobre as disciplinas de instalações de um empreendimento: da entrada de energia
-            e de água à infraestrutura para sistemas, com modelagem BIM e avaliação técnica de projetos de
-            terceiros.
+            e de água à infraestrutura para sistemas, com modelagem BIM e avaliação técnica de projetos de terceiros.
           </p>
         </div>
 
-        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-          {SOLUTIONS.map((solution, index) => {
-            const Icon = SOLUTION_ICONS[solution.slug] ?? Box;
-            return (
-              <li key={solution.slug} className="reveal">
-                <article
-                  onMouseMove={trackPointer}
-                  onMouseLeave={resetTilt}
-                  className="group relative flex h-full min-h-[15rem] flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-[#111f33] p-5 transition-[transform,border-color,box-shadow] duration-200 [transform:perspective(900px)_rotateX(var(--rx,0deg))_rotateY(var(--ry,0deg))] hover:border-[#EDA700]/60 hover:shadow-[0_24px_50px_-20px_rgba(237,167,0,0.4)]"
-                >
-                  {/* Luz que segue o mouse */}
-                  <span
-                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(320px_circle_at_var(--mx,50%)_var(--my,50%),rgba(237,167,0,0.14),transparent_65%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                    aria-hidden="true"
-                  />
-
-                  <div className="relative flex items-center justify-between">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EDA700]/15 text-[#EDA700] transition duration-500 group-hover:rotate-6 group-hover:scale-110 group-hover:bg-[#EDA700] group-hover:text-slate-900">
-                      <Icon size={20} aria-hidden="true" />
-                    </span>
-                    <span className="font-mono text-xs font-bold tracking-widest text-white/25 transition group-hover:text-[#EDA700]">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-
-                  <h3 className="font-display text-lg font-bold leading-tight">
-                    <Link to={`/solucoes/${solution.slug}`} className="after:absolute after:inset-0 after:z-10 after:content-['']">
-                      {solution.name}
-                    </Link>
-                  </h3>
-
-                  <p className="relative text-sm leading-relaxed text-slate-300">{solution.teaser}</p>
-
-                  <span className="relative mt-auto inline-flex items-center gap-1 pt-1 text-sm font-bold text-[#EDA700]">
-                    Saiba mais
-                    <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1" />
-                  </span>
-                </article>
-              </li>
-            );
-          })}
+        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {AREAS.map((area, index) => (
+            <li key={area.id} className="reveal">
+              <AreaCard area={area} index={index} />
+            </li>
+          ))}
         </ul>
 
         <div className="mt-12 flex justify-center">
