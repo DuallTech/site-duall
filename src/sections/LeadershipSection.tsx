@@ -8,7 +8,6 @@ import photo201 from '../assets/images/diretores/DSC00201.jpg';
 import photo307 from '../assets/images/diretores/DSC00307.jpg';
 import photo316 from '../assets/images/diretores/DSC00316.jpg';
 import photo321 from '../assets/images/diretores/DSC00321.jpg';
-import photo358 from '../assets/images/diretores/DSC00358.jpg';
 import photo384 from '../assets/images/diretores/DSC00384.jpg';
 import photo439 from '../assets/images/diretores/DSC00439.jpg';
 import photo465 from '../assets/images/diretores/DSC00465.jpg';
@@ -32,9 +31,16 @@ type Cell =
   | { kind: 'tile'; tile: Tile };
 
 const SLIDES: Cell[][] = [
-  // Grupo à esquerda
+  // Quadro de frase à esquerda (sem foto em grupo neste grid)
   [
-    { kind: 'group', src: photo358 },
+    {
+      kind: 'tile',
+      tile: {
+        title: 'Liderança presente',
+        text: 'Coordenação técnica próxima, do primeiro estudo à entrega final.',
+        tone: 'gold',
+      },
+    },
     { kind: 'photo', src: photo384 },
     { kind: 'photo', src: photo040 },
     { kind: 'photo', src: photo201 },
