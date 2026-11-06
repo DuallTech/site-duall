@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import { AnimatePresence, motion, type Variants } from 'motion/react';
 import { ArrowLeft, ArrowRight, Quote } from 'lucide-react';
 
@@ -122,13 +122,15 @@ function TileCell({ tile, className = '' }: { tile: Tile; className?: string }) 
   return (
     <motion.div
       variants={cellVariants}
-      className={`relative flex aspect-[3/4] min-w-0 flex-col md:aspect-[21/20] justify-between overflow-hidden rounded-xl p-4 lg:p-5 ${className} ${
+      className={`relative flex aspect-[3/4] min-w-0 flex-col md:aspect-[21/20] justify-between overflow-hidden rounded-xl p-3 md:p-4 lg:p-5 ${className} ${
         gold ? 'bg-[#EDA700] text-slate-900' : 'bg-white/[0.04] text-white ring-1 ring-white/10'
       }`}
     >
       <Quote size={24} className={gold ? 'text-slate-900/70' : 'text-[#EDA700]'} aria-hidden="true" />
       <div>
-        <p className="font-display text-lg font-extrabold leading-tight xl:text-xl">{tile.title}</p>
+        <p className="break-words font-display text-[15px] font-extrabold leading-tight min-[400px]:text-base md:text-lg xl:text-xl">
+          {tile.title}
+        </p>
         <p className={`mt-2 text-sm leading-relaxed ${gold ? 'text-slate-900/80' : 'text-slate-400'}`}>{tile.text}</p>
       </div>
     </motion.div>
@@ -139,6 +141,8 @@ function TileCell({ tile, className = '' }: { tile: Tile; className?: string }) 
 function TeamGallery() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ x: number; left: number; moved: boolean } | null>(null);
   const n = SLIDES.length;
 
   const go = (target: number, direction: 1 | -1) => {
@@ -150,7 +154,59 @@ function TeamGallery() {
 
   return (
     <div className="mt-12">
-      <div className="relative overflow-hidden">
+      {/* Mobile: faixa horizontal com a mesma ordem do desktop, 2 por vez, rolando para o lado */}
+      <div
+        ref={stripRef}
+        onPointerDown={(e) => {
+          const el = stripRef.current;
+          if (!el || e.pointerType === 'touch') return;
+          dragRef.current = { x: e.clientX, left: el.scrollLeft, moved: false };
+        }}
+        onPointerMove={(e) => {
+          const el = stripRef.current;
+          const d = dragRef.current;
+          if (!el || !d) return;
+          const dx = e.clientX - d.x;
+          if (Math.abs(dx) > 3) {
+            d.moved = true;
+            el.style.scrollSnapType = 'none';
+          }
+          el.scrollLeft = d.left - dx;
+        }}
+        onPointerUp={() => {
+          const el = stripRef.current;
+          dragRef.current = null;
+          if (el) el.style.scrollSnapType = '';
+        }}
+        onPointerLeave={() => {
+          const el = stripRef.current;
+          dragRef.current = null;
+          if (el) el.style.scrollSnapType = '';
+        }}
+        className="-mx-4 flex cursor-grab touch-pan-x select-none snap-x snap-mandatory items-start gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden"
+      >
+        {SLIDES.flat().map((cell, i) => {
+          if (cell.kind === 'group')
+            return (
+              <div key={`m-${i}`} className="w-[calc(100%-2rem)] shrink-0 snap-start">
+                <PhotoCell src={cell.src} className="aspect-[3/2]" />
+              </div>
+            );
+          if (cell.kind === 'photo')
+            return (
+              <div key={`m-${i}`} className="w-[calc(50%-1.25rem)] shrink-0 snap-start">
+                <PhotoCell src={cell.src} className="aspect-[3/4]" />
+              </div>
+            );
+          return (
+            <div key={`m-${i}`} className="w-[calc(50%-1.25rem)] shrink-0 snap-start">
+              <TileCell tile={cell.tile} />
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="relative hidden overflow-hidden md:block">
         <AnimatePresence mode="wait" custom={dir} initial={false}>
           <motion.div
             key={index}
@@ -183,7 +239,7 @@ function TeamGallery() {
         </AnimatePresence>
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-6 hidden items-center justify-between gap-4 md:flex">
         <div className="flex items-center gap-2">
           {SLIDES.map((_, i) => (
             <button

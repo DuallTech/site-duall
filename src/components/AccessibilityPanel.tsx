@@ -82,7 +82,7 @@ export default function AccessibilityPanel({
       </a>
 
       {/* Floating Accessibility Trigger */}
-      <div className="fixed bottom-6 left-6 z-40 flex flex-col items-start gap-2">
+      <div className="fixed bottom-6 left-6 z-40 hidden flex-col items-start gap-2 md:flex">
         {isOpen && (
           <div
             className={`p-4 rounded-xl shadow-2xl border ${
