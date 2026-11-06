@@ -1,6 +1,7 @@
 import VideoCarousel from '../components/VideoCarousel';
 import { Container, Eyebrow, PageHero } from '../components/ui';
 import ClientsSection from '../sections/ClientsSection';
+import LeadershipSection from '../sections/LeadershipSection';
 import TestimonialsSection from '../sections/TestimonialsSection';
 import Seo from '../seo/Seo';
 import { breadcrumbLd } from '../seo/jsonld';
@@ -42,11 +43,12 @@ export function AboutPage() {
           </div>
 
           <div className="reveal">
-            <VideoCarousel isHighContrast={false} />
+            <VideoCarousel />
           </div>
         </Container>
       </section>
 
+      <LeadershipSection />
       <ClientsSection />
       <TestimonialsSection />
     </>
