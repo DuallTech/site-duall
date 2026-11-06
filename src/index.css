@@ -1,6 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
 @import "tailwindcss";
 
+/* Open editorial layout: clear photography and a quiet caption underneath. */
+.solution-gallery {
+  width: 100%;
+  min-width: 0;
+  margin-block: 1rem;
+}
+
+.solution-gallery-image {
+  border-radius: 3px;
+}
+
+@media (min-width: 1024px) {
+  .solution-intro {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .solution-gallery {
+    margin-block: 0;
+  }
+
+  .solution-intro-copy > div {
+    max-width: 94%;
+  }
+}
+
 @theme {
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Outfit", system-ui, sans-serif;
@@ -73,6 +99,10 @@
     scroll-behavior: auto !important;
   }
   
+  .animate-ticker {
+    animation: none !important;
+  }
+
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -106,4 +136,318 @@
 .high-contrast a {
   text-decoration: underline !important;
   color: #7dd3fc !important;
+}
+
+
+/* Grade técnica de fundo (seções escuras) */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+
+/* Entrada do hero: CSS puro, sem esperar o JavaScript (o texto é o LCP). */
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero-in {
+  animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Revelação ao rolar: scroll-driven animations, sem JS. Onde não há suporte, o conteúdo já aparece normal. */
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* Seção de conteúdo técnico: identidade de prancha de engenharia */
+.bg-blueprint {
+  background-color: #eaf0f6;
+  background-image:
+    linear-gradient(rgba(49, 86, 118, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 86, 118, 0.14) 1px, transparent 1px),
+    linear-gradient(rgba(49, 86, 118, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 86, 118, 0.07) 1px, transparent 1px);
+  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
+}
+
+@keyframes ct-write {
+  0% { transform: scaleX(0); }
+  35%, 85% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+@keyframes ct-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.ct-write { animation: ct-write 5s ease-in-out infinite; }
+.ct-cursor { animation: ct-cursor 1s steps(1) infinite; }
+
+/* Linhas que se desenham ao rolar (scroll-driven; sem suporte, aparecem prontas) */
+@keyframes draw-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .draw-x {
+      transform-origin: left center;
+      animation: draw-x linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-write, .ct-cursor { animation: none !important; }
+}
+
+/* ===== Identidade geral: transições, progresso e brilhos ===== */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.page-in { animation: page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Barra dourada de progresso de leitura (scroll-driven) */
+@keyframes scroll-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.scroll-progress {
+  display: none;
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: 3px;
+  background: linear-gradient(90deg, #eda700, #ffd36b);
+  transform-origin: left center;
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      display: block;
+      animation: scroll-grow linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+/* Manchas de luz que flutuam nas seções escuras */
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.12); }
+  66% { transform: translate(-30px, 24px) scale(0.94); }
+}
+.blob { animation: blob 16s ease-in-out infinite; }
+.blob-slow { animation: blob 24s ease-in-out infinite reverse; }
+
+/* Borda luminosa que gira (formulário) */
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes spin-angle { to { --angle: 360deg; } }
+.glow-border {
+  background: conic-gradient(from var(--angle), rgba(237, 167, 0, 0) 55%, #eda700 80%, rgba(237, 167, 0, 0) 100%);
+  animation: spin-angle 6s linear infinite;
+}
+
+/* Texto vazado claro (marca gigante, palavras-fantasma) */
+.bg-grid-light {
+  background-image:
+    linear-gradient(rgba(49, 86, 118, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(49, 86, 118, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+}
+.text-outline-dark {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(49, 86, 118, 0.14);
+}
+.text-outline-light {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.18);
+}
+
+/* Cantoneiras de desenho técnico em volta de imagens */
+.corner-marks > i {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: #eda700;
+  border-style: solid;
+  border-width: 0;
+  transition: transform 0.5s ease;
+}
+.corner-marks > i:nth-child(1) { top: -8px; left: -8px; border-top-width: 3px; border-left-width: 3px; }
+.corner-marks > i:nth-child(2) { top: -8px; right: -8px; border-top-width: 3px; border-right-width: 3px; }
+.corner-marks > i:nth-child(3) { bottom: -8px; left: -8px; border-bottom-width: 3px; border-left-width: 3px; }
+.corner-marks > i:nth-child(4) { bottom: -8px; right: -8px; border-bottom-width: 3px; border-right-width: 3px; }
+.corner-marks:hover > i:nth-child(1) { transform: translate(-4px, -4px); }
+.corner-marks:hover > i:nth-child(2) { transform: translate(4px, -4px); }
+.corner-marks:hover > i:nth-child(3) { transform: translate(-4px, 4px); }
+.corner-marks:hover > i:nth-child(4) { transform: translate(4px, 4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob, .blob-slow, .glow-border, .page-in { animation: none !important; }
+}
+
+/* Âncoras (#unidades, #clientes) não ficam escondidas pelo cabeçalho fixo */
+[id] { scroll-margin-top: 7rem; }
+
+/* ===== Fundo técnico do hero (HeroSkyline) =====
+   Ciclo de 12s: primeiro a água (azul) entra em operação, depois a elétrica (dourado). */
+@keyframes bp-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes bp-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes bp-phase {
+  0%, 44% { opacity: 1; }
+  52%, 92% { opacity: 0.22; }
+  100% { opacity: 1; }
+}
+@keyframes bp-branch {
+  0% { stroke-dashoffset: 1; opacity: 0.2; }
+  10%, 44% { stroke-dashoffset: 0; opacity: 1; }
+  52%, 92% { stroke-dashoffset: 0; opacity: 0.35; }
+  100% { stroke-dashoffset: 1; opacity: 0.2; }
+}
+@keyframes bp-spin {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes bp-drop {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(46px); opacity: 0; }
+}
+@keyframes bp-ping {
+  from { transform: scale(0.6); opacity: 1; }
+  to { transform: scale(2.4); opacity: 0; }
+}
+@keyframes bp-magnify {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(0, 72px); }
+  50% { transform: translate(0, 108px); }
+  75% { transform: translate(0, 144px); }
+}
+@keyframes bp-rise {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes bp-sweep {
+  from { transform: translateX(0); }
+  to { transform: translateX(1900px); }
+}
+@keyframes bp-trolley {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(150px); }
+}
+@keyframes bp-flow {
+  to { stroke-dashoffset: -28; }
+}
+@keyframes bp-scan {
+  0% { transform: translateY(0); opacity: 0; }
+  12%, 85% { opacity: 1; }
+  100% { transform: translateY(-600px); opacity: 0; }
+}
+@keyframes bp-glow {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+
+.bp-draw {
+  stroke-dasharray: 1;
+  animation: bp-draw 2.2s cubic-bezier(0.6, 0, 0.2, 1) both;
+  animation-delay: var(--d, 0s);
+}
+.bp-fade { animation: bp-fade 1s ease-out both; animation-delay: var(--d, 0s); }
+.bp-phase-a { animation: bp-phase 12s ease-in-out infinite; }
+.bp-phase-b { animation: bp-phase 12s ease-in-out infinite; animation-delay: -6s; }
+.bp-spin { animation: bp-spin 14s linear infinite; }
+.bp-drop { animation: bp-drop 1.8s ease-in infinite; }
+.bp-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bp-ping 2s ease-out infinite;
+}
+.bp-magnify { animation: bp-magnify 8s ease-in-out infinite; }
+.bp-rise {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: bp-rise 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0s);
+}
+.bp-sweep { animation: bp-sweep 10s linear infinite; }
+.bp-trolley { animation: bp-trolley 9s ease-in-out infinite; }
+.bp-phase-c { animation: bp-phase 12s ease-in-out infinite; animation-delay: -3s; }
+.bp-flow { stroke-dasharray: 2 12; animation: bp-flow 1.4s linear infinite; }
+.bp-scan { animation: bp-scan 7s ease-in-out infinite; }
+.bp-branch {
+  stroke-dasharray: 1;
+  animation: bp-branch 12s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.bp-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bp-glow 3s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-draw, .bp-fade, .bp-phase-a, .bp-phase-b, .bp-phase-c, .bp-flow, .bp-scan, .bp-branch, .bp-glow, .bp-rise, .bp-sweep, .bp-trolley, .bp-spin, .bp-drop, .bp-ping, .bp-magnify { animation: none !important; }
+  .bp-branch { stroke-dashoffset: 0; }
+  .bp-pulse { display: none; }
+}
+
+/* Selos que flutuam levemente, defasados */
+@keyframes chip-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+.chip-float { animation: chip-float 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .chip-float { animation: none !important; } }
+
+/* Página A Duall: anel de princípios, carrossel em sentido oposto e parallax */
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+.ring-spin, .ring-spin-rev { transform-box: view-box; transform-origin: 150px 150px; }
+.ring-spin { animation: ring-spin 60s linear infinite; }
+.ring-spin-rev { animation: ring-spin 40s linear infinite reverse; }
+
+@keyframes ticker-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.animate-ticker-reverse { animation: ticker-reverse 65s linear infinite; }
+.animate-ticker-reverse:hover { animation-play-state: paused; }
+
+@keyframes parallax-y {
+  from { transform: scale(1.15) translateY(-5%); }
+  to { transform: scale(1.15) translateY(5%); }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax-img { animation: parallax-y linear both; animation-timeline: view(); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-spin, .ring-spin-rev, .animate-ticker-reverse { animation: none !important; }
 }

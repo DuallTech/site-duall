@@ -125,7 +125,7 @@ export default function TestimonialsSection() {
                   <p className="mt-6 min-h-26 text-[15px] leading-8 text-duall-blue italic">
                     "{testimonial.text}"
                   </p>
-
+ 
                   <div className="mt-10 h-px w-7 bg-[#D6DEE8]" />
 
                   <div className="mt-6 flex items-center gap-3">

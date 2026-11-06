@@ -1,245 +1,136 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+import { useState, type FormEvent } from 'react';
+import { CheckCircle2, Send, Sparkles } from 'lucide-react';
 
-import React, { useState } from 'react';
-import { Send, CheckCircle2, Phone, Sparkles, Building2, Layers } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { getWhatsAppGlobalUrl } from '../utils/whatsapp';
 
-interface ContactFormProps {
-  isHighContrast: boolean;
-}
+const TYPES = ['Residencial', 'Comercial', 'Misto'] as const;
 
-export default function ContactForm({ isHighContrast }: ContactFormProps) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    whatsapp: '',
-    city: '',
-    buildingType: 'residencial_vertical',
-    area: '',
-    message: ''
-  });
+const field =
+  'w-full rounded-xl border border-white/10 bg-[#0a1322] px-4 py-3 text-sm text-white placeholder-slate-500 transition focus:border-[#EDA700] focus:outline-none focus:ring-2 focus:ring-[#EDA700]/25';
+const label = 'mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-slate-300';
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+type FormState = { name: string; city: string; email: string; phone: string; type: string; area: string; message: string };
+const empty: FormState = { name: '', city: '', email: '', phone: '', type: TYPES[0], area: '', message: '' };
 
-  const buildingTypes = [
-    { id: 'residencial_vertical', name: 'Residencial Vertical (Torre)' },
-    { id: 'comercial_corporativo', name: 'Comercial & Corporativo' },
-    { id: 'industrial_galpao', name: 'Industrial & Logística' },
-    { id: 'residencial_horizontal', name: 'Residencial Horizontal' }
-  ];
+/** Formulário do bloco 7. Sem backend: a confirmação aparece na própria página e oferece o envio pelo WhatsApp. */
+export default function ContactForm() {
+  const [data, setData] = useState<FormState>(empty);
+  const [error, setError] = useState('');
+  const [sent, setSent] = useState(false);
 
-  const updateField = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errorMsg) setErrorMsg('');
+  const update = (key: keyof FormState, value: string) => {
+    setData((prev) => ({ ...prev, [key]: value }));
+    if (error) setError('');
   };
 
-  const currentThemeClasses = {
-    card: isHighContrast 
-      ? 'bg-black border-2 border-white text-white' 
-      : 'bg-slate-900/60 backdrop-blur-md border border-slate-800 text-white',
-    input: isHighContrast 
-      ? 'bg-black border border-white text-white focus:outline-none focus:border-yellow-405 placeholder-slate-400' 
-      : 'bg-slate-950/65 border border-slate-800 text-white focus:outline-none focus:border-[#315676] focus:ring-1 focus:ring-[#315676]/35 placeholder-slate-500',
-    label: 'block text-xs font-bold uppercase tracking-wider font-mono text-slate-300 mb-1.5',
-    button: isHighContrast 
-      ? 'bg-white text-black hover:bg-slate-200' 
-      : 'bg-[#315676] text-white hover:bg-[#254261] shadow-lg shadow-blue-950/10'
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Basic Validation
-    if (!formData.name.trim() || !formData.email.trim() || !formData.whatsapp.trim()) {
-      setErrorMsg('Por favor, preencha os campos obrigatórios (Nome, E-mail e WhatsApp).');
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    if (!data.name.trim() || !data.email.trim() || !data.phone.trim()) {
+      setError('Preencha nome, e-mail e telefone ou WhatsApp.');
       return;
     }
-
-    setIsSubmitted(true);
+    if (!/^\S+@\S+\.\S+$/.test(data.email)) {
+      setError('Informe um e-mail válido.');
+      return;
+    }
+    setSent(true);
   };
 
-  const getSuccessWhatsAppLink = () => {
-    const number = "5511945406289";
-    const selectedBuildingTypeName = buildingTypes.find(b => b.id === formData.buildingType)?.name || 'Empreendimento';
-    const areaString = formData.area ? ` de cerca de ${formData.area}m²` : '';
-    const cityString = formData.city ? ` localizada na cidade de ${formData.city}` : '';
-    const details = formData.message ? `\n\nDetalhes sobre a obra: "${formData.message}"` : '';
+  const whatsappUrl = getWhatsAppGlobalUrl(
+    `Olá, Duall Engenharia! Sou ${data.name}${data.city ? `, de ${data.city}` : ''}. Enviei um contato pelo site sobre um empreendimento ${data.type.toLowerCase()}${
+      data.area ? ` de ${data.area} m²` : ''
+    }.${data.message ? `
 
-    const text = encodeURIComponent(
-      `Olá Duall Engenharia! Meu nome é ${formData.name}. Enviei um contato pelo site para solicitar orçamento de projetos de instalações para uma obra do tipo ${selectedBuildingTypeName}${areaString}${cityString}.${details}\n\nGostaria de agendar uma reunião técnica com um engenheiro coordenador.`
+${data.message}` : ''}`,
+  );
+
+  if (sent) {
+    return (
+      <div role="status" className="space-y-5 rounded-3xl border border-emerald-400/30 bg-emerald-500/10 p-8 text-white">
+        <CheckCircle2 size={36} className="text-emerald-400" aria-hidden="true" />
+        <h3 className="font-display text-2xl font-extrabold">Recebemos as informações, {data.name.split(' ')[0]}.</h3>
+        <p className="leading-relaxed text-slate-300">
+          A equipe técnica da Duall Engenharia retorna para alinhar escopo, prazo e documentação. Para agilizar, você
+          também pode continuar a conversa pelo WhatsApp.
+        </p>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-500"
+        >
+          Continuar pelo WhatsApp
+        </a>
+      </div>
     );
-    return `https://wa.me/${number}?text=${text}`;
-  };
+  }
 
   return (
-    <div className={`p-6 md:p-8 rounded-3xl shadow-xl ${currentThemeClasses.card}`}>
-      <AnimatePresence mode="wait">
-        {!isSubmitted ? (
-          <motion.form 
-            key="form"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onSubmit={handleSubmit} 
-            className="space-y-4"
-          >
-            <div>
-              <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-[#315676] font-mono mb-1">
-                <Sparkles size={11} /> Atendimento Premium
-              </span>
-              <h3 className="text-lg font-display font-extrabold tracking-tight">Fale com Nossos Especialistas</h3>
-              <p className="text-slate-400 text-xs mt-1">Preencha os dados abaixo e entraremos em contato prontamente.</p>
-            </div>
+    <form onSubmit={onSubmit} noValidate className="flex w-full flex-col gap-4 rounded-[1.65rem] border border-white/10 bg-white/[0.03] p-6 text-white md:p-8">
+      <header className="space-y-1.5 pb-1">
+        <p className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
+          <Sparkles size={11} aria-hidden="true" /> Atendimento direto
+        </p>
+        <h3 className="font-display text-xl font-extrabold">Fale com nossos especialistas</h3>
+        <p className="text-sm text-slate-400">Preencha os dados abaixo e entraremos em contato prontamente.</p>
+      </header>
 
-            {errorMsg && (
-              <div className="p-3.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-medium">
-                {errorMsg}
-              </div>
-            )}
+      {error && (
+        <p role="alert" className="rounded-xl border border-rose-400/40 bg-rose-500/10 p-3 text-sm font-medium text-rose-300">
+          {error}
+        </p>
+      )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className={currentThemeClasses.label}>Nome Completo *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Seu nome"
-                  value={formData.name}
-                  onChange={(e) => updateField('name', e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm transition-all ${currentThemeClasses.input}`}
-                />
-              </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="cf-name" className={label}>Nome completo *</label>
+          <input id="cf-name" autoComplete="name" required placeholder="Seu nome" className={field} value={data.name} onChange={(e) => update('name', e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="cf-email" className={label}>E-mail *</label>
+          <input id="cf-email" type="email" autoComplete="email" required placeholder="exemplo@empresa.com.br" className={field} value={data.email} onChange={(e) => update('email', e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="cf-phone" className={label}>WhatsApp / telefone *</label>
+          <input id="cf-phone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" className={field} value={data.phone} onChange={(e) => update('phone', e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="cf-city" className={label}>Cidade / UF</label>
+          <input id="cf-city" autoComplete="address-level2" placeholder="São Paulo - SP" className={field} value={data.city} onChange={(e) => update('city', e.target.value)} />
+        </div>
+        <div>
+          <label htmlFor="cf-type" className={label}>Tipo de empreendimento</label>
+          <select id="cf-type" className={field} value={data.type} onChange={(e) => update('type', e.target.value)}>
+            {TYPES.map((t) => (
+              <option key={t}>{t}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="cf-area" className={label}>Área estimada (m²)</label>
+          <input id="cf-area" inputMode="numeric" placeholder="Ex: 5000" className={field} value={data.area} onChange={(e) => update('area', e.target.value)} />
+        </div>
+      </div>
 
-              <div>
-                <label className={currentThemeClasses.label}>E-mail Corporativo *</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="exemplo@empresa.com.br"
-                  value={formData.email}
-                  onChange={(e) => updateField('email', e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm transition-all ${currentThemeClasses.input}`}
-                />
-              </div>
-            </div>
+      <div className="flex flex-1 flex-col">
+        <label htmlFor="cf-message" className={label}>Fale sobre as suas necessidades de projetos</label>
+        <textarea
+          id="cf-message"
+          rows={4}
+          placeholder="Descreva brevemente o escopo necessário (elétrico, hidráulico, incêndio, sistemas, BIM)."
+          className={`${field} min-h-28 flex-1 resize-none`}
+          value={data.message}
+          onChange={(e) => update('message', e.target.value)}
+        />
+      </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className={currentThemeClasses.label}>WhatsApp / Telefone *</label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="(11) 99999-9999"
-                  value={formData.whatsapp}
-                  onChange={(e) => updateField('whatsapp', e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm transition-all ${currentThemeClasses.input}`}
-                />
-              </div>
-
-              <div>
-                <label className={currentThemeClasses.label}>Cidade / UF</label>
-                <input
-                  type="text"
-                  placeholder="São Paulo - SP"
-                  value={formData.city}
-                  onChange={(e) => updateField('city', e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm transition-all ${currentThemeClasses.input}`}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className={currentThemeClasses.label}>Tipo de Obra</label>
-                <select
-                  value={formData.buildingType}
-                  onChange={(e) => updateField('buildingType', e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm transition-all appearance-none cursor-pointer ${currentThemeClasses.input}`}
-                >
-                  {buildingTypes.map(b => (
-                    <option key={b.id} value={b.id} className="bg-slate-900 text-white">
-                      {b.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className={currentThemeClasses.label}>Área Estimada (m²)</label>
-                <input
-                  type="number"
-                  placeholder="Ex: 5000"
-                  value={formData.area}
-                  onChange={(e) => updateField('area', e.target.value)}
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm transition-all ${currentThemeClasses.input}`}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className={currentThemeClasses.label}>Fale sobre as suas necessidades de projetos</label>
-              <textarea
-                rows={3}
-                placeholder="Descreva brevemente o escopo necessário (Elétrico, Hidráulico, Incêndio, Ar condicionado)."
-                value={formData.message}
-                onChange={(e) => updateField('message', e.target.value)}
-                className={`w-full px-4 py-2.5 rounded-xl text-sm transition-all resize-none ${currentThemeClasses.input}`}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className={`w-full py-3.5 px-6 rounded-xl font-bold font-sans text-sm transition-all flex items-center justify-center gap-2 transform active:scale-95 cursor-pointer ${currentThemeClasses.button}`}
-            >
-              Solicitar Contato Técnico <Send size={15} />
-            </button>
-          </motion.form>
-        ) : (
-          <motion.div
-            key="success"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            className="py-8 text-center space-y-6"
-          >
-            <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto">
-              <CheckCircle2 size={36} />
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-xl font-display font-extrabold text-white">Quase lá!</h3>
-              <p className="text-slate-300 text-sm max-w-sm mx-auto leading-relaxed">
-                Prezado <strong>{formData.name}</strong>, para concluir sua solicitação, envie os dados para nosso time de engenharia pelo WhatsApp.
-              </p>
-              <p className="text-slate-400 text-xs max-w-xs mx-auto">
-                Clique no botão abaixo: seus dados já estarão preenchidos na mensagem.
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-3 pt-2">
-              <a
-                href={getSuccessWhatsAppLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/15"
-              >
-                <Phone size={16} /> Falar com engenheiro no WhatsApp
-              </a>
-
-              <button
-                onClick={() => setIsSubmitted(false)}
-                className="text-slate-400 hover:text-white text-xs underline font-semibold transition"
-              >
-                Enviar Outra Solicitação
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      <button
+        type="submit"
+        className="mt-auto inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#EDA700] px-6 py-3.5 text-sm font-bold text-slate-900 shadow-[0_10px_30px_-10px_rgba(237,167,0,0.7)] transition hover:bg-[#ffb81a] active:scale-[0.99]"
+      >
+        Enviar contato
+        <Send size={16} aria-hidden="true" />
+      </button>
+    </form>
   );
 }

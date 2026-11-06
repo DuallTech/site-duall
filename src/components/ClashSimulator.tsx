@@ -166,12 +166,22 @@ export default function ClashSimulator() {
   const [hoveredElement, setHoveredElement] = useState<BIMElementData | null>(null);
   const [showAxes, setShowAxes] = useState<boolean>(true);
   const [showGrid, setShowGrid] = useState<boolean>(true);
-  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(true);
+  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
   const [isXRayMode, setIsXRayMode] = useState<boolean>(false);
   const [isMeasuringMode, setIsMeasuringMode] = useState<boolean>(false);
   const [measurePoints, setMeasurePoints] = useState<THREE.Vector3[]>([]);
   const [measureDistance, setMeasureDistance] = useState<number | null>(null);
-  const isAutoRotatingRef = useRef<boolean>(true);
+  const isAutoRotatingRef = useRef<boolean>(false);
+  // Desenho sob demanda: só redesenha a cena por alguns quadros depois de uma mudança, e nunca fora da tela.
+  const renderFramesRef = useRef<number>(30);
+  const inViewRef = useRef<boolean>(true);
+  const invalidate = (frames = 30) => {
+    renderFramesRef.current = Math.max(renderFramesRef.current, frames);
+  };
+  // Qualquer mudança de estado (seleção, visibilidade, raio-X, medição, carregamento) pede um novo desenho.
+  useEffect(() => {
+    invalidate();
+  });
   
   // Discipline Show/Hide
   const [visibleSystems, setVisibleSystems] = useState({
@@ -730,7 +740,22 @@ export default function ClashSimulator() {
       }
     };
 
+    // Hover: no máximo uma leitura por quadro, e nenhuma enquanto a pessoa arrasta a câmera.
+    let hoverFrame = 0;
+    let lastMove: PointerEvent | null = null;
     const handlePointerMove = (event: PointerEvent) => {
+      lastMove = event;
+      if (event.buttons !== 0 || hoverFrame) return;
+      hoverFrame = requestAnimationFrame(() => {
+        hoverFrame = 0;
+        if (lastMove) updateHover(lastMove);
+      });
+    };
+
+    const setHover = (element: BIMElementData | null) =>
+      setHoveredElement((prev) => (prev?.id === element?.id ? prev : element));
+
+    const updateHover = (event: PointerEvent) => {
       if (!canvasRef.current) return;
       const rect = canvasRef.current.getBoundingClientRect();
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -746,7 +771,7 @@ export default function ClashSimulator() {
           const object = intersects[0].object as any;
           const expressID = loader.ifcManager.getExpressId(object.geometry, faceIndex);
           if (expressID !== undefined && expressID !== null) {
-            setHoveredElement({
+            setHover({
               id: `ifc_${expressID}`,
               stepId: `#${expressID}`,
               name: object.userData?.name || 'Elemento IFC',
@@ -762,11 +787,11 @@ export default function ClashSimulator() {
           }
         }
         if (intersects[0].object.userData?.id) {
-          setHoveredElement(intersects[0].object.userData as BIMElementData);
+          setHover(intersects[0].object.userData as BIMElementData);
           return;
         }
       }
-      setHoveredElement(null);
+      setHover(null);
     };
 
     const canvasEl = canvasRef.current;
@@ -776,34 +801,36 @@ export default function ClashSimulator() {
     // Initial default build triggering (starts empty)
     resetIFCViewer();
 
-    // 6. Animation render loop
+    // 6. Render loop sob demanda (máx. 30 quadros/s): desenha quando a câmera se move, gira sozinha
+    //    ou quando algo pediu invalidate(); fica parado quando nada muda ou quando o visualizador está fora da tela.
     const clock = new THREE.Clock();
     let lastRenderTime = 0;
     const animate = () => {
-      const delta = clock.getDelta();
-      const elapsed = clock.getElapsedTime();
       animationFrameIdRef.current = requestAnimationFrame(animate);
+      if (!inViewRef.current) return;
 
-      if (elapsed - lastRenderTime < 1 / 30) {
-        return;
+      const elapsed = clock.getElapsedTime();
+      if (elapsed - lastRenderTime < 1 / 30) return;
+
+      const controls = controlsRef.current;
+      if (controls) {
+        controls.autoRotate = isAutoRotatingRef.current;
+        controls.autoRotateSpeed = 0.8;
       }
+      const cameraMoved = controls ? controls.update() : false;
+      if (!cameraMoved && renderFramesRef.current <= 0) return;
+
+      if (renderFramesRef.current > 0) renderFramesRef.current -= 1;
       lastRenderTime = elapsed;
-
-
-
-      // Auto rotation mapping
-      if (controlsRef.current && isAutoRotatingRef.current) {
-        controlsRef.current.autoRotate = true;
-        controlsRef.current.autoRotateSpeed = 0.8;
-      } else if (controlsRef.current) {
-        controlsRef.current.autoRotate = false;
-      }
-
-      // Render loops
-      controlsRef.current?.update();
       renderer.render(scene, camera);
     };
     animate();
+
+    const viewObserver = new IntersectionObserver(([entry]) => {
+      inViewRef.current = entry.isIntersecting;
+      if (entry.isIntersecting) invalidate();
+    });
+    viewObserver.observe(canvasEl);
 
     // 7. Dynamic Window Resize observer bound with container widths
     const handleResize = () => {
@@ -813,6 +840,7 @@ export default function ClashSimulator() {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       rendererRef.current.setSize(w, h);
+      invalidate();
     };
 
     const resizeObserver = new ResizeObserver(() => handleResize());
@@ -828,6 +856,8 @@ export default function ClashSimulator() {
       canvasEl.removeEventListener('pointerdown', handlePointerDown);
       canvasEl.removeEventListener('pointermove', handlePointerMove);
       resizeObserver.disconnect();
+      viewObserver.disconnect();
+      if (hoverFrame) cancelAnimationFrame(hoverFrame);
       if (modelFrameRef.current && sceneRef.current) {
         sceneRef.current.remove(modelFrameRef.current);
         modelFrameRef.current.geometry.dispose();
@@ -965,6 +995,7 @@ export default function ClashSimulator() {
       let pulseCount = 0;
       const flashInterval = setInterval(() => {
         obj3D.visible = !obj3D.visible;
+        invalidate(2);
         pulseCount++;
         if (pulseCount >= 6) {
           clearInterval(flashInterval);

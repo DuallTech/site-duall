@@ -10,7 +10,7 @@ export default function DuallLogo({ isDark = false }: DuallLogoProps) {
     <img
       src={isDark ? duallLogoWhiteUrl : duallLogoUrl}
       alt="Duall Engenharia"
-      className="h-14 w-auto select-none"
+      className="h-12 w-auto select-none"
     />
   );
 }
