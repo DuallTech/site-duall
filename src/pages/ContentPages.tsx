@@ -1,12 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 
-import { ButtonLink, Container, PageHero } from '../components/ui';
+import { Container, PageHero } from '../components/ui';
 import { ARTICLES, getArticle } from '../content/articles';
 import { SITE } from '../content/site';
-import { ArticleCard, TicketCard } from '../sections/ContentFaqSection';
+import { ArticleCard } from '../sections/ContentFaqSection';
 import Seo from '../seo/Seo';
-import { articleLd, breadcrumbLd, eventLd } from '../seo/jsonld';
+import { articleLd, breadcrumbLd } from '../seo/jsonld';
 import NotFoundPage from './MiscPages';
 
 const dateFormat = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -19,19 +19,19 @@ export function ContentHubPage() {
   return (
     <>
       <Seo
-        title="Conteúdo técnico e eventos | Duall Engenharia"
-        description="Artigos sobre projetos de instalações e o Workshop Técnico Duall, treinamento voltado a construtoras, incorporadoras e arquitetos."
+        title="Conteúdo técnico | Duall Engenharia"
+        description="Artigos da Duall Engenharia sobre projetos de instalações elétricas, hidráulicas e BIM."
         path="/conteudo"
         jsonLd={[breadcrumbLd(crumbs)]}
       />
       <PageHero
         eyebrow="Conteúdo"
-        title="Conteúdo técnico e eventos da Duall"
-        lead="A Duall Engenharia publica artigos sobre projetos de instalações e realiza o Workshop Técnico Duall, treinamento voltado a construtoras, incorporadoras e arquitetos."
+        title="Conteúdo técnico da Duall"
+        lead="Artigos da Duall Engenharia sobre projetos de instalações elétricas, hidráulicas e BIM."
         crumbs={crumbs}
       />
       <section className="bg-blueprint py-20">
-        <Container className="grid gap-6 md:grid-cols-2">
+        <Container className="grid gap-6">
           <Link
             to="/conteudo/artigos"
             className="group space-y-3 rounded-3xl border border-[#315676]/20 bg-white p-8 transition hover:-translate-y-1 hover:shadow-xl"
@@ -42,7 +42,6 @@ export function ContentHubPage() {
               Ver artigos <ArrowUpRight size={16} />
             </span>
           </Link>
-          <TicketCard />
         </Container>
       </section>
     </>
@@ -126,36 +125,6 @@ export function ArticlePage() {
           )}
         </Container>
       </article>
-    </>
-  );
-}
-
-export function WorkshopPage() {
-  const crumbs = [
-    { name: 'Início', path: '/' },
-    { name: 'Conteúdo', path: '/conteudo' },
-    { name: 'Workshop técnico', path: '/conteudo/workshop-tecnico' },
-  ];
-  return (
-    <>
-      <Seo
-        title="Workshop Técnico Duall | Duall Engenharia"
-        description="O Workshop Técnico Duall é um treinamento técnico para construtoras, incorporadoras e arquitetos, realizado pela Duall Engenharia."
-        path="/conteudo/workshop-tecnico"
-        jsonLd={[breadcrumbLd(crumbs), eventLd()]}
-      />
-      <PageHero
-        eyebrow="Evento"
-        title="3º Workshop Técnico Duall"
-        lead="Treinamento técnico para construtoras, incorporadoras e arquitetos, realizado pela Duall Engenharia."
-        crumbs={crumbs}
-        actions={<ButtonLink to="/contato">Inscrever-se no Workshop</ButtonLink>}
-      />
-      <section className="bg-white py-20">
-        <Container className="max-w-3xl space-y-4 text-lg leading-relaxed text-slate-600">
-          <p>Data e local serão divulgados em breve. Para receber o aviso de abertura das inscrições, fale com a equipe da Duall.</p>
-        </Container>
-      </section>
     </>
   );
 }

@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { AnimatePresence, motion, type Variants } from 'motion/react';
-import { ArrowLeft, ArrowRight, Compass, GraduationCap, Handshake, Quote, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Quote } from 'lucide-react';
 
 import photo040 from '../assets/images/diretores/DSC00040.jpg';
 import photo056 from '../assets/images/diretores/DSC00056.jpg';
@@ -16,50 +16,31 @@ import photo9798 from '../assets/images/diretores/DSC09798.jpg';
 import photo9868 from '../assets/images/diretores/DSC09868.jpg';
 import photo9938 from '../assets/images/diretores/DSC09938.jpg';
 import { Container, Eyebrow } from '../components/ui';
-import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from './animations';
+import { fadeInUpVariants, staggerContainerVariants } from './animations';
 
 const viewport = { once: true, margin: '-100px' } as const;
-
-const POINTS: Array<{ title: string; text: string; Icon: LucideIcon }> = [
-  {
-    title: 'Liderança presente',
-    text: 'Coordenação técnica próxima, do primeiro estudo à entrega final.',
-    Icon: Compass,
-  },
-  {
-    title: 'Relações de confiança',
-    text: 'Proximidade, transparência e disponibilidade em todas as etapas.',
-    Icon: Handshake,
-  },
-  {
-    title: 'Profissionais capacitados',
-    text: 'Desenvolvimento contínuo e conhecimento compartilhado entre a equipe.',
-    Icon: GraduationCap,
-  },
-];
 
 type Tile = { title: string; text: string; tone: 'gold' | 'glass' };
 
 /**
- * Cada grid tem uma foto em grupo (ocupa duas colunas) e retratos individuais, em 3 colunas e 2 linhas.
- * A foto em grupo muda de lugar em cada grid. O retrato na mesma linha dela estica até a altura do grupo (fill).
- * Quando faltam retratos, o espaço vira um quadro com uma frase.
+ * Cada grid é uma faixa larga: a foto em grupo ocupa o espaço de dois retratos e muda de lugar em cada grid;
+ * as demais são retratos (ou um quadro com frase), um sim, um não deslocados para baixo.
  */
 type Cell =
   | { kind: 'group'; src: string }
-  | { kind: 'photo'; src: string; fill?: boolean }
+  | { kind: 'photo'; src: string }
   | { kind: 'tile'; tile: Tile };
 
 const SLIDES: Cell[][] = [
-  // Grupo em cima, à esquerda
+  // Grupo à esquerda
   [
     { kind: 'group', src: photo358 },
-    { kind: 'photo', src: photo384, fill: true },
+    { kind: 'photo', src: photo384 },
     { kind: 'photo', src: photo040 },
     { kind: 'photo', src: photo201 },
     { kind: 'photo', src: photo9868 },
   ],
-  // Grupo embaixo, à direita
+  // Grupo à direita
   [
     { kind: 'photo', src: photo056 },
     {
@@ -71,12 +52,12 @@ const SLIDES: Cell[][] = [
       },
     },
     { kind: 'photo', src: photo9798 },
-    { kind: 'photo', src: photo439, fill: true },
+    { kind: 'photo', src: photo439 },
     { kind: 'group', src: photo316 },
   ],
-  // Grupo em cima, à direita
+  // Grupo no meio
   [
-    { kind: 'photo', src: photo307, fill: true },
+    { kind: 'photo', src: photo307 },
     { kind: 'group', src: photo321 },
     { kind: 'photo', src: photo465 },
     { kind: 'photo', src: photo9938 },
@@ -90,6 +71,10 @@ const SLIDES: Cell[][] = [
     },
   ],
 ];
+
+/** Largura de cada célula na faixa: o grupo vale dois retratos e o quadro de frase um pouco mais que um, para o título caber inteiro. */
+const columnTemplate = (cells: Cell[]) =>
+  cells.map((c) => (c.kind === 'group' ? '2fr' : c.kind === 'tile' ? '1.4fr' : '1fr')).join(' ');
 
 const PHOTO_ALT = 'Equipe da Duall Engenharia';
 
@@ -126,18 +111,18 @@ function PhotoCell({ src, className }: { src: string; className: string }) {
   );
 }
 
-function TileCell({ tile }: { tile: Tile }) {
+function TileCell({ tile, className = '' }: { tile: Tile; className?: string }) {
   const gold = tile.tone === 'gold';
   return (
     <motion.div
       variants={cellVariants}
-      className={`relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-xl p-5 md:p-6 ${
+      className={`relative flex aspect-[3/4] min-w-0 flex-col md:aspect-[21/20] justify-between overflow-hidden rounded-xl p-4 lg:p-5 ${className} ${
         gold ? 'bg-[#EDA700] text-slate-900' : 'bg-white/[0.04] text-white ring-1 ring-white/10'
       }`}
     >
-      <Quote size={28} className={gold ? 'text-slate-900/70' : 'text-[#EDA700]'} aria-hidden="true" />
+      <Quote size={24} className={gold ? 'text-slate-900/70' : 'text-[#EDA700]'} aria-hidden="true" />
       <div>
-        <p className="font-display text-xl font-extrabold leading-tight md:text-2xl">{tile.title}</p>
+        <p className="font-display text-lg font-extrabold leading-tight xl:text-xl">{tile.title}</p>
         <p className={`mt-2 text-sm leading-relaxed ${gold ? 'text-slate-900/80' : 'text-slate-400'}`}>{tile.text}</p>
       </div>
     </motion.div>
@@ -158,7 +143,7 @@ function TeamGallery() {
   const cells = SLIDES[index];
 
   return (
-    <div className="mx-auto mt-14 max-w-4xl">
+    <div className="mt-12">
       <div className="relative overflow-hidden">
         <AnimatePresence mode="wait" custom={dir} initial={false}>
           <motion.div
@@ -175,21 +160,19 @@ function TeamGallery() {
               if (info.offset.x < -80) go(index + 1, 1);
               else if (info.offset.x > 80) go(index - 1, -1);
             }}
-            className="grid cursor-grab grid-flow-row-dense grid-cols-2 gap-3 active:cursor-grabbing md:grid-cols-3 md:gap-4"
+            style={{ '--cols': columnTemplate(cells) } as CSSProperties}
+            className="grid cursor-grab grid-flow-row-dense grid-cols-2 items-start gap-3 pb-2 active:cursor-grabbing md:grid-cols-[var(--cols)] md:gap-4"
           >
-            {cells.map((cell, i) =>
-              cell.kind === 'group' ? (
-                <PhotoCell key={cell.src} src={cell.src} className="col-span-2 aspect-[3/2]" />
-              ) : cell.kind === 'photo' ? (
-                <PhotoCell
-                  key={cell.src}
-                  src={cell.src}
-                  className={cell.fill ? 'aspect-[3/4] md:aspect-auto' : 'aspect-[3/4]'}
-                />
-              ) : (
-                <TileCell key={`tile-${i}`} tile={cell.tile} />
-              ),
-            )}
+            {cells.map((cell, i) => {
+              const offset = i % 2 === 1 ? 'md:mt-12' : '';
+              if (cell.kind === 'group')
+                return (
+                  <PhotoCell key={cell.src} src={cell.src} className={`col-span-2 aspect-[3/2] md:col-span-1 ${offset}`} />
+                );
+              if (cell.kind === 'photo')
+                return <PhotoCell key={cell.src} src={cell.src} className={`aspect-[3/4] ${offset}`} />;
+              return <TileCell key={`tile-${i}`} tile={cell.tile} className={offset} />;
+            })}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -280,30 +263,6 @@ export default function LeadershipSection() {
             </p>
           </motion.div>
         </motion.div>
-
-        <motion.ul
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewport}
-          variants={staggerContainerVariants}
-          className="mt-12 grid gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 md:grid-cols-3"
-        >
-          {POINTS.map(({ title, text, Icon }) => (
-            <motion.li
-              key={title}
-              variants={staggerItemVariants}
-              className="group flex gap-4 bg-[#0d1929] p-6 transition-colors duration-300 hover:bg-[#12233a]"
-            >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/15 text-[#EDA700] transition duration-300 group-hover:border-[#EDA700] group-hover:bg-[#EDA700] group-hover:text-slate-900">
-                <Icon size={18} aria-hidden="true" />
-              </span>
-              <div>
-                <p className="font-display text-lg font-bold">{title}</p>
-                <p className="mt-1 text-sm leading-relaxed text-slate-400">{text}</p>
-              </div>
-            </motion.li>
-          ))}
-        </motion.ul>
 
         <TeamGallery />
       </Container>

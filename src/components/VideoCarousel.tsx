@@ -74,16 +74,15 @@ function DescricaoPanel() {
     <div className="grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl lg:grid-cols-[0.9fr_1.1fr]">
       <motion.div
         variants={itemVariants}
-        className="relative isolate overflow-hidden bg-[#0d1929] p-8 text-white md:p-10 lg:p-12"
+        className="relative isolate overflow-hidden border-b border-slate-200 p-8 text-[#2D3845] md:p-10 lg:border-b-0 lg:border-r lg:p-12"
       >
-        <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-30" aria-hidden="true" />
         <span
-          className="pointer-events-none absolute -bottom-10 -right-4 -z-10 select-none font-display text-[10rem] font-extrabold leading-none text-white/[0.04]"
+          className="pointer-events-none absolute -bottom-10 -right-4 -z-10 select-none font-display text-[10rem] font-extrabold leading-none text-[#315676]/[0.05]"
           aria-hidden="true"
         >
           01
         </span>
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#EDA700]">Sobre a Duall</p>
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#D99500]">Sobre a Duall</p>
         <h3 className="mt-5 font-display text-2xl font-extrabold leading-tight tracking-tight md:text-3xl">
           Referência em projetos de instalações e gestão de engenharia<span className="text-[#EDA700]">.</span>
         </h3>
@@ -94,7 +93,7 @@ function DescricaoPanel() {
           className="mt-8 block h-px w-24 origin-left bg-[#EDA700]"
           aria-hidden="true"
         />
-        <p className="mt-6 text-lg leading-relaxed text-slate-300">
+        <p className="mt-6 text-lg leading-relaxed text-slate-600">
           Todo projeto nasce de uma expectativa. Para transformá-la em realidade, é preciso mais do que conhecimento
           técnico: é preciso responsabilidade com cada decisão.
         </p>
@@ -137,14 +136,13 @@ function MissaoPanel() {
       <motion.article
         variants={itemVariants}
         whileHover={{ y: -6 }}
-        className="relative isolate overflow-hidden rounded-3xl bg-[#0d1929] p-8 text-white shadow-xl"
+        className="relative flex flex-col items-center overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl"
       >
-        <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-30" aria-hidden="true" />
         <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#EDA700] text-slate-900">
           <Target size={22} aria-hidden="true" />
         </span>
-        <p className="mt-6 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#EDA700]">Missão</p>
-        <p className="mt-3 leading-relaxed text-slate-200">
+        <p className="mt-6 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#315676]">Missão</p>
+        <p className="mt-3 leading-relaxed text-slate-600">
           Garantir tranquilidade aos nossos clientes, por meio de uma engenharia precisa, prazos respeitados, coordenação
           técnica presente e prezar pelo desenvolvimento da equipe em um ambiente saudável.
         </p>
@@ -153,7 +151,7 @@ function MissaoPanel() {
       <motion.article
         variants={itemVariants}
         whileHover={{ y: -6 }}
-        className="relative flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-xl"
+        className="relative flex flex-col items-center overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl"
       >
         <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#315676]/10 text-[#315676]">
           <Compass size={22} aria-hidden="true" />
@@ -166,7 +164,7 @@ function MissaoPanel() {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.9, delay: 0.5, ease }}
-          className="mt-auto block h-[3px] w-full origin-left rounded-full bg-linear-to-r from-[#EDA700] to-transparent"
+          className="mt-auto block h-[3px] w-full origin-center rounded-full bg-linear-to-r from-transparent via-[#EDA700] to-transparent"
           aria-hidden="true"
         />
       </motion.article>
@@ -174,13 +172,13 @@ function MissaoPanel() {
       <motion.article
         variants={itemVariants}
         whileHover={{ y: -6 }}
-        className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl"
+        className="flex flex-col items-center rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl"
       >
         <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#315676]/10 text-[#315676]">
           <Gem size={22} aria-hidden="true" />
         </span>
         <p className="mt-6 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#315676]">Valores</p>
-        <motion.ul variants={listVariants} className="mt-4 flex flex-wrap gap-2">
+        <motion.ul variants={listVariants} className="mt-4 flex flex-wrap justify-center gap-2">
           {PRINCIPIOS.map((principio) => (
             <motion.li
               key={principio}
@@ -201,15 +199,10 @@ function VideoPanel() {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div className="relative isolate overflow-hidden rounded-3xl bg-[#0d1929] p-5 text-white shadow-2xl md:p-8 lg:p-10">
-      <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-30" aria-hidden="true" />
-      <div
-        className="pointer-events-none absolute -right-24 -top-24 -z-10 h-72 w-72 rounded-full bg-[#315676]/40 blur-3xl"
-        aria-hidden="true"
-      />
+    <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 text-[#2D3845] shadow-xl md:p-8 lg:p-10">
 
       <motion.div variants={itemVariants} className="max-w-3xl">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#EDA700]">Vídeo institucional</p>
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#D99500]">Vídeo institucional</p>
         <h3 className="mt-3 font-display text-2xl font-extrabold leading-tight tracking-tight md:text-3xl">
           {VIDEO_LEAD_TEXT}
         </h3>
@@ -218,7 +211,7 @@ function VideoPanel() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-center">
         <motion.div
           variants={itemVariants}
-          className="relative aspect-video overflow-hidden rounded-2xl bg-black ring-1 ring-white/10"
+          className="relative aspect-video overflow-hidden rounded-2xl bg-black shadow-lg"
         >
           {playing ? (
             <iframe
@@ -241,7 +234,7 @@ function VideoPanel() {
                 loading="lazy"
                 className="h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-100"
               />
-              <span className="absolute inset-0 bg-linear-to-t from-[#0d1929]/80 via-transparent to-transparent" />
+              <span className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
               <span className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
                 <span className="absolute h-20 w-20 animate-ping rounded-full bg-[#EDA700]/40 motion-reduce:animate-none" />
                 <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-[#EDA700] text-slate-900 shadow-2xl transition duration-300 group-hover:scale-110">
@@ -260,15 +253,15 @@ function VideoPanel() {
             <motion.li
               key={title}
               variants={itemVariants}
-              className="group flex gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-colors duration-300 hover:border-[#EDA700]/50 hover:bg-white/[0.06]"
+              className="group flex gap-4 rounded-2xl border border-slate-200 bg-slate-50/60 p-4 transition-colors duration-300 hover:border-[#EDA700]/60 hover:bg-white"
             >
-              <span className="font-mono text-[11px] font-bold text-white/40">{String(i + 1).padStart(2, '0')}</span>
+              <span className="font-mono text-[11px] font-bold text-slate-400">{String(i + 1).padStart(2, '0')}</span>
               <div>
                 <p className="flex items-center gap-2 font-display font-bold">
-                  <Icon size={16} className="text-[#EDA700]" aria-hidden="true" />
+                  <Icon size={16} className="text-[#D99500]" aria-hidden="true" />
                   {title}
                 </p>
-                <p className="mt-1 text-sm leading-relaxed text-slate-400">{text}</p>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
               </div>
             </motion.li>
           ))}
@@ -307,7 +300,7 @@ export default function VideoCarousel() {
               onClick={() => select(tab.id)}
               className={`group relative flex cursor-pointer items-center gap-4 overflow-hidden rounded-2xl border px-5 py-4 text-left transition-colors duration-300 ${
                 isActive
-                  ? 'border-transparent text-white'
+                  ? 'border-[#EDA700]/50 bg-white text-[#2D3845] shadow-[0_12px_30px_-18px_rgba(237,167,0,0.6)]'
                   : 'border-slate-200 bg-white/80 text-[#2D3845] hover:border-[#315676]/40 hover:bg-white'
               }`}
             >
@@ -315,7 +308,7 @@ export default function VideoCarousel() {
                 <motion.span
                   layoutId="about-tab-bg"
                   transition={{ type: 'spring', stiffness: 400, damping: 34 }}
-                  className="absolute inset-0 -z-0 bg-[#0d1929]"
+                  className="absolute inset-0 -z-0 bg-[#EDA700]/[0.06]"
                   aria-hidden="true"
                 />
               )}
@@ -329,7 +322,7 @@ export default function VideoCarousel() {
               <span className="relative min-w-0">
                 <span
                   className={`block font-mono text-[10px] font-bold uppercase tracking-[0.2em] ${
-                    isActive ? 'text-[#EDA700]' : 'text-slate-400'
+                    isActive ? 'text-[#D99500]' : 'text-slate-400'
                   }`}
                 >
                   {String(i + 1).padStart(2, '0')} · {tab.hint}

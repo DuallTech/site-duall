@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, CalendarDays, ChevronDown, Linkedin } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown, Linkedin } from 'lucide-react';
 
 import { ButtonLink, Container } from '../components/ui';
 import { ARTICLES, type Article } from '../content/articles';
@@ -67,48 +67,6 @@ export function ArticleCard({ article }: { article: Article }) {
   );
 }
 
-/** Ingresso do Workshop: recortes laterais, "3º" vazado e brilho que varre o card. */
-export function TicketCard() {
-  return (
-    <article className="ticket group relative isolate overflow-hidden rounded-3xl bg-[#0d1929] p-8 text-white shadow-[0_30px_60px_-25px_rgba(13,25,41,0.7)] transition duration-500 hover:-rotate-1 hover:-translate-y-2 md:p-10">
-      <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-40" aria-hidden="true" />
-      <span className="ticket-shine pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-      <span className="absolute inset-x-0 top-0 h-1.5 bg-[#EDA700]" aria-hidden="true" />
-
-      {/* Recortes do ingresso */}
-      <span className="absolute -left-4 top-[58%] h-8 w-8 rounded-full bg-[#eaf0f6]" aria-hidden="true" />
-      <span className="absolute -right-4 top-[58%] h-8 w-8 rounded-full bg-[#eaf0f6]" aria-hidden="true" />
-
-      <div className="flex items-start justify-between">
-        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[#EDA700]">Evento</p>
-        <CalendarDays className="text-[#EDA700]" aria-hidden="true" />
-      </div>
-
-      <p className="text-outline mt-4 select-none font-display text-[7rem] font-extrabold leading-[0.85] md:text-[8.5rem]" aria-hidden="true">
-        3º
-      </p>
-
-      <h3 className="mt-2 font-display text-2xl font-extrabold leading-tight md:text-3xl">Workshop Técnico Duall</h3>
-      <p className="mt-3 leading-relaxed text-slate-300">
-        Treinamento técnico para construtoras, incorporadoras e arquitetos.
-      </p>
-
-      <div className="my-7 border-t-2 border-dashed border-white/20" aria-hidden="true" />
-
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <p className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-slate-200">
-          <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EDA700] opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#EDA700]" />
-          </span>
-          Data e local em breve
-        </p>
-        <ButtonLink to="/conteudo/workshop-tecnico">Inscrever-se no Workshop</ButtonLink>
-      </div>
-    </article>
-  );
-}
-
 /** Estado sem artigos: folha em branco sendo escrita. */
 function BlankSheet() {
   return (
@@ -156,7 +114,7 @@ function DimensionLine({ label }: { label: string }) {
   );
 }
 
-/** Bloco 6. Conteúdo técnico e evento. As perguntas frequentes ficam na página /faq. */
+/** Bloco 6. Conteúdo técnico. As perguntas frequentes ficam na página /faq. */
 export default function ContentFaqSection() {
   const latest = [...ARTICLES].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 
@@ -171,26 +129,22 @@ export default function ContentFaqSection() {
                 id="conteudo"
                 className="font-display text-4xl font-extrabold leading-[1.02] tracking-tight text-[#2D3845] md:text-6xl lg:col-span-7"
               >
-                Conteúdo técnico e{' '}
+                Conteúdo{' '}
                 <span className="relative inline-block whitespace-nowrap text-[#315676]">
-                  eventos
+                  técnico
                   <span className="draw-x absolute -bottom-1 left-0 h-1.5 w-full bg-[#EDA700]" aria-hidden="true" />
                 </span>{' '}
                 da Duall
               </h2>
               <p className="text-lg leading-relaxed text-slate-600 lg:col-span-5">
-                A Duall Engenharia publica artigos sobre projetos de instalações e realiza o Workshop Técnico Duall,
-                treinamento voltado a construtoras, incorporadoras e arquitetos.
+                Artigos da Duall Engenharia sobre projetos de instalações elétricas, hidráulicas e BIM.
               </p>
             </div>
           </div>
 
           <div className="grid items-stretch gap-8 lg:grid-cols-12 lg:gap-10">
-            <div className="reveal flex flex-col lg:col-span-7">
-              <p className="mb-4 flex items-center gap-3 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[#315676]">
-                <span className="flex h-6 w-6 items-center justify-center rounded border border-[#315676]/40">1</span>
-                Artigos
-              </p>
+            <div className="reveal flex flex-col lg:col-span-12">
+              <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[#315676]">Artigos</p>
               {latest.length ? (
                 <div className="border-t border-[#315676]/15">
                   {latest.map((article) => (
@@ -218,13 +172,6 @@ export default function ContentFaqSection() {
               </div>
             </div>
 
-            <div className="reveal lg:col-span-5">
-              <p className="mb-4 flex items-center gap-3 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[#315676]">
-                <span className="flex h-6 w-6 items-center justify-center rounded border border-[#315676]/40">2</span>
-                Workshop
-              </p>
-              <TicketCard />
-            </div>
           </div>
         </div>
       </Container>

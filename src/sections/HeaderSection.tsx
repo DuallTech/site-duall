@@ -13,6 +13,8 @@ interface HeaderSectionProps {
 export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Fecha o menu de Soluções depois de um clique, mesmo com o mouse ainda em cima; reabre quando o mouse sai e volta.
+  const [solutionsClosed, setSolutionsClosed] = useState(false);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -23,6 +25,17 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
   }, []);
 
   useEffect(() => setMobileOpen(false), [pathname]);
+
+  const closeSolutions = () => {
+    setSolutionsClosed(true);
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeSolutions();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Só a Home tem hero escuro: nas demais páginas o cabeçalho já nasce sobre fundo claro.
   const solid = isScrolled || pathname !== '/';
@@ -57,17 +70,31 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
           <nav aria-label="Principal" className="hidden items-center gap-5 xl:gap-8 lg:flex">
             {NAV.map((item) =>
               item.href === '/solucoes' ? (
-                <div key={item.href} className="group relative">
-                  <NavLink to={item.href} className={(s) => `${linkClass(s)} inline-flex items-center gap-1 py-2`}>
+                <div
+                  key={item.href}
+                  className="group relative"
+                  onMouseLeave={() => setSolutionsClosed(false)}
+                  onFocus={() => setSolutionsClosed(false)}
+                >
+                  <NavLink
+                    to={item.href}
+                    onClick={closeSolutions}
+                    className={(s) => `${linkClass(s)} inline-flex items-center gap-1 py-2`}
+                  >
                     {item.label}
                     <ChevronDown size={14} className="transition group-hover:rotate-180 group-focus-within:rotate-180" />
                   </NavLink>
-                  <div className="invisible absolute left-1/2 top-full w-72 -translate-x-1/2 translate-y-2 opacity-0 transition duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className={`invisible absolute left-1/2 top-full w-72 -translate-x-1/2 translate-y-2 opacity-0 transition duration-200 ${
+                      solutionsClosed
+                        ? 'pointer-events-none'
+                        : 'group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100'
+                    }`}>
                     <ul className="mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
                       {SOLUTION_AREAS.map((s) => (
                         <li key={s.id}>
                           <Link
                             to={s.to}
+                            onClick={closeSolutions}
                             className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-[#315676]"
                           >
                             {s.title}

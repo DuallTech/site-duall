@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, CircleCheck } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Box, ChevronLeft, ChevronRight, CircleCheck, Play } from 'lucide-react';
 
 import imgAprovacao from '../assets/images/atuacao/aprovacao-concessionaria.png';
 import imgBim from '../assets/images/atuacao/bim-modelagem3d.png';
 import imgBombeiro from '../assets/images/atuacao/corpo-de-bombeiro.png';
+import BimRealityCompare from '../components/BimRealityCompare';
 import { ButtonLink, ClientOnly, Container, Eyebrow, PageHero } from '../components/ui';
 import { SOLUTION_PHOTOS } from '../content/solutionPhotos';
 import { SOLUTIONS, getSolution } from '../content/solutions';
@@ -104,9 +105,41 @@ const SOLUTION_GALLERY: Record<string, string[]> = {
 
 const ifcFallback = (
   <div className="flex h-[480px] items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-sm text-slate-400">
-    Carregando o navegador IFC 3D…
+    Carregando o modelo 3D…
   </div>
 );
+
+/**
+ * O navegador IFC (Three.js + web-ifc + modelo de ~35 MB) é pesado: só baixa e processa quando a pessoa pede,
+ * para a página de BIM abrir leve e não travar ao rolar.
+ */
+function IfcViewerGate() {
+  const [open, setOpen] = useState(false);
+  if (open) return <ClientOnly load={() => import('../components/ClashSimulator')} fallback={ifcFallback} />;
+
+  return (
+    <div className="relative isolate flex h-[480px] flex-col items-center justify-center gap-5 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 px-6 text-center">
+      <div className="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-30" aria-hidden="true" />
+      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#EDA700]/15 text-[#EDA700]">
+        <Box size={30} aria-hidden="true" />
+      </span>
+      <div className="space-y-2">
+        <p className="font-display text-xl font-bold text-white">Modelo IFC de exemplo</p>
+        <p className="max-w-md text-sm leading-relaxed text-slate-400">
+          O visualizador carrega um modelo 3D completo. Pode levar alguns segundos, dependendo da conexão.
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center gap-2 rounded-full bg-[#EDA700] px-6 py-3 font-display text-sm font-bold text-slate-900 shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+      >
+        <Play size={16} fill="currentColor" aria-hidden="true" />
+        Abrir visualizador 3D
+      </button>
+    </div>
+  );
+}
 
 function SolutionGallery({ images, alt }: { images: string[]; alt: string }) {
   const [index, setIndex] = useState(0);
@@ -173,6 +206,8 @@ export function SolutionPage() {
   const gallery = SOLUTION_GALLERY[solution.slug] ?? [];
   const Icon = SOLUTION_ICONS[solution.slug];
   const showServiceIntro = solution.slug === 'hidraulica' || solution.slug === 'aquecimento-solar';
+  // Na página de BIM, a lista de tópicos dá lugar ao navegador IFC e ao comparador BIM x obra.
+  const isBim = solution.slug === 'bim';
 
   return (
     <>
@@ -214,6 +249,7 @@ export function SolutionPage() {
             {gallery.length > 0 && <SolutionGallery key={solution.slug} images={gallery} alt={solution.short} />}
           </div>
 
+          {!isBim && (
           <div id="servicos" className="scroll-mt-28 pt-6 lg:pt-14">
             <div className="mb-8 flex items-center gap-4">
               <span className="h-px w-10 bg-[#EDA700]" aria-hidden="true" />
@@ -232,10 +268,11 @@ export function SolutionPage() {
 
             </div>
           </div>
+          )}
         </Container>
       </section>
 
-      {solution.slug === 'bim' && (
+      {isBim && (
         <section className="bg-slate-950 py-20 text-white" aria-labelledby="navegador-ifc">
           <Container className="space-y-10">
             <div className="max-w-3xl space-y-4">
@@ -248,7 +285,27 @@ export function SolutionPage() {
                 modelo em tempo real.
               </p>
             </div>
-            <ClientOnly load={() => import('../components/ClashSimulator')} fallback={ifcFallback} />
+            <IfcViewerGate />
+          </Container>
+        </section>
+      )}
+
+      {isBim && (
+        <section className="bg-white py-20" aria-labelledby="bim-realidade">
+          <Container className="space-y-10">
+            <div className="grid items-end gap-6 lg:grid-cols-12 lg:gap-12">
+              <div className="space-y-4 lg:col-span-6">
+                <Eyebrow>Do modelo à obra</Eyebrow>
+                <h2 id="bim-realidade" className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-[#2D3845] md:text-4xl">
+                  BIM vs realidade<span className="text-[#EDA700]">.</span>
+                </h2>
+              </div>
+              <p className="leading-relaxed text-slate-600 lg:col-span-6">
+                Arraste a linha para comparar o modelo BIM com a instalação executada: a representação fiel das
+                disciplinas no modelo é o que permite antecipar incompatibilidades antes da obra.
+              </p>
+            </div>
+            <BimRealityCompare />
           </Container>
         </section>
       )}

@@ -38,6 +38,8 @@ interface Area {
   /** Página interna correspondente; áreas sem página própria levam à lista de soluções. */
   to: string;
   images: string[];
+  /** Foto que preenche o card inteiro (zoom), em vez de aparecer inteira com fundo desfocado. */
+  cover?: boolean;
 }
 
 /** As seis áreas de atuação. Cada card alterna até quatro fotos. */
@@ -64,11 +66,8 @@ const AREAS: Area[] = [
     ...SOLUTION_AREAS[3],
     eyebrow: 'Projetos',
     icon: Layers,
-    images: [
-      imgBim,
-      'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
-    ],
+    images: [imgBim],
+    cover: true,
   },
   {
     ...SOLUTION_AREAS[4],
@@ -88,7 +87,7 @@ const ROTATE_MS = 7000;
 
 /** Card com três fotos que se alternam em crossfade. Cada card começa com um atraso, para não trocar todos ao mesmo tempo. */
 function AreaCard({ area, index }: { area: Area; index: number }) {
-  const { icon: Icon, images } = area;
+  const { icon: Icon, images, cover } = area;
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -120,19 +119,23 @@ function AreaCard({ area, index }: { area: Area; index: number }) {
             }`}
           >
             {/* Fundo desfocado da própria foto preenche as laterais; a foto fica inteira por cima, sem corte. */}
+            {!cover && (
+              <img
+                src={src}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-xl"
+              />
+            )}
             <img
               src={src}
               alt=""
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-xl"
-            />
-            <img
-              src={src}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="relative h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+              className={`relative h-full w-full transition-transform duration-500 group-hover:scale-[1.03] ${
+                cover ? 'object-cover object-[40%_50%]' : 'object-contain'
+              }`}
             />
           </div>
         ))}

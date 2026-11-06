@@ -35,7 +35,7 @@ O site é construído para ser **lido por buscadores e sistemas de IA** (GEO): c
 | `/solucoes` · `/solucoes/[slug]` | Hub e as 5 soluções: `eletrica`, `hidraulica`, `sistemas`, `bim`, `consultoria-atp` |
 | `/a-duall` | Quem somos, unidades, clientes e depoimentos |
 | Trabalhe conosco | Sem página própria: botões na navbar, no rodapé e na Home abrem direto o portal de talentos (`SITE.careersUrl`) |
-| `/conteudo` · `/conteudo/artigos` · `/conteudo/artigos/[slug]` · `/conteudo/workshop-tecnico` | Artigos e Workshop Técnico |
+| `/conteudo` · `/conteudo/artigos` · `/conteudo/artigos/[slug]` | Artigos |
 | `/contato` | Formulário, WhatsApp e chatbot |
 | `/politica-de-privacidade` | Política de privacidade |
 

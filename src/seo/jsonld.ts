@@ -145,13 +145,3 @@ export const articleLd = (article: {
   publisher: { '@id': ORG_ID },
 });
 
-export const eventLd = (): Json => ({
-  '@context': 'https://schema.org',
-  '@type': 'EducationEvent',
-  name: '3º Workshop Técnico Duall',
-  description:
-    'Treinamento técnico para construtoras, incorporadoras e arquitetos, realizado pela Duall Engenharia.',
-  organizer: { '@id': ORG_ID },
-  url: absoluteUrl('/conteudo/workshop-tecnico'),
-  inLanguage: SITE.locale,
-});
