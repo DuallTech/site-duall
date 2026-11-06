@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -19,6 +19,7 @@ const getTestimonialMeta = (role: string, company: string) =>
 export default function TestimonialsSection() {
   const [cardsPerView, setCardsPerView] = useState(3);
   const [page, setPage] = useState(0);
+  const startX = useRef<number | null>(null);
 
   useEffect(() => {
     const updateCardsPerView = () => {
@@ -104,7 +105,22 @@ export default function TestimonialsSection() {
             <ChevronRight className="h-5 w-5" />
           </button>
 
-          <div className="overflow-hidden">
+          <div
+            className="touch-pan-y overflow-hidden"
+            onPointerDown={(e) => {
+              startX.current = e.clientX;
+            }}
+            onPointerUp={(e) => {
+              if (startX.current === null) return;
+              const dx = e.clientX - startX.current;
+              startX.current = null;
+              if (dx < -50) setPage((current) => Math.min(totalPages - 1, current + 1));
+              else if (dx > 50) setPage((current) => Math.max(0, current - 1));
+            }}
+            onPointerCancel={() => {
+              startX.current = null;
+            }}
+          >
           <div
             className="flex transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${translate})` }}
@@ -164,12 +180,16 @@ export default function TestimonialsSection() {
               key={idx}
               type="button"
               onClick={() => setPage(idx)}
-              className={`h-2.5 rounded-full transition-all ${
+              className={`hidden h-2.5 rounded-full transition-all md:block ${
                 idx === page ? 'w-8 bg-[#EDA700]' : 'w-2.5 bg-[#C7D3E0] hover:bg-[#8EA8C3]'
               }`}
               aria-label={`Ir para o grupo de depoimentos ${idx + 1}`}
             />
           ))}
+
+          <span className="min-w-14 text-center text-[11px] font-bold uppercase tracking-[1.4px] text-[#5E6B7A] md:hidden">
+            {String(page + 1).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
+          </span>
 
           <button
             type="button"

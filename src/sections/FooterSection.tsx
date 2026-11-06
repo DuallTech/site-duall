@@ -28,14 +28,14 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
     <footer className={`relative overflow-hidden border-t text-white ${isHighContrast ? 'border-white bg-black' : 'border-slate-800/80 bg-[#090f19]'}`}>
       <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#EDA700] to-transparent" aria-hidden="true" />
       <div className="relative mx-auto max-w-7xl space-y-5 px-4 py-6 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-2">
+        <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
+          <div className="flex flex-col items-center space-y-2 md:block">
             <DuallLogo isDark />
             <p className="sr-only">
               {SITE.name} <span className="text-[#EDA700]">|</span> {SITE.signature}
             </p>
           </div>
-          <div className="flex gap-2.5">
+          <div className="flex justify-center gap-2.5">
             <a
               href={SITE.social.linkedin}
               target="_blank"
@@ -88,9 +88,9 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
           </div>
         </div>
 
-        <nav aria-label="Rodapé" className="border-t border-white/10 pt-5">
+        <nav aria-label="Rodapé" className="border-t border-white/10 pt-5 text-center md:text-left">
           <h2 className={headingClass}>Navegação</h2>
-          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm md:justify-start">
             {FOOTER_MENU.map((item) => (
               <li key={item.href}>
                 {item.href.startsWith('http') ? (
@@ -107,10 +107,10 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
           </ul>
         </nav>
 
-        <div className="flex flex-col gap-4 border-t border-white/10 pt-4 text-xs text-slate-400 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-4 text-center text-xs text-slate-400 md:flex-row md:items-end md:justify-between md:text-left">
           <div className="space-y-1.5">
             <p>© {new Date().getFullYear()} Duall Engenharia Ltda. Todos os direitos reservados.</p>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1 text-sm">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-sm md:justify-start">
               <Link to="/politica-de-privacidade" className="transition hover:text-[#EDA700]">
                 Política de privacidade
               </Link>
@@ -119,7 +119,7 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
               </a>
             </div>
           </div>
-          <div className="space-y-1.5 text-right">
+          <div className="space-y-1.5 md:text-right">
             <p className="font-semibold text-[#EDA700]">Duall Projetos e Instalações Prediais BIM LOD 400</p>
           </div>
         </div>
