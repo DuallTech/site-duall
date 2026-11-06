@@ -119,9 +119,6 @@ export default function FooterSection({ isHighContrast }: FooterSectionProps) {
               </a>
             </div>
           </div>
-          <div className="space-y-1.5 md:text-right">
-            <p className="font-semibold text-[#EDA700]">Duall Projetos e Instalações Prediais BIM LOD 400</p>
-          </div>
         </div>
       </div>
     </footer>
