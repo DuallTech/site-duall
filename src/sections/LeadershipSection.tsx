@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { AnimatePresence, motion, type Variants } from 'motion/react';
 import { ArrowLeft, ArrowRight, Quote } from 'lucide-react';
 
@@ -18,6 +18,9 @@ import { Container, Eyebrow } from '../components/ui';
 import { fadeInUpVariants, staggerContainerVariants } from './animations';
 
 const viewport = { once: true, margin: '-100px' } as const;
+
+/** Tempo que cada grid fica na tela antes de passar sozinho. */
+const AUTOPLAY_MS = 5000;
 
 type Tile = { title: string; text: string; tone: 'gold' | 'glass' };
 
@@ -141,6 +144,7 @@ function TileCell({ tile, className = '' }: { tile: Tile; className?: string }) 
 function TeamGallery() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
+  const [paused, setPaused] = useState(false);
   const stripRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ x: number; left: number; moved: boolean } | null>(null);
   const n = SLIDES.length;
@@ -152,8 +156,24 @@ function TeamGallery() {
 
   const cells = SLIDES[index];
 
+  // Passa sozinho para o próximo grid a cada 5s; reinicia a contagem ao navegar e pausa com o mouse em cima.
+  useEffect(() => {
+    if (paused) return;
+    const id = window.setTimeout(() => {
+      setDir(1);
+      setIndex((i) => (i + 1) % n);
+    }, AUTOPLAY_MS);
+    return () => window.clearTimeout(id);
+  }, [index, paused, n]);
+
   return (
-    <div className="mt-12">
+    <div
+      className="mt-12"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
       {/* Mobile: faixa horizontal com a mesma ordem do desktop, 2 por vez, rolando para o lado */}
       <div
         ref={stripRef}
