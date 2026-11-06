@@ -21,6 +21,8 @@ export const SITE = {
   social: {
     linkedin: 'https://www.linkedin.com/company/duall-engenharia/',
     instagram: 'https://www.instagram.com/duallengenharia',
+    tiktok: 'https://www.tiktok.com/@duallengenharia',
+    facebook: 'https://www.facebook.com/duallengenharia/',
   },
   units: [
     { city: 'Americana', region: 'SP', street: null as string | null, phone: null as string | null },

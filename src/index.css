@@ -1,6 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
 @import "tailwindcss";
 
+/* Open editorial layout: clear photography and a quiet caption underneath. */
+.solution-gallery {
+  width: 100%;
+  min-width: 0;
+  margin-block: 1rem;
+}
+
+.solution-gallery-image {
+  border-radius: 3px;
+}
+
+@media (min-width: 1024px) {
+  .solution-intro {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .solution-gallery {
+    margin-block: 0;
+  }
+
+  .solution-intro-copy > div {
+    max-width: 94%;
+  }
+}
+
 @theme {
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Outfit", system-ui, sans-serif;

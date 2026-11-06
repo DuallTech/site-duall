@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, CircleCheck } from 'lucide-react';
 
-import SolutionVisual from '../components/SolutionVisual';
-import { ButtonLink, ChatButton, ClientOnly, Container, Eyebrow, PageHero } from '../components/ui';
+import imgAprovacao from '../assets/images/atuacao/aprovacao-concessionaria.png';
+import imgBim from '../assets/images/atuacao/bim-modelagem3d.png';
+import imgBombeiro from '../assets/images/atuacao/corpo-de-bombeiro.png';
+import { ButtonLink, ClientOnly, Container, Eyebrow, PageHero } from '../components/ui';
+import { SOLUTION_PHOTOS } from '../content/solutionPhotos';
 import { SOLUTIONS, getSolution } from '../content/solutions';
 import { SOLUTION_ICONS } from '../sections/SolutionsSection';
 import Seo from '../seo/Seo';
@@ -87,19 +91,72 @@ export function SolutionsPage() {
   );
 }
 
-const PROCESS = [
-  { title: 'Estudo preliminar', text: 'Análise do empreendimento e das premissas para definir a melhor solução.' },
-  { title: 'Projeto executivo', text: 'Desenvolvimento das pranchas prontas para executar em obra.' },
-  { title: 'Compatibilização', text: 'Verificação entre disciplinas para evitar interferências antes da obra.' },
-  { title: 'Memória de cálculo', text: 'Dimensionamentos e critérios documentados com precisão.' },
-  { title: 'Entrega com ART', text: 'Pranchas finais, documentação e responsabilidade técnica.' },
-];
+/** Fotos de cada solução, na ordem do carrossel. */
+const SOLUTION_GALLERY: Record<string, string[]> = {
+  eletrica: [SOLUTION_PHOTOS['eletrica']],
+  hidraulica: [SOLUTION_PHOTOS['hidraulica']],
+  sistemas: [SOLUTION_PHOTOS['sistemas']],
+  bim: [imgBim],
+  'corpo-de-bombeiro': [SOLUTION_PHOTOS['corpo-de-bombeiro']],
+  'aquecimento-solar': [SOLUTION_PHOTOS['aquecimento-solar']],
+  'consultoria-atp': [imgAprovacao, imgBombeiro],
+};
 
 const ifcFallback = (
   <div className="flex h-[480px] items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-sm text-slate-400">
     Carregando o navegador IFC 3D…
   </div>
 );
+
+function SolutionGallery({ images, alt }: { images: string[]; alt: string }) {
+  const [index, setIndex] = useState(0);
+  const total = images.length;
+  const step = (n: number) => setIndex((current) => (current + n + total) % total);
+
+  return (
+    <div className="solution-gallery relative" role="region" aria-label={`Imagens de ${alt}`}>
+      <div className="relative aspect-[3/2]">
+      {images.map((src, i) => (
+        <img
+          key={src}
+          src={src}
+          alt={i === index ? alt : ''}
+          aria-hidden={i !== index}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          className={`solution-gallery-image absolute inset-0 h-full w-full object-cover transition-opacity duration-700 motion-reduce:transition-none ${i === index ? 'opacity-100' : 'opacity-0'}`}
+        />
+      ))}
+      </div>
+
+      <div className="mt-3 flex min-h-11 items-center justify-between gap-4">
+        <p className="text-xs tracking-wide text-slate-500">{alt}</p>
+        {total > 1 && (
+        <div className="flex shrink-0 items-center gap-1">
+          <button
+            type="button"
+            onClick={() => step(-1)}
+            aria-label="Imagem anterior"
+            className="flex h-11 w-11 items-center justify-center text-[#315676] transition hover:bg-slate-50"
+          >
+            <ChevronLeft size={18} aria-hidden="true" />
+          </button>
+          <span className="min-w-12 text-center font-mono text-[11px] tabular-nums text-slate-500" aria-live="polite">
+            {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+          </span>
+          <button
+            type="button"
+            onClick={() => step(1)}
+            aria-label="Próxima imagem"
+            className="flex h-11 w-11 items-center justify-center text-[#315676] transition hover:bg-slate-50"
+          >
+            <ChevronRight size={18} aria-hidden="true" />
+          </button>
+        </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function SolutionPage() {
   const { slug = '' } = useParams();
@@ -112,7 +169,10 @@ export function SolutionPage() {
     { name: 'Soluções', path: '/solucoes' },
     { name: solution.name, path },
   ];
-  const others = SOLUTIONS.filter((s) => s.slug !== solution.slug);
+  const services = solution.services ?? solution.scope;
+  const gallery = SOLUTION_GALLERY[solution.slug] ?? [];
+  const Icon = SOLUTION_ICONS[solution.slug];
+  const showServiceIntro = solution.slug === 'hidraulica' || solution.slug === 'aquecimento-solar';
 
   return (
     <>
@@ -122,94 +182,54 @@ export function SolutionPage() {
         path={path}
         jsonLd={[breadcrumbLd(crumbs), serviceLd(solution.slug)]}
       />
-      <PageHero eyebrow="Solução" title={solution.name} lead={solution.summary} crumbs={crumbs} />
 
-      <section className="bg-white py-16" aria-labelledby="escopo">
-        <Container className="space-y-8">
-          <div className="space-y-4">
-            <Eyebrow>No escopo</Eyebrow>
-            <h2 id="escopo" className="font-display text-3xl font-extrabold leading-tight text-[#2D3845] md:text-4xl">
-              {solution.short}: o que a Duall entrega
-            </h2>
+      <section className="solution-detail bg-white pb-20 pt-28 md:pt-32" aria-label={solution.name}>
+        <Container>
+          <Link
+            to="/solucoes"
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#315676]"
+          >
+            <ArrowLeft size={16} className="transition group-hover:-translate-x-1" aria-hidden="true" />
+            {showServiceIntro ? 'Voltar aos Serviços' : 'Voltar às soluções'}
+          </Link>
+
+          <div className="solution-intro relative mt-8 grid items-center lg:grid-cols-2">
+            <div className="solution-intro-copy relative z-10 flex flex-col items-start gap-7 py-6 lg:py-16">
+              <div className="space-y-6">
+                <span className="flex items-center gap-3 text-[#315676]">
+                  {Icon && <Icon size={22} aria-hidden="true" />}
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-[0.24em]">{showServiceIntro ? 'Projetos de' : 'Soluções / Duall'}</span>
+                </span>
+                <div className="space-y-2">
+                  <h1 className="max-w-xl font-display text-[clamp(2.5rem,4.8vw,4.5rem)] font-semibold leading-[1.04] tracking-[-0.045em] text-[#243b50]">{solution.short}</h1>
+                </div>
+                <p className="max-w-lg text-base leading-[1.85] text-slate-600">{solution.summary}</p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-x-7 gap-y-5 pt-1">
+                <ButtonLink to="/contato">{showServiceIntro ? 'Solicitar Proposta' : 'Solicitar proposta'}</ButtonLink>
+              </div>
+            </div>
+
+            {gallery.length > 0 && <SolutionGallery key={solution.slug} images={gallery} alt={solution.short} />}
           </div>
 
-          {/* Um painel só: lista de escopo, esquema e disciplinas relacionadas no mesmo bloco */}
-          <div className="overflow-hidden rounded-3xl border border-[#315676]/15 bg-[#f6f9fc]">
-            <div className="grid lg:grid-cols-2">
-              <ol className="divide-y divide-[#315676]/10 p-2 md:p-4">
-                {solution.scope.map((item, i) => (
-                  <li key={item} className="group flex items-start gap-5 rounded-xl px-4 py-4 transition hover:bg-white">
-                    <span className="pt-0.5 font-mono text-sm font-bold text-[#315676]/40 transition group-hover:text-[#EDA700]">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className="text-[15px] leading-snug text-slate-700">{item}</span>
+          <div id="servicos" className="scroll-mt-28 pt-6 lg:pt-14">
+            <div className="mb-8 flex items-center gap-4">
+              <span className="h-px w-10 bg-[#EDA700]" aria-hidden="true" />
+              <h2 className="font-display text-2xl font-medium tracking-tight text-[#243b50] md:text-3xl">{showServiceIntro ? 'Lista completa de serviços' : 'O que faz parte do projeto'}</h2>
+            </div>
+
+            <div>
+              <ul className="gap-x-16 md:columns-2">
+                {services.map((item) => (
+                  <li key={item} className="flex break-inside-avoid items-start gap-3 border-b border-slate-100 py-4 text-[15px] leading-relaxed text-slate-600">
+                    <CircleCheck size={18} className="mt-0.5 shrink-0 text-[#D99500]" aria-hidden="true" />
+                    <span>{item}</span>
                   </li>
                 ))}
-              </ol>
-              <div className="border-t border-[#315676]/10 p-4 md:p-6 lg:border-l lg:border-t-0">
-                <SolutionVisual slug={solution.slug} caption={`Esquema · ${solution.short}`} />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3 border-t border-[#315676]/10 px-6 py-4 md:flex-row md:items-center md:gap-6">
-              <p className="shrink-0 font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[#315676]/70">
-                Compatibilizado com
-              </p>
-              <ul className="flex flex-wrap gap-x-6 gap-y-2">
-                {others.map((o) => {
-                  const Icon = SOLUTION_ICONS[o.slug];
-                  return (
-                    <li key={o.slug}>
-                      <Link
-                        to={`/solucoes/${o.slug}`}
-                        className="group inline-flex items-center gap-2 text-sm font-semibold text-[#2D3845] transition hover:text-[#315676]"
-                      >
-                        {Icon && <Icon size={15} className="text-[#315676]" aria-hidden="true" />}
-                        <span className="border-b border-transparent transition group-hover:border-[#EDA700]">{o.short}</span>
-                        <ArrowUpRight size={13} className="text-slate-400 transition group-hover:text-[#EDA700]" aria-hidden="true" />
-                      </Link>
-                    </li>
-                  );
-                })}
               </ul>
-            </div>
-          </div>
-        </Container>
-      </section>
 
-      <section className="bg-white pb-16" aria-labelledby="como-trabalhamos">
-        <Container className="space-y-8">
-          <div className="space-y-4">
-            <Eyebrow>Como trabalhamos</Eyebrow>
-            <h2 id="como-trabalhamos" className="font-display text-3xl font-extrabold leading-tight text-[#2D3845] md:text-4xl">
-              Do estudo preliminar à prancha final
-            </h2>
-          </div>
-
-          {/* Mesmo painel do escopo: etapas e chamada para contato no mesmo bloco */}
-          <div className="overflow-hidden rounded-3xl border border-[#315676]/15 bg-[#f6f9fc]">
-            <ol className="relative grid gap-8 p-6 md:grid-cols-5 md:gap-4 md:p-8">
-              <span className="draw-x absolute left-8 right-8 top-[3.25rem] hidden h-px bg-gradient-to-r from-[#EDA700] via-[#EDA700]/40 to-transparent md:block" aria-hidden="true" />
-              {PROCESS.map((step, i) => (
-                <li key={step.title} className="group relative space-y-3 md:pr-4">
-                  <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#EDA700] bg-[#f6f9fc] font-mono text-xs font-bold text-[#315676] transition duration-300 group-hover:bg-[#EDA700] group-hover:text-slate-900">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <h3 className="font-display text-base font-bold text-[#2D3845]">{step.title}</h3>
-                  <p className="text-sm leading-relaxed text-slate-600">{step.text}</p>
-                </li>
-              ))}
-            </ol>
-
-            <div className="flex flex-col gap-4 border-t border-[#315676]/10 px-6 py-5 md:flex-row md:items-center md:justify-between md:px-8">
-              <p className="text-[15px] text-slate-700">
-                <span className="font-display font-extrabold text-[#2D3845]">Tem um empreendimento em vista?</span>{' '}
-                Conte o escopo e a Duall indica como atuar em {solution.short}.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <ButtonLink to="/contato">Solicitar proposta</ButtonLink>
-                <ChatButton variant="outline">Falar com a Duall</ChatButton>
-              </div>
             </div>
           </div>
         </Container>
@@ -232,7 +252,6 @@ export function SolutionPage() {
           </Container>
         </section>
       )}
-
     </>
   );
 }

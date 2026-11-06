@@ -4,7 +4,7 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 
 import DuallLogo from '../components/DuallLogo';
 import { NAV, SITE } from '../content/site';
-import { SOLUTIONS } from '../content/solutions';
+import { SOLUTION_AREAS } from '../content/solutionAreas';
 
 interface HeaderSectionProps {
   isHighContrast: boolean;
@@ -64,13 +64,13 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
                   </NavLink>
                   <div className="invisible absolute left-1/2 top-full w-72 -translate-x-1/2 translate-y-2 opacity-0 transition duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                     <ul className="mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
-                      {SOLUTIONS.map((s) => (
-                        <li key={s.slug}>
+                      {SOLUTION_AREAS.map((s) => (
+                        <li key={s.id}>
                           <Link
-                            to={`/solucoes/${s.slug}`}
+                            to={s.to}
                             className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-[#315676]"
                           >
-                            {s.short}
+                            {s.title}
                           </Link>
                         </li>
                       ))}
@@ -154,13 +154,13 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
               </Link>
               {item.href === '/solucoes' && (
                 <ul className="ml-4 border-l border-white/10 pl-2">
-                  {SOLUTIONS.map((s) => (
-                    <li key={s.slug}>
+                  {SOLUTION_AREAS.map((s) => (
+                    <li key={s.id}>
                       <Link
-                        to={`/solucoes/${s.slug}`}
+                        to={s.to}
                         className="block rounded-lg px-4 py-2 text-sm text-slate-300 transition hover:text-[#EDA700]"
                       >
-                        {s.short}
+                        {s.title}
                       </Link>
                     </li>
                   ))}
