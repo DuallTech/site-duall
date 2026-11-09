@@ -71,7 +71,7 @@ const aiBots = [
 ];
 write(
   'robots.txt',
-  `User-agent: *\nAllow: /\n\n${aiBots.map((bot) => `User-agent: ${bot}\nAllow: /\n`).join('\n')}\nSitemap: ${SITE_URL}/sitemap.xml\n`,
+  `User-agent: *\nAllow: /\nDisallow: /admin\n\n${aiBots.map((bot) => `User-agent: ${bot}\nAllow: /\nDisallow: /admin\n`).join('\n')}\nSitemap: ${SITE_URL}/sitemap.xml\n`,
 );
 
 // llms.txt (índice para LLMs) e llms-full.txt (conteúdo textual das páginas principais).

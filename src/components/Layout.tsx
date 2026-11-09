@@ -34,7 +34,7 @@ export default function Layout() {
   }, [isHighContrast]);
 
   return (
-    <div className={`min-h-screen font-sans ${isHighContrast ? 'bg-black text-white' : 'bg-slate-50 text-slate-800'}`}>
+    <div className={`flex min-h-screen flex-col font-sans ${isHighContrast ? 'bg-black text-white' : 'bg-slate-50 text-slate-800'}`}>
       <a
         href="#main-content"
         className="sr-only z-50 rounded-md bg-white px-4 py-2 font-semibold text-slate-900 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
@@ -50,7 +50,7 @@ export default function Layout() {
         textSize={textSize}
       />
       <HeaderSection isHighContrast={isHighContrast} />
-      <main id="main-content" key={pathname} className="page-in">
+      <main id="main-content" key={pathname} className="page-in flex-1">
         <Outlet />
       </main>
       <FooterSection isHighContrast={isHighContrast} />
