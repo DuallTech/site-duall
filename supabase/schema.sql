@@ -43,7 +43,7 @@ drop policy if exists "Publico le artigos publicados" on public.posts;
 create policy "Publico le artigos publicados"
   on public.posts for select
   to anon, authenticated
-  using (status = 'published');
+  using (status = 'published' and published_at <= now());  -- published_at no futuro = agendado
 
 drop policy if exists "Admin le tudo" on public.posts;
 create policy "Admin le tudo"

@@ -6,7 +6,12 @@ import RichText, { youtubeId } from '../components/RichText';
 
 import { getPost, savePost, slugify, uploadImage, type PostStatus } from './api';
 
-const today = () => new Date().toISOString().slice(0, 10);
+/** Converte uma data em "AAAA-MM-DDTHH:mm" no fuso local (formato do input datetime-local). */
+const toLocalInput = (d: Date) => {
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+};
+const today = () => toLocalInput(new Date());
 
 const EMOJIS = ['👍', '👏', '🙌', '💡', '🚀', '🏗️', '⚡', '💧', '🔥', '✅', '📐', '🤝', '🎯', '📌', '😊', '❤️'];
 
@@ -71,7 +76,7 @@ export default function AdminEditor() {
       setBody(post.body);
       setCoverUrl(post.coverUrl);
       setLinkedinUrl(post.linkedinUrl ?? '');
-      setPublishedAt(post.publishedAt.slice(0, 10));
+      setPublishedAt(toLocalInput(new Date(post.publishedAt)));
       setLoading(false);
     });
   }, [id, navigate]);
@@ -153,6 +158,7 @@ export default function AdminEditor() {
   const submit = async (status: PostStatus) => {
     if (status === 'published' && !canPublish) return setError('Preencha o título e o texto para publicar.');
     if (!title.trim()) return setError('Dê ao menos um título para salvar o rascunho.');
+    if (!publishedAt || Number.isNaN(new Date(publishedAt).getTime())) return setError('Informe uma data e hora de publicação válidas.');
     setBusy(true);
     setError('');
     try {
@@ -270,13 +276,18 @@ export default function AdminEditor() {
         )}
         {!showPreview && panel === 'date' && (
           <label className="mx-6 mb-3 flex items-center gap-3 rounded-xl border border-slate-200 p-3 text-sm font-semibold">
-            Data de publicação
+            Data e hora de publicação
             <input
-              type="date"
+              type="datetime-local"
               value={publishedAt}
               onChange={(e) => setPublishedAt(e.target.value)}
               className="rounded-lg border border-slate-300 px-3 py-1.5 font-normal"
             />
+            {new Date(publishedAt).getTime() > Date.now() && (
+              <span className="text-xs font-normal text-amber-700">
+                Agendado: o artigo só aparece no site a partir desse horário.
+              </span>
+            )}
           </label>
         )}
         {!showPreview && panel === 'more' && (
@@ -363,7 +374,7 @@ export default function AdminEditor() {
             onClick={() => submit('published')}
             className="rounded-full bg-[#EDA700] px-6 py-2 text-sm font-bold text-slate-900 transition hover:brightness-95 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
           >
-            {isPublished ? 'Salvar alterações' : 'Publicar'}
+            {new Date(publishedAt).getTime() > Date.now() ? 'Agendar' : isPublished ? 'Salvar alterações' : 'Publicar'}
           </button>
         </div>
       </div>

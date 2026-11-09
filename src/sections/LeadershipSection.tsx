@@ -3,7 +3,7 @@ import { AnimatePresence, motion, type Variants } from 'motion/react';
 import { ArrowLeft, ArrowRight, Quote } from 'lucide-react';
 
 import photo040 from '../assets/images/diretores/DSC00040.jpg';
-import photo056 from '../assets/images/diretores/DSC00056.jpg';
+import photo064 from '../assets/images/diretores/DSC00064.jpg';
 import photo201 from '../assets/images/diretores/DSC00201.jpg';
 import photo307 from '../assets/images/diretores/DSC00307.jpg';
 import photo358 from '../assets/images/diretores/DSC00358.jpg';
@@ -45,7 +45,7 @@ const SLIDES: Cell[][] = [
   ],
 
   [
-    { kind: 'photo', src: photo056 },
+    { kind: 'photo', src: photo064 },
     {
       kind: 'tile',
       tile: {

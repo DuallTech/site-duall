@@ -44,6 +44,7 @@ export function YouTubeEmbed({ id }: { id: string }) {
           title="Vídeo do YouTube"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
           allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
           className="absolute inset-0 h-full w-full border-0"
         />
       ) : (

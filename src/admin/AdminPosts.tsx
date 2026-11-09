@@ -2,12 +2,18 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 
-import { deletePost, listPosts, type AdminPost, type PostStatus } from './api';
+import { deletePost, listPosts, type AdminPost } from './api';
 
-const dateFormat = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+const dateFormat = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-const TABS: { status: PostStatus; param: string; label: string; empty: string }[] = [
+type Kind = 'published' | 'scheduled' | 'draft';
+
+const kindOf = (p: AdminPost): Kind =>
+  p.status === 'draft' ? 'draft' : new Date(p.publishedAt).getTime() > Date.now() ? 'scheduled' : 'published';
+
+const TABS: { status: Kind; param: string; label: string; empty: string }[] = [
   { status: 'published', param: 'publicados', label: 'Publicados', empty: 'Nenhum artigo publicado ainda.' },
+  { status: 'scheduled', param: 'agendados', label: 'Agendados', empty: 'Nenhum artigo agendado.' },
   { status: 'draft', param: 'rascunhos', label: 'Rascunhos', empty: 'Nenhum rascunho salvo.' },
 ];
 
@@ -27,8 +33,8 @@ export default function AdminPosts() {
     load();
   };
 
-  const visible = posts?.filter((p) => p.status === tab.status) ?? [];
-  const count = (status: PostStatus) => posts?.filter((p) => p.status === status).length ?? 0;
+  const visible = posts?.filter((p) => kindOf(p) === tab.status) ?? [];
+  const count = (status: Kind) => posts?.filter((p) => kindOf(p) === status).length ?? 0;
 
   return (
     <div className="space-y-6">
@@ -84,7 +90,11 @@ export default function AdminPosts() {
               <Link to={`/admin/editar/${post.id}`} className="min-w-0 flex-1 hover:underline">
                 <p className="truncate font-bold text-[#0d1929]">{post.title}</p>
                 <p className="mt-0.5 text-sm text-slate-500">
-                  {post.status === 'published' ? 'Publicado em' : 'Última edição em'}{' '}
+                  {post.status === 'published'
+                    ? new Date(post.publishedAt).getTime() > Date.now()
+                      ? 'Agendado para'
+                      : 'Publicado em'
+                    : 'Última edição em'}{' '}
                   {dateFormat.format(new Date(post.status === 'published' ? post.publishedAt : post.updatedAt))}
                 </p>
               </Link>
