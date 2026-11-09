@@ -138,7 +138,7 @@ export function PageHero({
   const step = (n: number) => ({ animationDelay: `${n * 0.09}s` });
 
   return (
-    <section className={`relative isolate overflow-hidden bg-gradient-to-b from-white to-[#eef3f8] text-[#2D3845] ${compact ? 'pb-5 pt-24 md:pb-6 md:pt-24' : 'pb-10 pt-28 md:pb-12 md:pt-32'}`}>
+    <section className={`relative isolate overflow-hidden bg-linear-to-b from-white to-[#eef3f8] text-[#2D3845] ${compact ? 'pb-5 pt-24 md:pb-6 md:pt-24' : 'pb-10 pt-28 md:pb-12 md:pt-32'}`}>
       <div className="bg-grid-light pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
       <div className="blob pointer-events-none absolute -right-24 -top-32 -z-10 h-[30rem] w-[30rem] rounded-full bg-[#315676]/10 blur-3xl" aria-hidden="true" />
       <div className="blob-slow pointer-events-none absolute -bottom-40 left-1/4 -z-10 h-80 w-80 rounded-full bg-[#EDA700]/15 blur-3xl" aria-hidden="true" />
@@ -176,7 +176,7 @@ export function PageHero({
         )}
       </Container>
 
-      <span className="draw-x absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-[#EDA700] via-[#EDA700]/30 to-transparent" aria-hidden="true" />
+      <span className="draw-x absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-[#EDA700] via-[#EDA700]/30 to-transparent" aria-hidden="true" />
     </section>
   );
 }

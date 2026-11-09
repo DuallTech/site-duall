@@ -13,11 +13,11 @@ export function ClientLogoMarquee({ reverse = false }: { reverse?: boolean }) {
     <div className="relative mx-auto w-[calc(100%-3rem)] max-w-[1800px] overflow-hidden motion-reduce:overflow-x-auto md:w-[82%]">
       
       <div
-        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-white/60 backdrop-blur-[3px] [mask-image:linear-gradient(to_right,#000,transparent)] md:w-28"
+        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-white/60 backdrop-blur-[3px] mask-[linear-gradient(to_right,#000,transparent)] md:w-28"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-white/60 backdrop-blur-[3px] [mask-image:linear-gradient(to_left,#000,transparent)] md:w-28"
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-white/60 backdrop-blur-[3px] mask-[linear-gradient(to_left,#000,transparent)] md:w-28"
         aria-hidden="true"
       />
 
@@ -113,7 +113,7 @@ export function NumbersBand({ blend = false }: { blend?: boolean }) {
                 <dd className="font-display text-4xl font-extrabold leading-none tracking-tight text-[#EDA700] md:text-5xl">
                   <CountUp value={item.value} />
                 </dd>
-                <dt className="mx-auto mt-2 max-w-[14rem] font-mono text-[10px] font-bold uppercase leading-snug tracking-[0.18em] text-slate-400">
+                <dt className="mx-auto mt-2 max-w-56 font-mono text-[10px] font-bold uppercase leading-snug tracking-[0.18em] text-slate-400">
                   {item.label}
                 </dt>
               </div>

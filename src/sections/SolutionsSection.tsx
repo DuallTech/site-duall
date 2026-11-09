@@ -171,7 +171,7 @@ export default function SolutionsSection() {
         aria-hidden="true"
       />
 
-      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-360 px-4 sm:px-6 lg:px-8">
         <blockquote className="reveal mb-6 flex items-center gap-4 font-display text-sm font-semibold text-white/85 md:text-base">
           <span className="h-px w-10 shrink-0 bg-white/70 md:w-10" aria-hidden="true" />
           “Comprometimento é a palavra que rege o nosso trabalho.”

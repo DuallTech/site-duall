@@ -32,7 +32,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 function DirectorsPhoto() {
   return (
     <figure>
-      <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-slate-100 shadow-[0_30px_60px_-30px_rgba(13,25,41,0.45)]">
+      <div className="relative aspect-3/2 overflow-hidden rounded-lg bg-slate-100 shadow-[0_30px_60px_-30px_rgba(13,25,41,0.45)]">
         <img
           src={directorsImage}
           alt="Denis Salles, Cristiano Salles e Eric Salles, diretores da Duall Engenharia."
@@ -40,7 +40,7 @@ function DirectorsPhoto() {
           decoding="async"
           className="h-full w-full object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
         />
-        <span className="pointer-events-none absolute left-0 right-0 top-0 h-[3px] bg-[#EDA700]" aria-hidden="true" />
+        <span className="pointer-events-none absolute left-0 right-0 top-0 h-0.75 bg-[#EDA700]" aria-hidden="true" />
       </div>
       <figcaption className="mt-4">
         <span className="block font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#315676]">Diretores</span>

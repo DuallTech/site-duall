@@ -19,7 +19,7 @@ export function FaqList() {
             <span className="flex-1">{item.question}</span>
             <ChevronDown size={20} className="shrink-0 text-[#315676] transition duration-300 group-open:rotate-180" aria-hidden="true" />
           </summary>
-          <p className="px-6 pb-6 pl-[4.25rem] leading-relaxed text-slate-600">{item.answer}</p>
+          <p className="px-6 pb-6 pl-17 leading-relaxed text-slate-600">{item.answer}</p>
         </details>
       ))}
     </div>

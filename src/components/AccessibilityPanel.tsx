@@ -187,7 +187,7 @@ export default function AccessibilityPanel({
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`flex items-center gap-2 p-3.5 rounded-full shadow-xl font-bold text-sm bg-duall-dark text-white border hover:bg-slate-800 transition transform hover:scale-105 active:scale-95 ${
-            isHighContrast ? 'border-white bg-[#000]' : 'border-[#355979]'
+            isHighContrast ? 'border-white bg-black' : 'border-[#355979]'
           }`}
           aria-expanded={isOpen}
           aria-haspopup="true"

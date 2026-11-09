@@ -148,7 +148,7 @@ function SolutionGallery({ images, alt }: { images: string[]; alt: string }) {
 
   return (
     <div className="solution-gallery relative" role="region" aria-label={`Imagens de ${alt}`}>
-      <div className="relative aspect-[3/2]">
+      <div className="relative aspect-3/2">
       {images.map((src, i) => (
         <img
           key={src}

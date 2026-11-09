@@ -26,7 +26,7 @@ const headingClass = 'mb-3 font-mono text-[11px] font-bold uppercase tracking-[0
 export default function FooterSection({ isHighContrast }: FooterSectionProps) {
   return (
     <footer className={`relative overflow-hidden border-t text-white ${isHighContrast ? 'border-white bg-black' : 'border-slate-800/80 bg-[#090f19]'}`}>
-      <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#EDA700] to-transparent" aria-hidden="true" />
+      <span className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[#EDA700] to-transparent" aria-hidden="true" />
       <div className="relative mx-auto max-w-7xl space-y-5 px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
           <div className="flex flex-col items-center space-y-2 md:block">

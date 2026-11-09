@@ -254,7 +254,7 @@ export default function AdminEditor() {
               onChange={(e) => setBody(e.target.value)}
               placeholder="Compartilhe suas ideias..."
               aria-label="Texto do artigo"
-              className={`${fieldClass} min-h-[220px] resize-none text-lg leading-relaxed text-slate-800`}
+              className={`${fieldClass} min-h-55 resize-none text-lg leading-relaxed text-slate-800`}
             />
           </div>
         )}

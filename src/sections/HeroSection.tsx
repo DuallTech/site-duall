@@ -13,7 +13,7 @@ export default function HeroSection() {
       <div className="bp-phase-a pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_90%,rgba(25,146,187,0.22),transparent_55%)]" aria-hidden="true" />
       <div className="bp-phase-b pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_80%_85%,rgba(237,167,0,0.2),transparent_55%)]" aria-hidden="true" />
       <div className="bp-phase-c pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_100%,rgba(242,85,93,0.14),transparent_50%)]" aria-hidden="true" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-b from-transparent to-[#0d1929]" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 bg-linear-to-b from-transparent to-[#0d1929]" aria-hidden="true" />
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_55%_at_50%_42%,#0d1929_35%,transparent_100%)] opacity-90"
         aria-hidden="true"
