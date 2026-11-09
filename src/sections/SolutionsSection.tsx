@@ -35,14 +35,14 @@ interface Area {
   eyebrow: string;
   title: string;
   icon: LucideIcon;
-  /** Página interna correspondente; áreas sem página própria levam à lista de soluções. */
+
   to: string;
   images: string[];
-  /** Foto que preenche o card inteiro (zoom), em vez de aparecer inteira com fundo desfocado. */
+
   cover?: boolean;
 }
 
-/** As seis áreas de atuação. Cada card alterna até quatro fotos. */
+
 const AREAS: Area[] = [
   {
     ...SOLUTION_AREAS[0],
@@ -85,7 +85,6 @@ const AREAS: Area[] = [
 
 const ROTATE_MS = 7000;
 
-/** Card com três fotos que se alternam em crossfade. Cada card começa com um atraso, para não trocar todos ao mesmo tempo. */
 function AreaCard({ area, index }: { area: Area; index: number }) {
   const { icon: Icon, images, cover } = area;
   const [current, setCurrent] = useState(0);
@@ -163,7 +162,6 @@ function AreaCard({ area, index }: { area: Area; index: number }) {
   );
 }
 
-/** Áreas de atuação com fotos que se alternam; o texto completo fica nas páginas de soluções. */
 export default function SolutionsSection() {
   return (
     <section aria-labelledby="solucoes" className="relative isolate overflow-hidden bg-[#0d1929] py-16 text-white">

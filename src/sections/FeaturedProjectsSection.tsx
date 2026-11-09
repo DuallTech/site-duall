@@ -8,7 +8,6 @@ import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from 
 
 const viewport = { once: true, margin: '-100px' } as const;
 
-/** Detalhes do projeto (área, localização, cliente) que aparecem sobre a foto ao passar o mouse. */
 function ProjectDetails({ project, className }: { project: Project; className: string }) {
   return (
     <div className={className}>
@@ -34,7 +33,6 @@ function ProjectDetails({ project, className }: { project: Project; className: s
   );
 }
 
-/** Bloco 2. Os cinco primeiros projetos em destaque na home, com link para a página completa de projetos. */
 export default function FeaturedProjectsSection() {
   const projects = useMemo(
     () => PROJECTS.map((project) => ({ ...project, imageUrl: projectImage(project.imageFileName) })).filter((project) => Boolean(project.imageUrl)),

@@ -6,7 +6,7 @@ import photo040 from '../assets/images/diretores/DSC00040.jpg';
 import photo056 from '../assets/images/diretores/DSC00056.jpg';
 import photo201 from '../assets/images/diretores/DSC00201.jpg';
 import photo307 from '../assets/images/diretores/DSC00307.jpg';
-import photo316 from '../assets/images/diretores/DSC00316.jpg';
+import photo358 from '../assets/images/diretores/DSC00358.jpg';
 import photo321 from '../assets/images/diretores/DSC00321.jpg';
 import photo384 from '../assets/images/diretores/DSC00384.jpg';
 import photo439 from '../assets/images/diretores/DSC00439.jpg';
@@ -19,22 +19,16 @@ import { fadeInUpVariants, staggerContainerVariants } from './animations';
 
 const viewport = { once: true, margin: '-100px' } as const;
 
-/** Tempo que cada grid fica na tela antes de passar sozinho. */
 const AUTOPLAY_MS = 5000;
 
 type Tile = { title: string; text: string; tone: 'gold' | 'glass' };
 
-/**
- * Cada grid é uma faixa larga: a foto em grupo ocupa o espaço de dois retratos e muda de lugar em cada grid;
- * as demais são retratos (ou um quadro com frase), um sim, um não deslocados para baixo.
- */
 type Cell =
   | { kind: 'group'; src: string }
   | { kind: 'photo'; src: string }
   | { kind: 'tile'; tile: Tile };
 
 const SLIDES: Cell[][] = [
-  // Quadro de frase à esquerda (sem foto em grupo neste grid)
   [
     {
       kind: 'tile',
@@ -49,7 +43,7 @@ const SLIDES: Cell[][] = [
     { kind: 'photo', src: photo201 },
     { kind: 'photo', src: photo9868 },
   ],
-  // Grupo à direita
+
   [
     { kind: 'photo', src: photo056 },
     {
@@ -62,9 +56,9 @@ const SLIDES: Cell[][] = [
     },
     { kind: 'photo', src: photo9798 },
     { kind: 'photo', src: photo439 },
-    { kind: 'group', src: photo316 },
+    { kind: 'group', src: photo358 },
   ],
-  // Grupo no meio
+ 
   [
     { kind: 'photo', src: photo307 },
     { kind: 'group', src: photo321 },
@@ -140,7 +134,6 @@ function TileCell({ tile, className = '' }: { tile: Tile; className?: string }) 
   );
 }
 
-/** Grids de fotos que passam para o lado (setas, bolinhas ou arrastando). */
 function TeamGallery() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
@@ -156,7 +149,6 @@ function TeamGallery() {
 
   const cells = SLIDES[index];
 
-  // Passa sozinho para o próximo grid a cada 5s; reinicia a contagem ao navegar e pausa com o mouse em cima.
   useEffect(() => {
     if (paused) return;
     const id = window.setTimeout(() => {
@@ -174,7 +166,7 @@ function TeamGallery() {
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      {/* Mobile: faixa horizontal com a mesma ordem do desktop, 2 por vez, rolando para o lado */}
+
       <div
         ref={stripRef}
         onPointerDown={(e) => {
@@ -300,7 +292,6 @@ function TeamGallery() {
   );
 }
 
-/** Liderança e equipe na página /a-duall: texto sobre confiança e grids de fotos da equipe. */
 export default function LeadershipSection() {
   return (
     <section aria-labelledby="lideranca" className="relative isolate overflow-hidden bg-[#0d1929] py-20 text-white md:py-28">

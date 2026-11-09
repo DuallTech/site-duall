@@ -28,7 +28,6 @@ export function FaqList() {
 
 const dateFormat = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
 
-/** Card de artigo (home e /conteudo/artigos): capa, data, título, resumo e botão "Ler mais". */
 export function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-[#EDA700] hover:shadow-xl">
@@ -67,7 +66,6 @@ export function ArticleCard({ article }: { article: Article }) {
   );
 }
 
-/** Estado sem artigos: folha em branco sendo escrita. */
 function BlankSheet() {
   return (
     <div className="relative flex h-full flex-col justify-between gap-8 rounded-3xl border-2 border-dashed border-[#315676]/30 bg-white/70 p-8 backdrop-blur md:p-10">
@@ -101,7 +99,6 @@ function BlankSheet() {
   );
 }
 
-/** Linha de cota (desenho técnico) que se desenha ao rolar. */
 function DimensionLine({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 text-[#315676]" aria-hidden="true">
@@ -114,7 +111,6 @@ function DimensionLine({ label }: { label: string }) {
   );
 }
 
-/** Bloco 6. Conteúdo técnico. As perguntas frequentes ficam na página /faq. */
 export default function ContentFaqSection() {
   const { articles } = useArticles();
   const latest = [...articles].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);

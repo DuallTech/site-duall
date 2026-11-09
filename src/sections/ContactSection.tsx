@@ -23,7 +23,6 @@ function InfoRow({ icon, title, children }: { icon: ReactNode; title: string; ch
 
 const link = 'font-mono text-[13px] font-semibold text-[#EDA700] transition hover:text-[#ffb81a]';
 
-/** Bloco 7. Contato: informações à esquerda e formulário à direita. Reutilizado em /contato. */
 export default function ContactSection({ asPage = false }: { asPage?: boolean }) {
   const Heading = asPage ? 'h1' : 'h2';
   const cities = SITE.units.map((u) => `${u.city} - ${u.region}`).join(' e ');
