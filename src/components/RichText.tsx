@@ -3,10 +3,10 @@ import { Play } from 'lucide-react';
 
 /**
  * Texto dos artigos (escrito no painel /admin), em marcações simples:
- *  - parágrafos separados por linha em branco
+ *  - parágrafos separados por linha em branco; alinhamento opcional no começo: {center}, {right} ou {justify}
  *  - **negrito** e [texto](https://link)
  *  - lista: linhas começando com "- "
- *  - imagem: ![descrição](https://...) sozinha numa linha
+ *  - imagem: ![descrição](https://...) sozinha numa linha; largura opcional logo depois: ![](https://...){50%}
  *  - vídeo: link do YouTube sozinho numa linha
  * Usado na pré-visualização do painel e na página pública do artigo.
  */
@@ -68,15 +68,18 @@ export default function RichText({ text, className = '' }: { text: string; class
   const blocks = text.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
 
   return (
-    <div className={`space-y-5 ${className}`}>
+    <div className={`space-y-5 [overflow-wrap:anywhere] ${className}`}>
       {blocks.map((block, i) => {
         const video = youtubeId(block);
         if (video) return <YouTubeEmbed key={i} id={video} />;
 
-        const image = block.match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/);
+        const image = block.match(/^!\[([^\]]*)\]\(([^)\s]+)\)(?:\{(?:(\d{1,3})%)? ?(left|center|right)?\})?$/);
         if (image && safeImage(image[2]))
           return (
-            <figure key={i}>
+            <figure
+              key={i}
+              className={image[4] === 'left' ? 'mr-auto' : image[4] === 'right' ? 'ml-auto' : 'mx-auto'}
+              style={image[3] ? { width: `${Math.min(100, Math.max(10, Number(image[3])))}%` } : undefined}>
               <img src={image[2]} alt={image[1]} loading="lazy" className="w-full rounded-xl" />
               {image[1] && <figcaption className="mt-2 text-center text-sm text-slate-500">{image[1]}</figcaption>}
             </figure>
@@ -92,9 +95,13 @@ export default function RichText({ text, className = '' }: { text: string; class
             </ul>
           );
 
+        const align = block.match(/^\{(center|right|justify)\}\s*/);
         return (
-          <p key={i} className="whitespace-pre-line">
-            {renderInline(block)}
+          <p
+            key={i}
+            className={`whitespace-pre-line ${align?.[1] === 'center' ? 'text-center' : align?.[1] === 'right' ? 'text-right' : align?.[1] === 'justify' ? 'text-justify' : ''}`}
+          >
+            {renderInline(align ? block.slice(align[0].length) : block)}
           </p>
         );
       })}

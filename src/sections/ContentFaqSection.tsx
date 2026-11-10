@@ -30,8 +30,13 @@ const dateFormat = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'sh
 
 export function ArticleCard({ article }: { article: Article }) {
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-[#EDA700] hover:shadow-xl">
-      <div className="relative aspect-video overflow-hidden bg-[#0d1929]">
+    <article className="group relative flex h-full origin-top flex-col rounded-[3px] border border-slate-200 bg-white shadow-[0_1px_1px_rgba(15,23,42,0.12),0_6px_14px_-4px_rgba(15,23,42,0.28)] transition duration-300 odd:rotate-[-0.8deg] even:rotate-[0.6deg] hover:-translate-y-1 hover:rotate-0 hover:shadow-[0_14px_28px_-8px_rgba(15,23,42,0.4)]">
+      {/* tachinha fincada no papel */}
+      <span aria-hidden="true" className="pointer-events-none absolute -top-2.5 left-1/2 z-10 -translate-x-1/2">
+        <span className="absolute left-1/2 top-3 h-2 w-4 -translate-x-1/2 rounded-full bg-black/30 blur-[2px]" />
+        <span className="relative block h-5 w-5 rounded-full bg-[radial-gradient(circle_at_35%_30%,#ffd768,#EDA700_55%,#a87400)] shadow-[0_2px_3px_rgba(0,0,0,0.35)] ring-1 ring-[#8a5f00]/40" />
+      </span>
+      <div className="relative mx-3 mt-5 aspect-video overflow-hidden bg-[#0d1929]">
         {article.coverUrl ? (
           <img
             src={article.coverUrl}
@@ -47,7 +52,7 @@ export function ArticleCard({ article }: { article: Article }) {
           </div>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-3 p-6">
+      <div className="flex flex-1 flex-col gap-3 px-6 pb-6 pt-5">
         <time dateTime={article.date} className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">
           {dateFormat.format(new Date(article.date))}
         </time>
