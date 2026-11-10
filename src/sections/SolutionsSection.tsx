@@ -35,14 +35,14 @@ interface Area {
   eyebrow: string;
   title: string;
   icon: LucideIcon;
-  /** Página interna correspondente; áreas sem página própria levam à lista de soluções. */
+
   to: string;
   images: string[];
-  /** Foto que preenche o card inteiro (zoom), em vez de aparecer inteira com fundo desfocado. */
+
   cover?: boolean;
 }
 
-/** As seis áreas de atuação. Cada card alterna até quatro fotos. */
+
 const AREAS: Area[] = [
   {
     ...SOLUTION_AREAS[0],
@@ -85,7 +85,6 @@ const AREAS: Area[] = [
 
 const ROTATE_MS = 7000;
 
-/** Card com três fotos que se alternam em crossfade. Cada card começa com um atraso, para não trocar todos ao mesmo tempo. */
 function AreaCard({ area, index }: { area: Area; index: number }) {
   const { icon: Icon, images, cover } = area;
   const [current, setCurrent] = useState(0);
@@ -163,7 +162,6 @@ function AreaCard({ area, index }: { area: Area; index: number }) {
   );
 }
 
-/** Áreas de atuação com fotos que se alternam; o texto completo fica nas páginas de soluções. */
 export default function SolutionsSection() {
   return (
     <section aria-labelledby="solucoes" className="relative isolate overflow-hidden bg-[#0d1929] py-16 text-white">
@@ -173,7 +171,7 @@ export default function SolutionsSection() {
         aria-hidden="true"
       />
 
-      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-360 px-4 sm:px-6 lg:px-8">
         <blockquote className="reveal mb-6 flex items-center gap-4 font-display text-sm font-semibold text-white/85 md:text-base">
           <span className="h-px w-10 shrink-0 bg-white/70 md:w-10" aria-hidden="true" />
           “Comprometimento é a palavra que rege o nosso trabalho.”

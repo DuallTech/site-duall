@@ -9,7 +9,6 @@ const viewport = { once: true, margin: '-100px' } as const;
 
 const PRINCIPLES = ['Ética', 'Comprometimento', 'Satisfação', 'Inovação', 'Humanização', 'Conhecimento técnico'];
 
-// Textos do site institucional atual (vídeo institucional): foco, agilidade e prazo.
 const PILLARS: Array<{ title: string; text: string; Icon: LucideIcon }> = [
   {
     title: 'Foco em soluções',
@@ -30,11 +29,10 @@ const PILLARS: Array<{ title: string; text: string; Icon: LucideIcon }> = [
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
-/** Foto dos diretores com legenda logo abaixo. */
 function DirectorsPhoto() {
   return (
     <figure>
-      <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-slate-100 shadow-[0_30px_60px_-30px_rgba(13,25,41,0.45)]">
+      <div className="relative aspect-3/2 overflow-hidden rounded-lg bg-slate-100 shadow-[0_30px_60px_-30px_rgba(13,25,41,0.45)]">
         <img
           src={directorsImage}
           alt="Denis Salles, Cristiano Salles e Eric Salles, diretores da Duall Engenharia."
@@ -42,7 +40,7 @@ function DirectorsPhoto() {
           decoding="async"
           className="h-full w-full object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
         />
-        <span className="pointer-events-none absolute left-0 right-0 top-0 h-[3px] bg-[#EDA700]" aria-hidden="true" />
+        <span className="pointer-events-none absolute left-0 right-0 top-0 h-0.75 bg-[#EDA700]" aria-hidden="true" />
       </div>
       <figcaption className="mt-4">
         <span className="block font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#315676]">Diretores</span>
@@ -54,7 +52,6 @@ function DirectorsPhoto() {
   );
 }
 
-/** Resumo da página /a-duall: o conteúdo completo (missão, visão, unidades) fica na página. */
 export default function AboutSummarySection() {
   return (
     <section aria-labelledby="a-duall" className="relative overflow-hidden bg-white py-20 md:py-24">

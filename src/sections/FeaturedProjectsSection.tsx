@@ -8,7 +8,6 @@ import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from 
 
 const viewport = { once: true, margin: '-100px' } as const;
 
-/** Detalhes do projeto (área, localização, cliente) que aparecem sobre a foto ao passar o mouse. */
 function ProjectDetails({ project, className }: { project: Project; className: string }) {
   return (
     <div className={className}>
@@ -34,7 +33,6 @@ function ProjectDetails({ project, className }: { project: Project; className: s
   );
 }
 
-/** Bloco 2. Os cinco primeiros projetos em destaque na home, com link para a página completa de projetos. */
 export default function FeaturedProjectsSection() {
   const projects = useMemo(
     () => PROJECTS.map((project) => ({ ...project, imageUrl: projectImage(project.imageFileName) })).filter((project) => Boolean(project.imageUrl)),
@@ -62,7 +60,7 @@ export default function FeaturedProjectsSection() {
             </div>
             <h2
               id="projetos-destaque"
-              className="mt-5 font-display text-3xl font-extrabold leading-[1] tracking-tight text-[#2D3845] md:text-4xl lg:text-[3.35rem]"
+              className="mt-5 font-display text-3xl font-extrabold leading-none tracking-tight text-[#2D3845] md:text-4xl lg:text-[3.35rem]"
             >
               Projetos ja desenvolvidos pela Duall.
             </h2>
@@ -116,7 +114,7 @@ export default function FeaturedProjectsSection() {
                       project.imageClassName ?? 'object-center'
                     }`}
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950/30 via-transparent to-transparent" />
                   <ProjectDetails
                     project={project}
                     className="pointer-events-none absolute inset-x-4 bottom-4 z-10 translate-y-3 rounded-2xl border border-white/20 bg-[#0e2135]/88 p-3 text-white opacity-0 shadow-[0_18px_50px_rgba(6,17,31,0.28)] backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"

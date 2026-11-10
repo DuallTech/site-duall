@@ -183,7 +183,7 @@ export function ProjectPage() {
                   src={src}
                   alt={`${project.title}, ${project.category.toLowerCase()}, projeto de instalações desenvolvido pela Duall Engenharia.`}
                   loading={i === 0 ? 'eager' : 'lazy'}
-                  className={`aspect-[16/9] max-h-[62vh] w-full rounded-xl object-cover shadow-xl ${i === 0 ? (project.imageClassName ?? '') : ''}`}
+                  className={`aspect-16/9 max-h-[62vh] w-full rounded-xl object-cover shadow-xl ${i === 0 ? (project.imageClassName ?? '') : ''}`}
                 />
               </div>
             ))}

@@ -13,7 +13,7 @@ interface HeaderSectionProps {
 export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  // Fecha o menu de Soluções depois de um clique, mesmo com o mouse ainda em cima; reabre quando o mouse sai e volta.
+  
   const [solutionsClosed, setSolutionsClosed] = useState(false);
   const { pathname } = useLocation();
 
@@ -37,7 +37,6 @@ export default function HeaderSection({ isHighContrast }: HeaderSectionProps) {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Só a Home tem hero escuro: nas demais páginas o cabeçalho já nasce sobre fundo claro.
   const solid = isScrolled || pathname !== '/';
 
   useEffect(() => {

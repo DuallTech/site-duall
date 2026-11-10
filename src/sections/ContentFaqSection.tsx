@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, ChevronDown, Linkedin } from 'lucide-react';
 
 import { ButtonLink, Container } from '../components/ui';
-import { ARTICLES, type Article } from '../content/articles';
+import { type Article } from '../content/articles';
+import { useArticles } from '../content/useArticles';
 import { FAQ } from '../content/faq';
 import { SITE } from '../content/site';
 
@@ -18,7 +19,7 @@ export function FaqList() {
             <span className="flex-1">{item.question}</span>
             <ChevronDown size={20} className="shrink-0 text-[#315676] transition duration-300 group-open:rotate-180" aria-hidden="true" />
           </summary>
-          <p className="px-6 pb-6 pl-[4.25rem] leading-relaxed text-slate-600">{item.answer}</p>
+          <p className="px-6 pb-6 pl-17 leading-relaxed text-slate-600">{item.answer}</p>
         </details>
       ))}
     </div>
@@ -27,47 +28,49 @@ export function FaqList() {
 
 const dateFormat = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
 
-/** Artigo em linha editorial: data, título e seta que desliza. */
-export function ArticleRow({ article }: { article: Article }) {
+export function ArticleCard({ article }: { article: Article }) {
   return (
-    <article className="group relative flex items-start gap-5 border-b border-[#315676]/15 py-6 transition-all duration-300 hover:translate-x-2 hover:border-[#EDA700]">
-      <time dateTime={article.date} className="w-24 shrink-0 pt-1 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-[#315676]/60">
-        {dateFormat.format(new Date(article.date))}
-      </time>
-      <div className="flex-1 space-y-1.5">
-        <h3 className="font-display text-xl font-bold leading-tight text-[#2D3845] md:text-2xl">
+    <article className="group relative flex h-full origin-top flex-col rounded-[3px] border border-slate-200 bg-white shadow-[0_1px_1px_rgba(15,23,42,0.12),0_6px_14px_-4px_rgba(15,23,42,0.28)] transition duration-300 odd:rotate-[-0.8deg] even:rotate-[0.6deg] hover:-translate-y-1 hover:rotate-0 hover:shadow-[0_14px_28px_-8px_rgba(15,23,42,0.4)]">
+      {/* tachinha fincada no papel */}
+      <span aria-hidden="true" className="pointer-events-none absolute -top-2.5 left-1/2 z-10 -translate-x-1/2">
+        <span className="absolute left-1/2 top-3 h-2 w-4 -translate-x-1/2 rounded-full bg-black/30 blur-[2px]" />
+        <span className="relative block h-5 w-5 rounded-full bg-[radial-gradient(circle_at_35%_30%,#ffd768,#EDA700_55%,#a87400)] shadow-[0_2px_3px_rgba(0,0,0,0.35)] ring-1 ring-[#8a5f00]/40" />
+      </span>
+      <div className="relative mx-3 mt-5 aspect-video overflow-hidden bg-[#0d1929]">
+        {article.coverUrl ? (
+          <img
+            src={article.coverUrl}
+            alt=""
+            loading="lazy"
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="bg-grid flex h-full w-full items-center justify-center opacity-90" aria-hidden="true">
+            <span className="font-display text-4xl font-extrabold text-white/90">
+              Duall<span className="text-[#EDA700]">.</span>
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col gap-3 px-6 pb-6 pt-5">
+        <time dateTime={article.date} className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">
+          {dateFormat.format(new Date(article.date))}
+        </time>
+        <h3 className="font-display text-xl font-bold leading-tight text-[#2D3845]">
           <Link to={`/conteudo/artigos/${article.slug}`} className="after:absolute after:inset-0 after:content-['']">
             {article.title}
           </Link>
         </h3>
-        <p className="line-clamp-2 text-sm leading-relaxed text-slate-600">{article.summary}</p>
+        {article.summary && <p className="line-clamp-3 text-sm leading-relaxed text-slate-600">{article.summary}</p>}
+        <span className="mt-auto inline-flex items-center gap-2 self-start rounded-full bg-[#EDA700] px-5 py-2 text-sm font-bold text-slate-900 transition duration-300 group-hover:brightness-95">
+          Ler mais{' '}
+          <ArrowUpRight size={16} className="transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+        </span>
       </div>
-      <ArrowUpRight className="mt-1 shrink-0 text-[#315676] transition duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-[#EDA700]" aria-hidden="true" />
     </article>
   );
 }
 
-/** Mantido para a listagem em /conteudo/artigos. */
-export function ArticleCard({ article }: { article: Article }) {
-  return (
-    <article className="group relative flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-7 transition hover:-translate-y-1 hover:shadow-xl">
-      <time dateTime={article.date} className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">
-        {dateFormat.format(new Date(article.date))}
-      </time>
-      <h3 className="font-display text-xl font-bold leading-tight text-[#2D3845]">
-        <Link to={`/conteudo/artigos/${article.slug}`} className="after:absolute after:inset-0 after:content-['']">
-          {article.title}
-        </Link>
-      </h3>
-      <p className="text-sm leading-relaxed text-slate-600">{article.summary}</p>
-      <span className="mt-auto inline-flex items-center gap-1 pt-2 text-sm font-bold text-[#315676]">
-        Ler artigo <ArrowUpRight size={16} />
-      </span>
-    </article>
-  );
-}
-
-/** Estado sem artigos: folha em branco sendo escrita. */
 function BlankSheet() {
   return (
     <div className="relative flex h-full flex-col justify-between gap-8 rounded-3xl border-2 border-dashed border-[#315676]/30 bg-white/70 p-8 backdrop-blur md:p-10">
@@ -101,7 +104,6 @@ function BlankSheet() {
   );
 }
 
-/** Linha de cota (desenho técnico) que se desenha ao rolar. */
 function DimensionLine({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 text-[#315676]" aria-hidden="true">
@@ -114,9 +116,9 @@ function DimensionLine({ label }: { label: string }) {
   );
 }
 
-/** Bloco 6. Conteúdo técnico. As perguntas frequentes ficam na página /faq. */
 export default function ContentFaqSection() {
-  const latest = [...ARTICLES].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+  const { articles } = useArticles();
+  const latest = [...articles].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
 
   return (
     <section aria-labelledby="conteudo" className="bg-blueprint relative overflow-hidden py-24">
@@ -146,22 +148,17 @@ export default function ContentFaqSection() {
             <div className="reveal flex flex-col lg:col-span-12">
               <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[#315676]">Artigos</p>
               {latest.length ? (
-                <div className="border-t border-[#315676]/15">
+                <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {latest.map((article) => (
-                    <ArticleRow key={article.slug} article={article} />
+                    <li key={article.slug}>
+                      <ArticleCard article={article} />
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
                 <BlankSheet />
               )}
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-                <Link
-                  to="/conteudo"
-                  className="group inline-flex items-center gap-2 font-display text-lg font-bold text-[#2D3845]"
-                >
-                  <span className="border-b-2 border-[#EDA700]">Abrir a página de Conteúdo</span>
-                  <ArrowRight className="transition-transform duration-300 group-hover:translate-x-2" aria-hidden="true" />
-                </Link>
                 <Link
                   to="/conteudo/artigos"
                   className="group inline-flex items-center gap-2 font-display text-lg font-bold text-[#2D3845]"

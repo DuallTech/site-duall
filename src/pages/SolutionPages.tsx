@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowUpRight, Box, ChevronLeft, ChevronRight, CircleCheck, P
 import imgAprovacao from '../assets/images/atuacao/aprovacao-concessionaria.png';
 import imgBim from '../assets/images/atuacao/bim-modelagem3d.png';
 import imgBombeiro from '../assets/images/atuacao/corpo-de-bombeiro.png';
-import BimRealityCompare from '../components/BimRealityCompare';
+// import BimRealityCompare from '../components/BimRealityCompare'; // desativado por enquanto (seção "BIM vs realidade")
 import { ButtonLink, ClientOnly, Container, Eyebrow, PageHero } from '../components/ui';
 import { SOLUTION_PHOTOS } from '../content/solutionPhotos';
 import { SOLUTIONS, getSolution } from '../content/solutions';
@@ -148,7 +148,7 @@ function SolutionGallery({ images, alt }: { images: string[]; alt: string }) {
 
   return (
     <div className="solution-gallery relative" role="region" aria-label={`Imagens de ${alt}`}>
-      <div className="relative aspect-[3/2]">
+      <div className="relative aspect-3/2">
       {images.map((src, i) => (
         <img
           key={src}
@@ -290,6 +290,7 @@ export function SolutionPage() {
         </section>
       )}
 
+      {/* Seção "BIM vs realidade" desativada por enquanto. Para voltar, descomente este bloco e o import lá em cima.
       {isBim && (
         <section className="bg-white py-20" aria-labelledby="bim-realidade">
           <Container className="space-y-10">
@@ -309,6 +310,7 @@ export function SolutionPage() {
           </Container>
         </section>
       )}
+      */}
     </>
   );
 }

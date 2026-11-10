@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/fetch-articles.mjs",
     "dev": "vite --port=3002 --strictPort --host=0.0.0.0",
+    "prebuild": "node scripts/fetch-articles.mjs",
     "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist dist-ssr",
@@ -12,6 +14,7 @@
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
+    "@supabase/supabase-js": "^2.119.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",

@@ -17,7 +17,6 @@ export function getRoutes(): string[] {
     '/solucoes',
     ...SOLUTIONS.map((s) => `/solucoes/${s.slug}`),
     '/a-duall',
-    '/conteudo',
     '/conteudo/artigos',
     ...ARTICLES.map((a) => `/conteudo/artigos/${a.slug}`),
     '/faq',

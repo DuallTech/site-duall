@@ -34,7 +34,7 @@ export const NAV = [
   { label: 'A Duall', href: '/a-duall' },
   { label: 'Projetos', href: '/projetos' },
   { label: 'Soluções', href: '/solucoes' },
-  { label: 'Conteúdo', href: '/conteudo' },
+  { label: 'Artigos', href: '/conteudo/artigos' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contato', href: '/contato' },
 ] as const;

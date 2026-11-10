@@ -77,7 +77,7 @@ function DescricaoPanel() {
         className="relative isolate overflow-hidden border-b border-slate-200 p-8 text-[#2D3845] md:p-10 lg:border-b-0 lg:border-r lg:p-12"
       >
         <span
-          className="pointer-events-none absolute -bottom-10 -right-4 -z-10 select-none font-display text-[10rem] font-extrabold leading-none text-[#315676]/[0.05]"
+          className="pointer-events-none absolute -bottom-10 -right-4 -z-10 select-none font-display text-[10rem] font-extrabold leading-none text-[#315676]/5"
           aria-hidden="true"
         >
           01
@@ -164,7 +164,7 @@ function MissaoPanel() {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.9, delay: 0.5, ease }}
-          className="mt-auto block h-[3px] w-full origin-center rounded-full bg-linear-to-r from-transparent via-[#EDA700] to-transparent"
+          className="mt-auto block h-0.75 w-full origin-center rounded-full bg-linear-to-r from-transparent via-[#EDA700] to-transparent"
           aria-hidden="true"
         />
       </motion.article>
@@ -308,7 +308,7 @@ export default function VideoCarousel() {
                 <motion.span
                   layoutId="about-tab-bg"
                   transition={{ type: 'spring', stiffness: 400, damping: 34 }}
-                  className="absolute inset-0 -z-0 bg-[#EDA700]/[0.06]"
+                  className="absolute inset-0 z-0 bg-[#EDA700]/6"
                   aria-hidden="true"
                 />
               )}
@@ -332,7 +332,7 @@ export default function VideoCarousel() {
               {isActive && (
                 <motion.span
                   layoutId="about-tab-line"
-                  className="absolute inset-x-0 bottom-0 h-[3px] bg-[#EDA700]"
+                  className="absolute inset-x-0 bottom-0 h-0.75 bg-[#EDA700]"
                   aria-hidden="true"
                 />
               )}

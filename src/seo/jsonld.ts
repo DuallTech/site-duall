@@ -131,12 +131,14 @@ export const articleLd = (article: {
   title: string;
   summary: string;
   date: string;
+  coverUrl?: string;
   author?: string;
 }): Json => ({
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: article.title,
-  description: article.summary, 
+  description: article.summary,
+  ...(article.coverUrl ? { image: [article.coverUrl] } : {}),
   datePublished: article.date,
   dateModified: article.date,
   inLanguage: SITE.locale,

@@ -3,10 +3,10 @@ import { AnimatePresence, motion, type Variants } from 'motion/react';
 import { ArrowLeft, ArrowRight, Quote } from 'lucide-react';
 
 import photo040 from '../assets/images/diretores/DSC00040.jpg';
-import photo056 from '../assets/images/diretores/DSC00056.jpg';
+import photo064 from '../assets/images/diretores/DSC00064.jpg';
 import photo201 from '../assets/images/diretores/DSC00201.jpg';
 import photo307 from '../assets/images/diretores/DSC00307.jpg';
-import photo316 from '../assets/images/diretores/DSC00316.jpg';
+import photo358 from '../assets/images/diretores/DSC00358.jpg';
 import photo321 from '../assets/images/diretores/DSC00321.jpg';
 import photo384 from '../assets/images/diretores/DSC00384.jpg';
 import photo439 from '../assets/images/diretores/DSC00439.jpg';
@@ -19,22 +19,16 @@ import { fadeInUpVariants, staggerContainerVariants } from './animations';
 
 const viewport = { once: true, margin: '-100px' } as const;
 
-/** Tempo que cada grid fica na tela antes de passar sozinho. */
 const AUTOPLAY_MS = 5000;
 
 type Tile = { title: string; text: string; tone: 'gold' | 'glass' };
 
-/**
- * Cada grid é uma faixa larga: a foto em grupo ocupa o espaço de dois retratos e muda de lugar em cada grid;
- * as demais são retratos (ou um quadro com frase), um sim, um não deslocados para baixo.
- */
 type Cell =
   | { kind: 'group'; src: string }
   | { kind: 'photo'; src: string }
   | { kind: 'tile'; tile: Tile };
 
 const SLIDES: Cell[][] = [
-  // Quadro de frase à esquerda (sem foto em grupo neste grid)
   [
     {
       kind: 'tile',
@@ -49,9 +43,9 @@ const SLIDES: Cell[][] = [
     { kind: 'photo', src: photo201 },
     { kind: 'photo', src: photo9868 },
   ],
-  // Grupo à direita
+
   [
-    { kind: 'photo', src: photo056 },
+    { kind: 'photo', src: photo064 },
     {
       kind: 'tile',
       tile: {
@@ -62,9 +56,9 @@ const SLIDES: Cell[][] = [
     },
     { kind: 'photo', src: photo9798 },
     { kind: 'photo', src: photo439 },
-    { kind: 'group', src: photo316 },
+    { kind: 'group', src: photo358 },
   ],
-  // Grupo no meio
+ 
   [
     { kind: 'photo', src: photo307 },
     { kind: 'group', src: photo321 },
@@ -113,7 +107,7 @@ function PhotoCell({ src, className }: { src: string; className: string }) {
         className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
       />
       <span
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-[#EDA700] transition-transform duration-500 group-hover:scale-x-100"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-0.75 origin-left scale-x-0 bg-[#EDA700] transition-transform duration-500 group-hover:scale-x-100"
         aria-hidden="true"
       />
     </motion.figure>
@@ -125,13 +119,13 @@ function TileCell({ tile, className = '' }: { tile: Tile; className?: string }) 
   return (
     <motion.div
       variants={cellVariants}
-      className={`relative flex aspect-[3/4] min-w-0 flex-col md:aspect-[21/20] justify-between overflow-hidden rounded-xl p-3 md:p-4 lg:p-5 ${className} ${
-        gold ? 'bg-[#EDA700] text-slate-900' : 'bg-white/[0.04] text-white ring-1 ring-white/10'
+      className={`relative flex aspect-3/4 min-w-0 flex-col md:aspect-21/20 justify-between overflow-hidden rounded-xl p-3 md:p-4 lg:p-5 ${className} ${
+        gold ? 'bg-[#EDA700] text-slate-900' : 'bg-white/4 text-white ring-1 ring-white/10'
       }`}
     >
       <Quote size={24} className={gold ? 'text-slate-900/70' : 'text-[#EDA700]'} aria-hidden="true" />
       <div>
-        <p className="break-words font-display text-[15px] font-extrabold leading-tight min-[400px]:text-base md:text-lg xl:text-xl">
+        <p className="wrap-break-word font-display text-[15px] font-extrabold leading-tight min-[400px]:text-base md:text-lg xl:text-xl">
           {tile.title}
         </p>
         <p className={`mt-2 text-sm leading-relaxed ${gold ? 'text-slate-900/80' : 'text-slate-400'}`}>{tile.text}</p>
@@ -140,7 +134,6 @@ function TileCell({ tile, className = '' }: { tile: Tile; className?: string }) 
   );
 }
 
-/** Grids de fotos que passam para o lado (setas, bolinhas ou arrastando). */
 function TeamGallery() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
@@ -156,7 +149,6 @@ function TeamGallery() {
 
   const cells = SLIDES[index];
 
-  // Passa sozinho para o próximo grid a cada 5s; reinicia a contagem ao navegar e pausa com o mouse em cima.
   useEffect(() => {
     if (paused) return;
     const id = window.setTimeout(() => {
@@ -174,7 +166,7 @@ function TeamGallery() {
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      {/* Mobile: faixa horizontal com a mesma ordem do desktop, 2 por vez, rolando para o lado */}
+
       <div
         ref={stripRef}
         onPointerDown={(e) => {
@@ -203,19 +195,19 @@ function TeamGallery() {
           dragRef.current = null;
           if (el) el.style.scrollSnapType = '';
         }}
-        className="-mx-4 flex cursor-grab touch-pan-x select-none snap-x snap-mandatory items-start gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden"
+        className="-mx-4 flex cursor-grab touch-pan-x select-none snap-x snap-mandatory items-start gap-3 overflow-x-auto px-4 pb-2 scrollbar-none md:hidden [&::-webkit-scrollbar]:hidden"
       >
         {SLIDES.flat().map((cell, i) => {
           if (cell.kind === 'group')
             return (
               <div key={`m-${i}`} className="w-[calc(100%-2rem)] shrink-0 snap-start">
-                <PhotoCell src={cell.src} className="aspect-[3/2]" />
+                <PhotoCell src={cell.src} className="aspect-3/2" />
               </div>
             );
           if (cell.kind === 'photo')
             return (
               <div key={`m-${i}`} className="w-[calc(50%-1.25rem)] shrink-0 snap-start">
-                <PhotoCell src={cell.src} className="aspect-[3/4]" />
+                <PhotoCell src={cell.src} className="aspect-3/4" />
               </div>
             );
           return (
@@ -243,16 +235,16 @@ function TeamGallery() {
               else if (info.offset.x > 80) go(index - 1, -1);
             }}
             style={{ '--cols': columnTemplate(cells) } as CSSProperties}
-            className="grid cursor-grab grid-flow-row-dense grid-cols-2 items-start gap-3 pb-2 active:cursor-grabbing md:grid-cols-[var(--cols)] md:gap-4"
+            className="grid cursor-grab grid-flow-row-dense grid-cols-2 items-start gap-3 pb-2 active:cursor-grabbing md:grid-cols-(--cols) md:gap-4"
           >
             {cells.map((cell, i) => {
               const offset = i % 2 === 1 ? 'md:mt-12' : '';
               if (cell.kind === 'group')
                 return (
-                  <PhotoCell key={cell.src} src={cell.src} className={`col-span-2 aspect-[3/2] md:col-span-1 ${offset}`} />
+                  <PhotoCell key={cell.src} src={cell.src} className={`col-span-2 aspect-3/2 md:col-span-1 ${offset}`} />
                 );
               if (cell.kind === 'photo')
-                return <PhotoCell key={cell.src} src={cell.src} className={`aspect-[3/4] ${offset}`} />;
+                return <PhotoCell key={cell.src} src={cell.src} className={`aspect-3/4 ${offset}`} />;
               return <TileCell key={`tile-${i}`} tile={cell.tile} className={offset} />;
             })}
           </motion.div>
@@ -300,7 +292,6 @@ function TeamGallery() {
   );
 }
 
-/** Liderança e equipe na página /a-duall: texto sobre confiança e grids de fotos da equipe. */
 export default function LeadershipSection() {
   return (
     <section aria-labelledby="lideranca" className="relative isolate overflow-hidden bg-[#0d1929] py-20 text-white md:py-28">
