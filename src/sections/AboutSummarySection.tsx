@@ -117,7 +117,7 @@ export default function AboutSummarySection() {
 
             <motion.ul
               variants={staggerContainerVariants}
-              className="mt-6 flex flex-wrap gap-x-5 gap-y-2"
+              className="mt-6 hidden flex-wrap gap-x-5 gap-y-2 lg:flex"
               aria-label="Princípios"
             >
               {PRINCIPLES.map((principle) => (
@@ -132,7 +132,7 @@ export default function AboutSummarySection() {
               ))}
             </motion.ul>
 
-            <motion.div variants={fadeInUpVariants} className="mt-8">
+            <motion.div variants={fadeInUpVariants} className="mt-8 flex justify-center lg:justify-start">
               <ButtonLink to="/a-duall">Conhecer a Duall</ButtonLink>
             </motion.div>
           </motion.div>
