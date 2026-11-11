@@ -122,7 +122,7 @@ export function ProjectsPage() {
     </>
   );
 }
-
+ 
 export function ProjectPage() {
   const { slug = '' } = useParams();
   const project = getProject(slug);

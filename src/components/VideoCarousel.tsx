@@ -132,17 +132,17 @@ function DescricaoPanel() {
 
 function MissaoPanel() {
   return (
-    <div className="grid gap-5 lg:grid-cols-3">
+    <div className="grid grid-cols-[1.45fr_1.1fr_1fr] gap-2 sm:grid-cols-3 sm:gap-4 lg:gap-5">
       <motion.article
         variants={itemVariants}
         whileHover={{ y: -6 }}
-        className="relative flex flex-col items-center overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl"
+        className="relative flex flex-col items-center overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-xl sm:rounded-3xl sm:p-6 lg:p-8"
       >
-        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#EDA700] text-slate-900">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg sm:h-12 sm:w-12 sm:rounded-xl bg-[#EDA700] text-slate-900">
           <Target size={22} aria-hidden="true" />
         </span>
-        <p className="mt-6 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#315676]">Missão</p>
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 font-mono text-[9px] font-bold uppercase tracking-[0.18em] sm:mt-6 sm:text-[10px] sm:tracking-[0.24em] text-[#315676]">Missão</p>
+        <p className="mt-2 text-[11px] leading-snug text-slate-600 sm:mt-3 sm:text-base sm:leading-relaxed">
           Garantir tranquilidade aos nossos clientes, por meio de uma engenharia precisa, prazos respeitados, coordenação
           técnica presente e prezar pelo desenvolvimento da equipe em um ambiente saudável.
         </p>
@@ -151,13 +151,13 @@ function MissaoPanel() {
       <motion.article
         variants={itemVariants}
         whileHover={{ y: -6 }}
-        className="relative flex flex-col items-center overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl"
+        className="relative flex flex-col items-center overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-xl sm:rounded-3xl sm:p-6 lg:p-8"
       >
-        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#315676]/10 text-[#315676]">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg sm:h-12 sm:w-12 sm:rounded-xl bg-[#315676]/10 text-[#315676]">
           <Compass size={22} aria-hidden="true" />
         </span>
-        <p className="mt-6 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#315676]">Visão</p>
-        <p className="mt-3 font-display text-2xl font-extrabold leading-tight tracking-tight text-[#2D3845]">
+        <p className="mt-3 font-mono text-[9px] font-bold uppercase tracking-[0.18em] sm:mt-6 sm:text-[10px] sm:tracking-[0.24em] text-[#315676]">Visão</p>
+        <p className="mt-2 font-display text-[15px] font-extrabold sm:mt-3 sm:text-2xl leading-tight tracking-tight text-[#2D3845]">
           Consolidar a marca como referência em projetos de instalações<span className="text-[#EDA700]">.</span>
         </p>
         <motion.span
@@ -172,19 +172,19 @@ function MissaoPanel() {
       <motion.article
         variants={itemVariants}
         whileHover={{ y: -6 }}
-        className="flex flex-col items-center rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl"
+        className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-xl sm:rounded-3xl sm:p-6 lg:p-8"
       >
-        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#315676]/10 text-[#315676]">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg sm:h-12 sm:w-12 sm:rounded-xl bg-[#315676]/10 text-[#315676]">
           <Gem size={22} aria-hidden="true" />
         </span>
-        <p className="mt-6 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[#315676]">Valores</p>
-        <motion.ul variants={listVariants} className="mt-4 flex flex-wrap justify-center gap-2">
+        <p className="mt-3 font-mono text-[9px] font-bold uppercase tracking-[0.18em] sm:mt-6 sm:text-[10px] sm:tracking-[0.24em] text-[#315676]">Valores</p>
+        <motion.ul variants={listVariants} className="mt-3 flex flex-col items-center gap-1.5 sm:mt-4 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-2">
           {PRINCIPIOS.map((principio) => (
             <motion.li
               key={principio}
               variants={popVariants}
               whileHover={{ scale: 1.06 }}
-              className="cursor-default rounded-full border border-[#315676]/20 px-3.5 py-1.5 text-sm font-semibold text-[#315676] transition-colors hover:border-[#EDA700] hover:bg-[#EDA700] hover:text-slate-900"
+              className="cursor-default rounded-full border border-transparent px-0 py-0 text-[11px] font-semibold sm:border-[#315676]/20 sm:px-3.5 sm:py-1.5 sm:text-sm text-[#315676] transition-colors hover:border-[#EDA700] hover:bg-[#EDA700] hover:text-slate-900"
             >
               {principio}
             </motion.li>

@@ -32,15 +32,7 @@ export function AboutPage() {
       {/* Quem somos: diretores, missão, visão, valores e vídeo, tudo nas abas (cada coisa aparece uma vez) */}
       <section className="bg-blueprint relative overflow-hidden py-20 md:py-24" aria-labelledby="quem-somos">
         <Container className="space-y-12">
-          <div className="reveal max-w-3xl space-y-5">
-            <Eyebrow>Quem somos</Eyebrow>
-            <h2 id="quem-somos" className="font-display text-3xl font-extrabold leading-[1.05] tracking-tight text-[#2D3845] md:text-5xl">
-              Engenharia que faz a diferença na prática
-            </h2>
-            <p className="text-lg leading-relaxed text-slate-600">
-              Entendemos que, quando um projeto nasce, expectativas são criadas.
-            </p>
-          </div>
+          <h2 id="quem-somos" className="sr-only">Quem somos</h2>
 
           <div className="reveal">
             <VideoCarousel />

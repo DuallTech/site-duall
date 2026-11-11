@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Building2, FileText, MapPin, Ruler } from 'lucide-react';
+import { Building2, ChevronUp, FileText, MapPin, Ruler } from 'lucide-react';
 
 import { PROJECTS, projectImage, type Project } from '../content/projects';
 import { fadeInUpVariants, staggerContainerVariants, staggerItemVariants } from './animations';
@@ -34,6 +34,7 @@ function ProjectDetails({ project, className }: { project: Project; className: s
 }
 
 export default function FeaturedProjectsSection() {
+  const [openId, setOpenId] = useState<Project['id'] | null>(null);
   const projects = useMemo(
     () => PROJECTS.map((project) => ({ ...project, imageUrl: projectImage(project.imageFileName) })).filter((project) => Boolean(project.imageUrl)),
     [],
@@ -88,13 +89,15 @@ export default function FeaturedProjectsSection() {
           whileInView="visible"
           viewport={viewport}
           variants={staggerContainerVariants}
-          className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5"
+          className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-12 lg:gap-5"
         >
           {projects.slice(0, 5).map((project, index) => {
             const isFeatured = index === 0;
             const isSideFeature = index === 1;
-            const wrapper = index < 2 ? 'lg:col-span-6' : 'lg:col-span-4';
-            const imageHeight = index < 2 ? 'h-[280px] md:h-[320px] lg:h-[360px]' : 'h-[210px] md:h-[225px]';
+            // No celular mostra só os 2 primeiros, lado a lado; do desktop em diante, todos.
+            const wrapper = index < 2 ? 'lg:col-span-6' : 'hidden lg:col-span-4 lg:block';
+            const imageHeight =
+              index < 2 ? 'h-[150px] sm:h-[220px] md:h-[320px] lg:h-[360px]' : 'h-[210px] md:h-[225px]';
 
             return (
               <motion.article
@@ -115,20 +118,35 @@ export default function FeaturedProjectsSection() {
                     }`}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950/30 via-transparent to-transparent" />
-                  <ProjectDetails
-                    project={project}
-                    className="pointer-events-none absolute inset-x-4 bottom-4 z-10 translate-y-3 rounded-2xl border border-white/20 bg-[#0e2135]/88 p-3 text-white opacity-0 shadow-[0_18px_50px_rgba(6,17,31,0.28)] backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-                  />
                   <div className="absolute left-4 top-4 rounded-full bg-[#315676] px-3.5 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md">
                     {project.category}
                   </div>
+                  <ProjectDetails
+                    project={project}
+                    className={`absolute inset-0 z-10 flex items-center bg-[#0e2135]/92 p-4 text-white backdrop-blur-md transition-opacity duration-300 ${
+                      openId === project.id ? 'opacity-100' : 'pointer-events-none opacity-0'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setOpenId(openId === project.id ? null : project.id)}
+                    aria-expanded={openId === project.id}
+                    aria-label={openId === project.id ? 'Fechar detalhes do projeto' : 'Ver detalhes do projeto'}
+                    className="absolute bottom-3 right-3 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-[#315676] shadow-md transition hover:bg-white"
+                  >
+                    <ChevronUp
+                      size={18}
+                      aria-hidden="true"
+                      className={`transition-transform duration-300 ${openId === project.id ? 'rotate-180' : ''}`}
+                    />
+                  </button>
                 </div>
 
-                <div className="bg-white px-5 py-4 md:px-5 md:py-5">
+                <div className="bg-white px-3 py-3 sm:px-5 sm:py-4 md:py-5">
                   <h3
                     className={`font-display font-extrabold leading-tight tracking-tight text-[#2D3845] ${
                       isFeatured || isSideFeature
-                        ? 'text-[1.8rem] md:text-[2.1rem]'
+                        ? 'text-[1.05rem] sm:text-[1.4rem] md:text-[2.1rem]'
                         : 'text-[1.28rem] md:text-[1.45rem]'
                     }`}
                   >
@@ -137,7 +155,13 @@ export default function FeaturedProjectsSection() {
 
                   <div className="mt-3 flex items-center gap-2 text-[#5E6B7A]">
                     <Building2 size={16} className="shrink-0 text-[#315676]" />
-                    <p className={`${isFeatured || isSideFeature ? 'text-[15px] leading-7' : 'text-[14px] leading-6'}`}>
+                    <p
+                      className={`${
+                        isFeatured || isSideFeature
+                          ? 'text-[12px] leading-5 sm:text-[15px] sm:leading-7'
+                          : 'text-[14px] leading-6'
+                      }`}
+                    >
                       Cliente: <span className="font-semibold text-[#315676]">{project.client}</span>
                     </p>
                   </div>

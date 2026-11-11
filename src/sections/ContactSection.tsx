@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Briefcase, Instagram, MapPin, Phone } from 'lucide-react';
+import { Briefcase, Instagram, MapPin, Phone } from 'lucide-react';
 
 import ContactForm from '../components/ContactForm';
 import { Container } from '../components/ui';
@@ -79,12 +78,6 @@ export default function ContactSection({ asPage = false }: { asPage?: boolean })
               </InfoRow>
             </ul>
 
-            {!asPage && (
-              <Link to="/contato" className="group inline-flex items-center gap-2 text-sm font-bold text-[#EDA700]">
-                <span className="border-b border-[#EDA700]/50 transition group-hover:border-[#EDA700]">Abrir a página de contato</span>
-                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
-              </Link>
-            )}
           </div>
 
           <div className="flex lg:col-span-6">
