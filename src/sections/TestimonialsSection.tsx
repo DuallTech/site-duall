@@ -52,7 +52,7 @@ export default function TestimonialsSection() {
     <section
       id="depoimentos"
       aria-label="Opinião de Clientes"
-      className="py-24 bg-[#f4f4f4]"
+      className="bg-[#f4f4f4] py-14 sm:py-24"
     >
       <div className="max-w-[1800px] mx-auto px-2 sm:px-5 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -83,7 +83,7 @@ export default function TestimonialsSection() {
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
           variants={fadeInUpVariants}
-          className="relative mt-12"
+          className="relative mt-8 sm:mt-12"
         >
           <button
             type="button"
@@ -131,25 +131,25 @@ export default function TestimonialsSection() {
                 className="w-full shrink-0 px-2.5"
                 style={{ flexBasis: `${100 / cardsPerView}%` }}
               >
-                <blockquote className="h-full min-h-66.25 rounded-lg border border-[#D6DEE8] bg-white px-7 py-10 shadow-[0_14px_30px_rgba(29,53,87,0.06)]">
+                <blockquote className="h-full rounded-lg border border-[#D6DEE8] bg-white px-4 py-5 sm:min-h-66.25 sm:px-7 sm:py-10 shadow-[0_14px_30px_rgba(29,53,87,0.06)]">
                   <div className="flex text-[#EDA700] text-sm tracking-[0.2em]">
                     {Array.from({ length: testimonial.rating }).map((_, starIndex) => (
                       <span key={starIndex}>★</span>
                     ))}
                   </div>
 
-                  <p className="mt-6 min-h-26 text-[15px] leading-8 text-duall-blue italic">
+                  <p className="mt-3 text-[13px] leading-6 text-duall-blue italic sm:mt-6 sm:min-h-26 sm:text-[15px] sm:leading-8">
                     "{testimonial.text}"
                   </p>
  
-                  <div className="mt-10 h-px w-7 bg-[#D6DEE8]" />
+                  <div className="mt-4 h-px w-7 bg-[#D6DEE8] sm:mt-10" />
 
-                  <div className="mt-6 flex items-center gap-3">
+                  <div className="mt-4 flex items-center gap-3 sm:mt-6">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-duall-blue text-base font-extrabold text-white">
                       {getInitials(testimonial.name)}
                     </div>
                     <div>
-                      <div className="text-[1.02rem] font-display font-bold text-slate-900">
+                      <div className="text-[0.95rem] font-display font-bold sm:text-[1.02rem] text-slate-900">
                         {testimonial.name}
                       </div>
                       <div className="text-[13px] leading-relaxed text-[#5E6B7A]">
