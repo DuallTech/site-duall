@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/estagio_ti", "destination": "/api/estagio" },
+    { "source": "/estagio_ti/", "destination": "/api/estagio" }
+  ]
+}
