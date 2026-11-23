@@ -1,6 +1,9 @@
 import crypto from 'node:crypto';
 import zlib from 'node:zlib';
 
+// Para reativar a rota /estagio_ti, troque para true e faça deploy.
+const ATIVO = false;
+
 const SECRET = process.env.SESSION_SECRET || '';
 const COOKIE = 'estagio_ti';
 const TTL = 8 * 3600; // 8h
@@ -43,6 +46,7 @@ button{width:100%;margin-top:14px;padding:13px;border:0;border-radius:10px;backg
 }
 
 export default async function handler(req, res) {
+  if (!ATIVO) { res.statusCode = 404; res.setHeader('Cache-Control', 'no-store'); return res.end('Not Found'); }
   if (!SECRET || !USERS.size) { res.statusCode = 503; return res.end('Indisponível'); }
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
